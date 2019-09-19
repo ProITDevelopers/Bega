@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Bega</string>
+    <string name="action_settings">Settings</string>
+    <string name="bega_logo">bega_logo</string>
+    <string name="text_hint_email">Email</string>
+    <string name="text_hint_senha">Senha</string>
+    <string name="btn_hint_entrar">Entrar</string>
+    <string name="btn_hint_nova_conta">Criar uma nova conta</string>
+    <string name="text_hint_nome">Nome</string>
+    <string name="text_hint_telefone">Telefone</string>
+    <string name="btn_hint_registrar">Registrar</string>
+    <string name="j_tenho_uma_conta">Já tenho uma conta</string>
+</resources>
