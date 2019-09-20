@@ -1,6 +1,7 @@
 package com.proitdevelopers.bega;
 
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +14,7 @@ public class RegistroActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Common.changeStatusBarColor(this, ContextCompat.getColor(this, R.color.white));
         setContentView(R.layout.activity_registro);
 
         btnRegistro = findViewById(R.id.btnRegistro);
