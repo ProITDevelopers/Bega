@@ -1,16 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!--    <color name="colorPrimary">#008577</color>-->
-<!--    <color name="colorPrimaryDark">#00574B</color>-->
-<!--    <color name="colorAccent">#D81B60</color>-->
 
-    <color name="colorPrimary">#8204a8</color>
-    <color name="colorPrimaryDark">#8904b2</color>
-    <color name="colorAccent">#D81B60</color>
 
-    <color name="colorButton">#8a04b2</color>
-    <color name="colorText">#7e478e</color>
+<!--    <color name="colorPrimary">#5da60e</color>-->
+<!--    <color name="colorPrimaryDark">#5da60e</color>-->
+
+    <color name="colorPrimary">#ff6600</color>
+    <color name="colorPrimaryDark">#ff6600</color>
+
+    <color name="colorAccent">#ff6600</color>
+
+    <color name="spinner_bg">#ff6600</color>
+
+    <color name="colorButton">#ff6200</color>
+    <color name="colorBotaoLogin">#d7a900</color>
+    <color name="colorCima">#b48d00</color>
+    <color name="colorButton_Inativo">#b1b1b1</color>
+    <color name="colorText">#ff6200</color>
+    <color name="colorOrange">#ff6200</color>
+    <color name="colorGreen">#5da60e</color>
+    <color name="colorTextSuccess">#5da60e</color>
+    <color name="colorTextGreen">#5da60e</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
+
+
+<!--    <color name="loginCor">#7e478e</color>-->
+    <color name="loginCor">#ff6200</color>
+
+    <color name="border_remove_item">#fc9898</color>
+    <color name="btn_remove_item">#fc2222</color>
+
+    <color name="border_add_item">#5da60e</color>
+    <color name="btn_add_item">#5da60e</color>
+    <color name="txt_price_color">#5da60e</color>
+    <color name="red_dull">#FC5A5A</color>
+
 
 </resources>

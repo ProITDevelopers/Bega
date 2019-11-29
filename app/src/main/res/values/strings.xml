@@ -1,13 +1,128 @@
 <resources>
     <string name="app_name">Bega</string>
+    <string name="google_browser_key">google_browser_key</string>
     <string name="action_settings">Settings</string>
     <string name="bega_logo">bega_logo</string>
     <string name="text_hint_email">Email</string>
     <string name="text_hint_senha">Senha</string>
     <string name="btn_hint_entrar">Entrar</string>
-    <string name="btn_hint_nova_conta">Criar uma nova conta</string>
+    <string name="btn_hint_nova_conta">Novo usuário? Registre-se!</string>
     <string name="text_hint_nome">Nome</string>
     <string name="text_hint_telefone">Telefone</string>
     <string name="btn_hint_registrar">Registrar</string>
     <string name="j_tenho_uma_conta">Já tenho uma conta</string>
+
+    <string name="txtMsg">A rede 3G ou WI-FI não possui tranferência de dados.</string>
+    <string name="txtMsgErroRede">O dispositivo não está conectado a nenhuma rede 3G ou WI-FI .</string>
+    <string name="txtProblemaMsg">Algum problema aconteceu.Relata o problema.</string>
+    <string name="txtTimeout">O tempo de comunicação excedeu. Possivelvente a internet está lenta.</string>
+    <string name="terminar_sessao">Terminar sessão</string>
+    <string name="text_hint_confirm_senha">Confirmar a senha</string>
+    <string name="primeiro_nome">Primeiro Nome</string>
+    <string name="sobrenome">Sobrenome</string>
+    <string name="telefone_alternativo">Nº Alternativo</string>
+    <string name="nome_de_utilizador">Nome de utilizador</string>
+    <string name="provincia">Província</string>
+    <string name="municipio">Município</string>
+    <string name="bairro">Bairro</string>
+    <string name="rua">Rua</string>
+    <string name="numero_da_casa">NºCasa</string>
+    <string name="recuperar_a_senha">Esqueci a senha</string>
+    <string name="txt_direitos">Copyright © 2019 Pro-it Consulting</string>
+
+    <string name="hit_recuperar_senha">Redifinir Senha</string>
+    <string name="hit_receber_cod_confirmacao">Como deseja receber o código de confirmação?</string>
+    <string name="hit_redif_senha">Insira o seu e-mail para redifinir a sua senha</string>
+    <string name="hit_redif_senha_telef">Insira o seu nº do telefone para redifinir a sua senha</string>
+    <string name="hit_enviar_telef">Insira o nº do telefone e o endereço para fazer o seu pedido</string>
+    <string name="hit_redif_telef">Insira o seu número do telefone</string>
+    <string name="hit_redif_cod">Insira o Seu Código de Confirmação</string>
+    <string name="hit_codigo_confirm">Código de Confirmação</string>
+    <string name="txtCodigoenviado">O código foi reenviado.</string>
+    <string name="hit_receber_denovo">Não Recebeu o código ?</string>
+    <string name="txtTentarNovamente">Tentar de Novo</string>
+    <string name="hit_btn_enviar_cod">Enviar Código</string>
+    <string name="hit_email_enviado">Enviamos o código de confirmação para </string>
+    <string name="txtTentarmaistarde">Tentar mais tarde.</string>
+    <string name="txtMsgCondConf">Insira o código de confirmação.</string>
+    <string name="txtMsgCondConfCod">Termina de inserir o código.</string>
+    <string name="hit_nova_senha">Senha Nova</string>
+    <string name="hit_conf_senha">Confirmar Senha</string>
+    <string name="hit_senha_antiga">Senha Antiga</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="hit_btn_receber_cod">Receber Código</string>
+    <string name="txtTelef_rec">Nº Telefone</string>
+    <string name="txtTelef_Email">Email ou Nº Telefone</string>
+    <string name="dialogo_escolher_foto_titulo">Escolher Fotografia</string>
+    <string name="dialogo_escolher_foto_opc_camera">Câmera</string>
+    <string name="dialogo_escolher_foto_opc_galeria">Galeria</string>
+    <string name="txtFotoAtualizada">Foto atualizada com sucesso.!.</string>
+
+    <string name="msg_preparing_order">Enviando o seu pedido…</string>
+    <string name="msg_order_placed_successfully">O seu pedido foi enviado com sucesso!</string>
+    <string name="thank_you">Obrigado!</string>
+    <string name="title_preparing_order">Preparing Order</string>
+    <string name="order_failed">Pedido Cancelado</string>
+    <string name="msg_order_placed_failed">O seu pedido não foi enviado. Please contact support.</string>
+
+
+    <string name="price_with_currency">Kz%.2f</string>
+<!--    <string name="btn_checkout">CHECKOUT (%s)</string>-->
+    <string name="btn_checkout">Enviar Pedido</string>
+    <string name="lbl_item_price_quantity">%s x %d</string>
+    <string name="cart_info_bar_data">%d Items | Kz%s</string>
+    <string name="cart_info_bar_items">%d Items</string>
+    <string name="cart_info_bar_total">Total: Kz%s</string>
+    <string name="timer_info_bar">%s</string>
+
+
+    <string name="title_activity_produtos">ProdutosActivity</string>
+    <string name="title_activity_menu_principal">MenuPrincipalActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+    <string name="title_activity_perfil">PerfilActivity</string>
+    <string name="nome_completo">Nome Completo</string>
+    <string name="salvar">Salvar</string>
+    <string name="title_activity_favoritos">FavoritosActivity</string>
+    <string name="title_activity_wallet">WalletActivity</string>
+    <string name="title_activity_check_out">CheckOutActivity</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_editar_perfil">EditarPerfilActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="title_activity_pagamento">PagamentoActivity</string>
+    <string-array name="genero">
+        <item>Feminino</item>
+        <item>Masculino</item>
+    </string-array>
+    <string-array name="cidade">
+        <item>Luanda</item>
+        <item>Bengo</item>
+        <item>Benguela</item>
+        <item>Bié</item>
+        <item>Cabinda</item>
+        <item>Cuando-Cubango</item>
+        <item>Cuanza Norte</item>
+        <item>Cuanza Sul</item>
+        <item>Cunene</item>
+        <item>Huambo</item>
+        <item>Huíla</item>
+        <item>Lunda Norte</item>
+        <item>Lunda Sul</item>
+        <item>Malanje</item>
+        <item>Moxico</item>
+        <item>Namibe</item>
+        <item>Uíge</item>
+        <item>Zaire</item>
+    </string-array>
 </resources>

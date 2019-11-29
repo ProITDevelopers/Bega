@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_perfil_edit"
+        app:showAsAction="always"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_edit_white_24dp"
+        android:title="Edit" />
+
+    <item
+        android:id="@+id/action_refresh"
+        android:orderInCategory="101"
+        android:title="Actualizar"
+        app:showAsAction="never" />
+
+
+</menu>

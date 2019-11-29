@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" tools:showIn="navigation_view">
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/nav_menu_home" android:icon="@drawable/ic_home_orange_24dp" android:title="Inicio"/>
+
+        <item android:id="@+id/nav_menu_perfil" android:icon="@drawable/ic_person_orange_24dp" android:title="Meu Perfil"/>
+
+        <item android:id="@+id/nav_menu_wallet" android:icon="@drawable/ic__wallet_orange_24dp" android:title="Carteira"/>
+
+<!--        <item android:id="@+id/nav_menu_favoritos" android:icon="@drawable/ic_favorite_orange_24dp" android:title="Favoritos"/>-->
+    </group>
+    <item android:title="Redes Sociais">
+        <menu>
+            <group android:id="@+id/menu_redes_sociais" android:checkableBehavior="single">
+                <item android:id="@+id/nav_menu_share" android:icon="@drawable/ic_share_orange_24dp" android:title="Partilhar"/>
+
+            </group>
+        </menu>
+    </item>
+    <item android:title="Definições">
+        <menu>
+            <group android:id="@+id/menu_config" android:checkableBehavior="single">
+
+                <item android:id="@+id/nav_menu_settings" android:icon="@drawable/ic_settings_orange_24dp" android:title="Definições"/>
+                <item android:id="@+id/nav_menu_logout" android:icon="@drawable/ic_logout_orange_24dp" android:title="Sair"/>
+            </group>
+        </menu>
+    </item>
+</menu>

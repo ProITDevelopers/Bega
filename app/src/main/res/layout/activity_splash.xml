@@ -4,17 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splash_bkg"
-    tools:context=".SplashActivity">
+    android:background="@color/white"
+    tools:context=".activities.SplashActivity">
 
     <ImageView
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/bega_logo"
+        android:src="@drawable/begalogo"
+        app:layout_constraintBottom_toTopOf="@+id/copyright"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
+    <TextView
+        android:id="@+id/copyright"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:src="@drawable/bega_logo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/bega_logo" />
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:textColor="@color/colorText"
+        android:text="@string/txt_direitos"/>
 
 </android.support.constraint.ConstraintLayout>
