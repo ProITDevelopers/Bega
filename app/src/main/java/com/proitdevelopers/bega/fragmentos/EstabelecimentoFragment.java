@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,20 +20,13 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.proitdevelopers.bega.R;
-import com.proitdevelopers.bega.activities.MenuActivity;
 import com.proitdevelopers.bega.activities.ProdutosActivity;
-import com.proitdevelopers.bega.adapters.CategoriaAdapter;
 import com.proitdevelopers.bega.adapters.EstabelecimentoAdapter;
 import com.proitdevelopers.bega.adapters.ItemClickListener;
 import com.proitdevelopers.bega.api.ApiClient;
 import com.proitdevelopers.bega.api.ApiInterface;
-import com.proitdevelopers.bega.helper.Common;
-import com.proitdevelopers.bega.helper.MetodosUsados;
-import com.proitdevelopers.bega.localDB.AppDatabase;
 import com.proitdevelopers.bega.localDB.AppPref;
-import com.proitdevelopers.bega.model.Categoria;
 import com.proitdevelopers.bega.model.Estabelecimento;
-import com.proitdevelopers.bega.model.Produtos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +35,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.proitdevelopers.bega.adapters.EstabelecimentoAdapter.SPAN_COUNT_ONE;
-import static com.proitdevelopers.bega.adapters.EstabelecimentoAdapter.SPAN_COUNT_THREE;
+import static com.proitdevelopers.bega.helper.Common.SPAN_COUNT_ONE;
+import static com.proitdevelopers.bega.helper.Common.SPAN_COUNT_THREE;
 import static com.proitdevelopers.bega.helper.MetodosUsados.conexaoInternetTrafego;
 import static com.proitdevelopers.bega.helper.MetodosUsados.mostrarMensagem;
 

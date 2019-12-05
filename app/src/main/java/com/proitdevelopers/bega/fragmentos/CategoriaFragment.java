@@ -15,16 +15,25 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.proitdevelopers.bega.R;
+
 import com.proitdevelopers.bega.adapters.CategoriaAdapter;
 import com.proitdevelopers.bega.adapters.ItemClickListener;
 import com.proitdevelopers.bega.helper.Common;
+import com.proitdevelopers.bega.localDB.AppPref;
 import com.proitdevelopers.bega.model.Categoria;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import static com.proitdevelopers.bega.helper.Common.SPAN_COUNT_ONE;
+import static com.proitdevelopers.bega.helper.Common.SPAN_COUNT_THREE;
+import static com.proitdevelopers.bega.helper.Common.TOP_MENU_CATEGORY;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,10 +52,13 @@ public class CategoriaFragment extends Fragment {
     private View view;
 
     RecyclerView recyclerCategory;
-    ProgressBar progressBar;
+    ProgressBar progress_bar_top, progressBar;
     RecyclerView.LayoutManager layoutManager;
     private GridLayoutManager gridLayoutManager;
     List<Categoria> categoriaList;
+    CategoriaAdapter categoriaAdapter;
+
+    ImageView category_image_bega,category_image_top;
 
 
     public CategoriaFragment() {
@@ -87,17 +99,56 @@ public class CategoriaFragment extends Fragment {
         // Inflate the layout for this fragment
         view =  inflater.inflate(R.layout.fragment_categoria, container, false);
 
-        //Carrega o menu
+        categoriaList = Common.getCategoryList();
+
+
+        category_image_bega =  view.findViewById(R.id.category_image_bega);
+        category_image_top =  view.findViewById(R.id.category_image_top);
+
+        progress_bar_top =  view.findViewById(R.id.progress_bar);
         progressBar =  view.findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.VISIBLE);
+
         recyclerCategory =  view.findViewById(R.id.recyclerCategory);
         recyclerCategory.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getContext());
-        gridLayoutManager = new GridLayoutManager(getContext(), 2);
-        recyclerCategory.setLayoutManager(layoutManager);
-//        recyclerCategory.setLayoutManager(gridLayoutManager);
+        gridLayoutManager = new GridLayoutManager(getContext(), AppPref.getInstance().getListGridViewMode());
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
 
-        categoriaList = Common.getCategoryList();
+                if (position % 3 == 0){
+                    return 2;
+                }else{
+                    return 1;
+                }
+
+            }
+        });
+
+        if (AppPref.getInstance().getListGridViewMode() ==  SPAN_COUNT_THREE) {
+
+            recyclerCategory.setLayoutManager(gridLayoutManager);
+        } else {
+
+            recyclerCategory.setLayoutManager(layoutManager);
+        }
+
+        Picasso.with(getContext())
+                .load(TOP_MENU_CATEGORY)
+                .placeholder(R.drawable.hamburger_placeholder)
+                .error(R.drawable.hamburger_placeholder)
+                .into(category_image_top, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        progress_bar_top.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onError() {
+                        progress_bar_top.setVisibility(View.GONE);
+                    }
+                });
+
 
         loadCategories();
 
@@ -105,7 +156,9 @@ public class CategoriaFragment extends Fragment {
     }
 
     private void loadCategories() {
-        CategoriaAdapter categoriaAdapter = new CategoriaAdapter(getContext(),categoriaList);
+        progressBar.setVisibility(View.VISIBLE);
+
+        categoriaAdapter = new CategoriaAdapter(getContext(),categoriaList,gridLayoutManager);
         recyclerCategory.setAdapter(categoriaAdapter);
         categoriaAdapter.notifyDataSetChanged();
         categoriaAdapter.setItemClickListener(new ItemClickListener() {
@@ -117,6 +170,7 @@ public class CategoriaFragment extends Fragment {
 
             }
         });
+        progressBar.setVisibility(View.GONE);
     }
 
     private void goToFragment(String categoria){
@@ -145,6 +199,13 @@ public class CategoriaFragment extends Fragment {
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem item =  menu.findItem(R.id.menu_view);
+        loadIcon(item);
+        super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
 
@@ -154,9 +215,59 @@ public class CategoriaFragment extends Fragment {
             return true;
         }
 
+        if (itemId == R.id.menu_view) {
+            switchLayout();
+            switchIcon(item);
+            return true;
+        }
+
 
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void loadIcon(MenuItem item) {
+        if (AppPref.getInstance().getListGridViewMode() ==  SPAN_COUNT_THREE) {
+            item.setTitle("Lista");
+            item.setIcon(getResources().getDrawable(R.drawable.ic_grid_on_white_24dp));
+        } else {
+            item.setTitle("Grelha");
+            item.setIcon(getResources().getDrawable(R.drawable.ic_list_white_24dp));
+        }
+    }
+
+    private void switchLayout() {
+        if (gridLayoutManager.getSpanCount() == SPAN_COUNT_ONE) {
+            gridLayoutManager.setSpanCount(SPAN_COUNT_THREE);
+
+
+            recyclerCategory.setLayoutManager(gridLayoutManager);
+
+        } else {
+            gridLayoutManager.setSpanCount(SPAN_COUNT_ONE);
+
+            recyclerCategory.setLayoutManager(layoutManager);
+        }
+
+
+        try {
+            categoriaAdapter.notifyItemRangeChanged(0, categoriaAdapter.getItemCount());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        AppPref.getInstance().saveListGridViewMode(gridLayoutManager.getSpanCount());
+
+    }
+
+    private void switchIcon(MenuItem item) {
+
+
+        if (gridLayoutManager.getSpanCount() ==  SPAN_COUNT_THREE) {
+            item.setIcon(getResources().getDrawable(R.drawable.ic_grid_on_white_24dp));
+        } else {
+            item.setIcon(getResources().getDrawable(R.drawable.ic_list_white_24dp));
+        }
+
     }
 }

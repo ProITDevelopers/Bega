@@ -5,9 +5,9 @@
 
     <item
         android:id="@+id/menu_cart"
-        android:title="Cart"
+        android:title="Carrinho"
         android:orderInCategory="102"
-        app:showAsAction="always"
+        app:showAsAction="never"
         android:icon="@drawable/ic_shopping_cart_white_24dp"/>
 
 

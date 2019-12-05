@@ -26,12 +26,15 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.proitdevelopers.bega.CartInfoBar;
+import com.proitdevelopers.bega.RecyclerSectionItemDecoration;
 import com.proitdevelopers.bega.localDB.AppPref;
 import com.proitdevelopers.bega.R;
 import com.proitdevelopers.bega.helper.Utils;
 import com.proitdevelopers.bega.adapters.CartProdutosAdapter;
 import com.proitdevelopers.bega.localDB.AppDatabase;
 import com.proitdevelopers.bega.model.CartItemProdutos;
+
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -104,6 +107,7 @@ public class ShoppingCartActivity extends AppCompatActivity
             if (cartItems != null && cartItems.size() > 0) {
                 setCartInfoBar(cartItems);
                 toggleCartBar(true);
+
             } else {
                 toggleCartBar(false);
             }
@@ -165,6 +169,39 @@ public class ShoppingCartActivity extends AppCompatActivity
         recyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         setTotalPrice();
+
+//        if (cartItems!=null){
+//            RecyclerSectionItemDecoration sectionItemDecoration =
+//                    new RecyclerSectionItemDecoration(getResources().getDimensionPixelSize(R.dimen.header),
+//                            true,
+//                            getSectionCallback(cartItems));
+//            recyclerView.addItemDecoration(sectionItemDecoration);
+//        }
+
+
+
+    }
+
+
+
+
+    private RecyclerSectionItemDecoration.SectionCallback getSectionCallback(RealmResults<CartItemProdutos> cartItems) {
+        return new RecyclerSectionItemDecoration.SectionCallback() {
+            @Override
+            public boolean isSection(int position) {
+
+
+                return position == 0 ||
+
+                        !cartItems.get(position).produtos.getEstabelecimento().equals(cartItems.get(position - 1).produtos.getEstabelecimento());
+            }
+
+            @Override
+            public String getSectionHeader(int position) {
+
+                return cartItems.get(position).produtos.getEstabelecimento();
+            }
+        };
     }
 
     private void setTotalPrice() {

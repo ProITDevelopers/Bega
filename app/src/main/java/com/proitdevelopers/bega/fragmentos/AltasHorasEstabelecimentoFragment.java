@@ -35,8 +35,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.proitdevelopers.bega.adapters.EstabelecimentoAdapter.SPAN_COUNT_ONE;
-import static com.proitdevelopers.bega.adapters.EstabelecimentoAdapter.SPAN_COUNT_THREE;
+
+import static com.proitdevelopers.bega.helper.Common.SPAN_COUNT_ONE;
+import static com.proitdevelopers.bega.helper.Common.SPAN_COUNT_THREE;
 import static com.proitdevelopers.bega.helper.MetodosUsados.conexaoInternetTrafego;
 import static com.proitdevelopers.bega.helper.MetodosUsados.mostrarMensagem;
 

@@ -38,12 +38,13 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/txtConfirmSucesso"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
             android:textColor="@color/black"
-            android:text="Aceda a sua conta com a nova senha!"
+            android:text="Sucesso!"
             android:textSize="16sp"
             android:textStyle="bold" />
 

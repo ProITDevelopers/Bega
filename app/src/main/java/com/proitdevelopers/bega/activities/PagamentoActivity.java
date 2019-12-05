@@ -153,7 +153,7 @@ public class PagamentoActivity extends AppCompatActivity {
             public void run() {
                 verificarConexao();
             }
-        }, 3000);
+        }, 1500);
 
 
 

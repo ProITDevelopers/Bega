@@ -117,7 +117,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:padding="5dp"
-            android:textColor="@color/colorTextGreen"
+            android:textColor="@color/colorText"
             android:text="Quer usar o seu nº? Toque aqui!"
             android:textSize="16sp"
             android:textAllCaps="false"

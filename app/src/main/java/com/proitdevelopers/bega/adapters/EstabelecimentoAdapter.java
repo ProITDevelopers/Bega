@@ -17,13 +17,11 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.proitdevelopers.bega.helper.Common.SPAN_COUNT_ONE;
+import static com.proitdevelopers.bega.helper.Common.VIEW_TYPE_BIG;
+import static com.proitdevelopers.bega.helper.Common.VIEW_TYPE_SMALL;
+
 public class EstabelecimentoAdapter extends RecyclerView.Adapter<EstabelecimentoAdapter.ItemViewHolder>{
-
-    public static final int SPAN_COUNT_ONE = 1;
-    public static final int SPAN_COUNT_THREE = 2;
-
-    private static final int VIEW_TYPE_SMALL = 1;
-    private static final int VIEW_TYPE_BIG = 2;
 
     private List<Estabelecimento> mItems;
     private GridLayoutManager mLayoutManager;

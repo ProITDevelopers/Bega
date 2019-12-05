@@ -15,11 +15,13 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
@@ -51,7 +53,10 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
@@ -97,8 +102,10 @@ public class EditarPerfilActivity extends AppCompatActivity implements View.OnCl
     private String primeiroNome,sobreNome,telefone,telefoneAlternativo;
     private String valorGeneroItem,valorCidadeItem;
     private String municipio,bairro,rua,nCasa;
-
     private ProgressDialog progressDialog;
+
+    File photoFile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -406,8 +413,25 @@ public class EditarPerfilActivity extends AppCompatActivity implements View.OnCl
 
 
     private void pegarFotoCamara() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, TIRAR_FOTO_CAMARA);
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if(cameraIntent.resolveActivity(getPackageManager()) != null){
+            //Create a file to store the image
+            photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                ex.printStackTrace();
+            }
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,"com.proitdevelopers.bega.provider", photoFile);
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        photoURI);
+                startActivityForResult(cameraIntent,
+                        TIRAR_FOTO_CAMARA);
+            }
+        }
     }
 
     private void cortarImagemCrop(Uri imagemUri) {
@@ -418,6 +442,24 @@ public class EditarPerfilActivity extends AppCompatActivity implements View.OnCl
                 .start(this);
 
 
+    }
+
+    String imageFilePath;
+    private File createImageFile() throws IOException {
+        String timeStamp =
+                new SimpleDateFormat("yyyyMMdd_HHmmss",
+                        Locale.getDefault()).format(new Date());
+        String imageFileName = "IMG_" + timeStamp + "_";
+        File storageDir =
+                getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        imageFilePath = image.getAbsolutePath();
+        return image;
     }
 
     public Bitmap reduzirImagem(Bitmap image, int maxSize) {
@@ -540,25 +582,15 @@ public class EditarPerfilActivity extends AppCompatActivity implements View.OnCl
             }
         }
 
-        if (requestCode == TIRAR_FOTO_CAMARA && resultCode == RESULT_OK && data != null) {
+        if (requestCode == TIRAR_FOTO_CAMARA && resultCode == RESULT_OK ) {
 
+            selectedImage = Uri.fromFile(photoFile);
 
-            try {
-                Bitmap bitmap1 = (Bitmap) data.getExtras().get("data");
-                Bitmap fotoReduzida = reduzirImagem(bitmap1, 500);
-                Log.i("urirranadka", bitmap1.getWidth() + "algumacoisa");
-
-
-                selectedImage = getImageUri(getApplicationContext(), fotoReduzida);
-
-                cortarImagemCrop(selectedImage);
-
-
-            } catch (Exception e) {
-                Log.i(TAG, "Erro onActivityResult" + e.getMessage());
-            }
+            cortarImagemCrop(selectedImage);
 
         }
+
+
     }
 
     private void verifConecxaoSalvar() {

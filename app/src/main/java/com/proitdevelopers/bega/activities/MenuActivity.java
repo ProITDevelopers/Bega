@@ -5,13 +5,16 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -27,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.proitdevelopers.bega.R;
+import com.proitdevelopers.bega.TimerInfoBar;
 import com.proitdevelopers.bega.api.ApiClient;
 import com.proitdevelopers.bega.api.ApiInterface;
 import com.proitdevelopers.bega.fragmentos.CategoriaFragment;
@@ -39,6 +43,7 @@ import com.proitdevelopers.bega.model.UsuarioPerfil;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -53,6 +58,7 @@ public class MenuActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private String TAG = "MenuActivity";
+    private static final String BACK_STACK_ROOT_TAG = "root_fragment";
 
 
 
@@ -69,6 +75,20 @@ public class MenuActivity extends AppCompatActivity implements
     NotificationHelper notificationHelper;
 
 
+    private static final long START_TIME_IN_MILLIS = 100000;
+
+    private TimerInfoBar mTextViewCountDown;
+    private Button mButtonStartPause;
+    private Button mButtonReset;
+
+    private CountDownTimer mCountDownTimer;
+
+    private boolean mTimerRunning;
+
+    private long mTimeLeftInMillis;
+    private long mEndTime;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,21 +98,8 @@ public class MenuActivity extends AppCompatActivity implements
 
         notificationHelper = new NotificationHelper(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Bega");
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
-
-
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -127,16 +134,35 @@ public class MenuActivity extends AppCompatActivity implements
 
 
 
-
         //carregar dados do Usuario
         Common.mCurrentUser = AppPref.getInstance().getUser();
         carregarMeuPerfilOffline(Common.mCurrentUser);
 
+        mTextViewCountDown = findViewById(R.id.timer_info_bar);
+
+        mButtonStartPause = findViewById(R.id.button_start_pause);
+        mButtonReset = findViewById(R.id.button_reset);
+
+        mButtonStartPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mTimerRunning) {
+                    pauseTimer();
+                } else {
+                    startTimer();
+                }
+            }
+        });
+
+        mButtonReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetTimer();
+            }
+        });
 
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_layout, new CategoriaFragment());
-        transaction.commit();
+        gotoCategoriaFragement();
 
     }
 
@@ -188,7 +214,7 @@ public class MenuActivity extends AppCompatActivity implements
                     }
 
                 } else {
-                    notificationHelper.createNotification("A sessão expirou!","Inicie outra vez a sessão!");
+//                    notificationHelper.createNotification("A sessão expirou!","Inicie outra vez a sessão!");
                     mensagemTokenExpirado();
                 }
 
@@ -248,6 +274,15 @@ public class MenuActivity extends AppCompatActivity implements
 
 
     private void logOut() {
+
+        resetTimer();
+
+        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.clear();
+
+        editor.apply();
+
         AppPref.getInstance().clearAppPrefs();
         AppDatabase.clearData();
         Intent intent = new Intent(MenuActivity.this, SplashActivity.class);
@@ -255,6 +290,16 @@ public class MenuActivity extends AppCompatActivity implements
         startActivity(intent);
         finish();
 
+    }
+
+    private void gotoCategoriaFragement(){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.frame_layout, new CategoriaFragment());
+        transaction.addToBackStack(BACK_STACK_ROOT_TAG);
+        transaction.commit();
     }
 
     @Override
@@ -283,7 +328,16 @@ public class MenuActivity extends AppCompatActivity implements
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+//            super.onBackPressed();
+
+            int fragments = getSupportFragmentManager().getBackStackEntryCount();
+            if (fragments == 1) {
+                finish();
+            } else if (getFragmentManager().getBackStackEntryCount() > 1) {
+                getFragmentManager().popBackStack();
+            } else {
+                super.onBackPressed();
+            }
 
         }
 
@@ -303,9 +357,7 @@ public class MenuActivity extends AppCompatActivity implements
         int id = item.getItemId();
 
         if (id == R.id.nav_menu_home) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.frame_layout, new CategoriaFragment());
-            transaction.commit();
+            gotoCategoriaFragement();
         }
 
         else if (id == R.id.nav_menu_perfil) {
@@ -325,6 +377,12 @@ public class MenuActivity extends AppCompatActivity implements
 //            Intent intent = new Intent(this,FavoritosActivity.class);
 //            startActivity(intent);
 //        }
+
+        else if (id == R.id.nav_menu_mapa) {
+
+            Intent intent = new Intent(this,MapActivity.class);
+            startActivity(intent);
+        }
 
         else if (id == R.id.nav_menu_share) {
             MetodosUsados.shareTheApp(this);
@@ -369,7 +427,7 @@ public class MenuActivity extends AppCompatActivity implements
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Toast.makeText(this, "Definições", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "action_settings", Toast.LENGTH_SHORT).show();
 
             return true;
         }
@@ -388,6 +446,123 @@ public class MenuActivity extends AppCompatActivity implements
 //        return super.onPrepareOptionsMenu(menu);
 //    }
 
+
+    private void startTimer() {
+        mEndTime = System.currentTimeMillis() + mTimeLeftInMillis;
+
+        mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                mTimeLeftInMillis = millisUntilFinished;
+                updateCountDownText();
+            }
+
+            @Override
+            public void onFinish() {
+                mTimerRunning = false;
+                updateButtons();
+
+                notificationHelper.createNotification("A sessão expirou!","onFinish()!");
+
+            }
+        }.start();
+
+        mTimerRunning = true;
+        updateButtons();
+
+
+    }
+
+    private void pauseTimer() {
+        mCountDownTimer.cancel();
+        mTimerRunning = false;
+        updateButtons();
+    }
+
+    private void resetTimer() {
+        mTimeLeftInMillis = START_TIME_IN_MILLIS;
+        updateCountDownText();
+        updateButtons();
+    }
+
+    private void updateCountDownText() {
+
+
+
+        int minutes = (int) (mTimeLeftInMillis / 1000) / 60;
+        int seconds = (int) (mTimeLeftInMillis / 1000) % 60;
+
+        String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
+
+        mTextViewCountDown.setData(timeLeftFormatted);
+    }
+
+    private void updateButtons() {
+        if (mTimerRunning) {
+            mButtonReset.setVisibility(View.INVISIBLE);
+            mButtonStartPause.setText("Pause");
+        } else {
+            mButtonStartPause.setText("Start");
+
+            if (mTimeLeftInMillis < 1000) {
+                mButtonStartPause.setVisibility(View.INVISIBLE);
+            } else {
+                mButtonStartPause.setVisibility(View.VISIBLE);
+            }
+
+            if (mTimeLeftInMillis < START_TIME_IN_MILLIS) {
+                mButtonReset.setVisibility(View.VISIBLE);
+            } else {
+                mButtonReset.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.putLong("millisLeft", mTimeLeftInMillis);
+        editor.putBoolean("timerRunning", mTimerRunning);
+        editor.putLong("endTime", mEndTime);
+
+        editor.apply();
+
+        if (mCountDownTimer != null) {
+            mCountDownTimer.cancel();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+
+        mTimeLeftInMillis = prefs.getLong("millisLeft", START_TIME_IN_MILLIS);
+        mTimerRunning = prefs.getBoolean("timerRunning", false);
+
+        updateCountDownText();
+        updateButtons();
+
+        if (mTimerRunning) {
+            mEndTime = prefs.getLong("endTime", 0);
+            mTimeLeftInMillis = mEndTime - System.currentTimeMillis();
+
+            if (mTimeLeftInMillis < 0) {
+                mTimeLeftInMillis = 0;
+                mTimerRunning = false;
+                updateCountDownText();
+                updateButtons();
+                notificationHelper.createNotification("A sessão expirou!","protected void onStart()!");
+            } else {
+                startTimer();
+            }
+        }
+    }
 
 
 

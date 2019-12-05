@@ -23,6 +23,7 @@
     <color name="colorTextGreen">#5da60e</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
+    <color name="transparentBlack">#80000000</color>
 
 
 <!--    <color name="loginCor">#7e478e</color>-->

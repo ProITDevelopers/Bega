@@ -1,4 +1,8 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'realm-android'
 
 
 android {
@@ -68,11 +72,24 @@ dependencies {
     //REALM DB
     implementation "io.realm:android-adapters:2.1.1"
 
+//    //MAPA
+//    implementation 'com.google.maps.android:android-maps-utils:0.5+'
+//    implementation 'com.google.android.gms:play-services-maps:15.0.1'
+//    implementation 'com.google.android.gms:play-services-location:15.0.1'
+//    implementation 'com.google.android.gms:play-services-places:15.0.1'
+
     //MAPA
-    implementation 'com.google.maps.android:android-maps-utils:0.5+'
-    implementation 'com.google.android.gms:play-services-maps:15.0.1'
-    implementation 'com.google.android.gms:play-services-location:15.0.1'
-    implementation 'com.google.android.gms:play-services-places:15.0.1'
+    implementation 'com.google.maps.android:android-maps-utils:0.6.2'
+    implementation 'com.google.android.gms:play-services-maps:16.0.0'
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+    implementation 'com.google.android.gms:play-services-places:16.0.0'
+    implementation "android.arch.navigation:navigation-ui-ktx:1.0.0"
+    implementation "android.arch.navigation:navigation-fragment-ktx:1.0.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
 
 }
-apply plugin: 'realm-android'
+
+repositories {
+    mavenCentral()
+}

@@ -59,6 +59,7 @@ public class CartProdutosAdapter extends RecyclerView.Adapter<CartProdutosAdapte
         Picasso.with(context).load(product.getImagemProduto()).placeholder(R.drawable.hamburger_placeholder).into(holder.thumbnail);
         holder.name.setText(product.getDescricaoProdutoC());
         holder.price.setText(holder.name.getContext().getString(R.string.lbl_item_price_quantity, context.getString(R.string.price_with_currency, product.getPrecoUnid()), cartItem.quantity));
+        holder.estabelecimento.setText(product.getEstabelecimento());
 
 
         if (listener != null)
@@ -75,6 +76,7 @@ public class CartProdutosAdapter extends RecyclerView.Adapter<CartProdutosAdapte
         private ImageView thumbnail;
         private TextView name;
         private TextView price;
+        private TextView estabelecimento;
         private Button btn_remove;
 
 
@@ -84,6 +86,7 @@ public class CartProdutosAdapter extends RecyclerView.Adapter<CartProdutosAdapte
             thumbnail = (ImageView) itemView.findViewById(R.id.thumbnail);
             name = (TextView) itemView.findViewById(R.id.name);
             price = (TextView) itemView.findViewById(R.id.price);
+            estabelecimento = (TextView) itemView.findViewById(R.id.estabelecimento);
             btn_remove = (Button) itemView.findViewById(R.id.btn_remove);
 
         }

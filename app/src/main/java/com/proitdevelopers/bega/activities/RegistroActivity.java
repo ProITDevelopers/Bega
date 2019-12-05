@@ -13,10 +13,12 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
@@ -32,6 +34,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.proitdevelopers.bega.helper.Common;
@@ -40,6 +43,7 @@ import com.proitdevelopers.bega.api.ApiClient;
 import com.proitdevelopers.bega.api.ApiInterface;
 import com.proitdevelopers.bega.api.ErrorResponce;
 import com.proitdevelopers.bega.api.ErrorUtils;
+import com.proitdevelopers.bega.helper.MetodosUsados;
 import com.proitdevelopers.bega.model.RegisterRequest;
 import com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -48,6 +52,9 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
@@ -65,6 +72,8 @@ import static com.proitdevelopers.bega.helper.Common.msgErroSenha;
 import static com.proitdevelopers.bega.helper.Common.msgErroSenhaDiferente;
 import static com.proitdevelopers.bega.helper.Common.msgErroTelefone;
 import static com.proitdevelopers.bega.helper.Common.msgQuasePronto;
+import static com.proitdevelopers.bega.helper.MetodosUsados.esconderTeclado;
+import static com.proitdevelopers.bega.helper.MetodosUsados.mostrarMensagem;
 import static com.proitdevelopers.bega.helper.MetodosUsados.removeAcentos;
 import static com.proitdevelopers.bega.helper.MetodosUsados.validarEmail;
 
@@ -94,6 +103,10 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
     private String nomeUtilizador,primeiroNome,sobreNome,email,telefone,senha,senhaConf;
     private String valorGeneroItem,valorCidadeItem;
     private String municipio,bairro,rua,nCasa;
+
+    private Dialog dialogConfirmTelefoneSuccesso;
+    TextView txtConfirmSucesso;
+    File photoFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,6 +201,13 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
         btnGaleria.setOnClickListener(this);
         btnCancelar_dialog.setOnClickListener(this);
 
+
+        dialogConfirmTelefoneSuccesso = new Dialog(this);
+        dialogConfirmTelefoneSuccesso.setContentView(R.layout.layout_confirmacao_sucesso);
+        txtConfirmSucesso = dialogConfirmTelefoneSuccesso.findViewById(R.id.txtConfirmSucesso);
+        Button dialog_btn_telefone_sucesso = dialogConfirmTelefoneSuccesso.findViewById(R.id.dialog_btn_telefone_sucesso);
+        dialog_btn_telefone_sucesso.setOnClickListener(this);
+
     }
 
 
@@ -199,7 +219,7 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void verificarPermissaoFotoCameraGaleria() {
-        if (Build.VERSION.SDK_INT >= 23) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSAO_FOTO);
         }
 
@@ -409,6 +429,7 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
         RequestBody rua = RequestBody.create(MultipartBody.FORM, registerRequest.rua);
         RequestBody nCasa = RequestBody.create(MultipartBody.FORM, registerRequest.nCasa);
 
+
         RequestBody filepart = RequestBody.create(MediaType.parse(getContentResolver().getType(selectedImage)),file);
 
         MultipartBody.Part file1 = MultipartBody.Part.createFormData("imagem",file.getName(),filepart);
@@ -427,8 +448,9 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if (response.isSuccessful()){
                     progressDialog.dismiss();
+                    txtConfirmSucesso.setText(getString(R.string.msg_conta_criada_sucesso));
+                    dialogConfirmTelefoneSuccesso.show();
 
-                    launchHomeScreen();
                 } else {
                     ErrorResponce errorResponce = ErrorUtils.parseError(response);
                     progressDialog.dismiss();
@@ -447,7 +469,7 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                 progressDialog.dismiss();
-                if (!conexaoInternetTrafego(RegistroActivity.this)){
+                if (!MetodosUsados.conexaoInternetTrafego(RegistroActivity.this,TAG)){
                     mostrarMensagem(RegistroActivity.this,R.string.txtMsg);
                 }else  if ("timeout".equals(t.getMessage())) {
                     mostrarMensagem(RegistroActivity.this,R.string.txtTimeout);
@@ -475,46 +497,7 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-    public void mostrarMensagem(Context mContexto, int mensagem) {
-        Toast.makeText(mContexto,mensagem,Toast.LENGTH_SHORT).show();
-    }
 
-    private boolean conexaoInternetTrafego(Context context){
-        String site = "www.google.com";
-        WebView webViewInternet = new WebView(context);
-        final boolean[] valorRetorno = new boolean[1];
-
-        webViewInternet.setWebViewClient(new WebViewClient());
-        webViewInternet.loadUrl(site);
-
-        webViewInternet.setWebViewClient(new WebViewClient(){
-            @Override
-            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                handler.proceed();
-                super.onReceivedSslError(view, handler, error);
-            }
-
-            @Override
-            public void onReceivedError(WebView view, int errorCode, String descricaoErro, String failingUrl) {
-                super.onReceivedError(view, errorCode, descricaoErro, failingUrl);
-                if (errorCode == -2) {
-                    valorRetorno[0] = false;
-                    Log.i(TAG,"webView ERROR " + descricaoErro );
-                    Log.i(TAG,"webView ERROR " + errorCode );
-                }
-            }
-        });
-
-        webViewInternet.setWebChromeClient(new WebChromeClient() {
-            public void onProgressChanged(WebView view, int progress) {
-                valorRetorno[0] = true;
-                Log.i(TAG,"webView " + progress );
-            }
-        });
-        Log.i(TAG,"webView " + valorRetorno[0]);
-
-        return valorRetorno[0];
-    }
 
     private void launchHomeScreen() {
         Intent intent = new Intent(RegistroActivity.this, LoginActivity.class);
@@ -526,14 +509,8 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        switch (parent.getId())
-        {
-            case R.id.editCidadeSpiner:
-                valorCidadeItem = parent.getItemAtPosition(position).toString();
-                break;
-
-
-
+        if (parent.getId() == R.id.editCidadeSpiner) {
+            valorCidadeItem = parent.getItemAtPosition(position).toString();
         }
 
     }
@@ -558,6 +535,12 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
             case R.id.btnCancelar_dialog:
                 caixa_dialogo_foto.dismiss();
                 break;
+
+            case R.id.dialog_btn_telefone_sucesso:
+                esconderTeclado(RegistroActivity.this);
+                dialogConfirmTelefoneSuccesso.cancel();
+                launchHomeScreen();
+                break;
         }
     }
 
@@ -574,8 +557,31 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
 
 
     private void pegarFotoCamara() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, TIRAR_FOTO_CAMARA);
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if(cameraIntent.resolveActivity(getPackageManager()) != null){
+            //Create a file to store the image
+            photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                ex.printStackTrace();
+            }
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,"com.proitdevelopers.bega.provider", photoFile);
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        photoURI);
+                startActivityForResult(cameraIntent,
+                        TIRAR_FOTO_CAMARA);
+            }
+        }
+
+//        if(pictureIntent.resolveActivity(getPackageManager()) != null) {
+//            startActivityForResult(pictureIntent,
+//                    TIRAR_FOTO_CAMARA);
+//        }
+//        startActivityForResult(pictureIntent, TIRAR_FOTO_CAMARA);
     }
 
     private void cortarImagemCrop(Uri imagemUri) {
@@ -612,6 +618,23 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
+    String imageFilePath;
+    private File createImageFile() throws IOException {
+        String timeStamp =
+                new SimpleDateFormat("yyyyMMdd_HHmmss",
+                        Locale.getDefault()).format(new Date());
+        String imageFileName = "IMG_" + timeStamp + "_";
+        File storageDir =
+                getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        imageFilePath = image.getAbsolutePath();
+        return image;
+    }
 
 
 
@@ -623,6 +646,25 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
             selectedImage = CropImage.getPickImageResultUri(RegistroActivity.this, data);
             cortarImagemCrop(selectedImage);
         }
+
+//        if (requestCode == TIRAR_FOTO_CAMARA && resultCode == RESULT_OK && data != null) {
+//
+//            try {
+//                Bitmap bitmap1 = (Bitmap) data.getExtras().get("data");
+//                Bitmap fotoReduzida = reduzirImagem(bitmap1, 500);
+//                Log.i("urirranadka", bitmap1.getWidth() + "algumacoisa");
+//
+//
+//                selectedImage = getImageUri(getApplicationContext(), fotoReduzida);
+//
+//                cortarImagemCrop(selectedImage);
+//
+//
+//            } catch (Exception e) {
+//                Log.i(TAG, "Erro onActivityResult" + e.getMessage());
+//            }
+//
+//        }
 
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
@@ -641,25 +683,15 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
             }
         }
 
-        if (requestCode == TIRAR_FOTO_CAMARA && resultCode == RESULT_OK && data != null) {
+        if (requestCode == TIRAR_FOTO_CAMARA && resultCode == RESULT_OK ) {
 
+            selectedImage = Uri.fromFile(photoFile);
 
-            try {
-                Bitmap bitmap1 = (Bitmap) data.getExtras().get("data");
-                Bitmap fotoReduzida = reduzirImagem(bitmap1, 500);
-                Log.i("urirranadka", bitmap1.getWidth() + "algumacoisa");
-
-
-                selectedImage = getImageUri(getApplicationContext(), fotoReduzida);
-
-                cortarImagemCrop(selectedImage);
-
-
-            } catch (Exception e) {
-                Log.i(TAG, "Erro onActivityResult" + e.getMessage());
-            }
+            cortarImagemCrop(selectedImage);
 
         }
+
+
     }
 
 

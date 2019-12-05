@@ -103,6 +103,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     //Esqueceu a senha? ----EnviarCodRedifinicao Telefone
     private Dialog dialogConfirmTelefoneSuccesso;
+    TextView txtConfirmSucesso;
 
     String nomeUtilizador,email,telefone,palavraPass,emailTelefone;
 
@@ -196,6 +197,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         dialogConfirmTelefoneSuccesso = new Dialog(this);
         dialogConfirmTelefoneSuccesso.setContentView(R.layout.layout_confirmacao_sucesso);
+        txtConfirmSucesso = dialogConfirmTelefoneSuccesso.findViewById(R.id.txtConfirmSucesso);
         Button dialog_btn_telefone_sucesso = dialogConfirmTelefoneSuccesso.findViewById(R.id.dialog_btn_telefone_sucesso);
         dialog_btn_telefone_sucesso.setOnClickListener(this);
 
@@ -384,6 +386,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     limparPinView(pinCodigoConfirmacaoTelef,editNovaSenha);
                     dialogSenhaEnviarTelefoneCodReset.cancel();
                     progressDialog.dismiss();
+                    txtConfirmSucesso.setText(getString(R.string.msg_sucesso_senha_alterada));
                     dialogConfirmTelefoneSuccesso.show();
 //                    mostrarDialogoOK(message);
                 }
@@ -530,12 +533,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onResponse(@NonNull Call<UsuarioAuth> call, @NonNull Response<UsuarioAuth> response) {
 
                 //response.body()==null
+                progressDialog.setMessage("Validando os dados...");
                 if (response.isSuccessful() && response.body() != null) {
                     UsuarioAuth userToken = response.body();
 
 
 
-                    progressDialog.setMessage("Validando os dados...");
                     AppPref.getInstance().saveAuthToken(userToken.tokenuser);
                     AppPref.getInstance().saveTokenTime(userToken.expiracao);
 //                    AppPref.getInstance().saveUser(Common.mCurrentUser);

@@ -1,6 +1,7 @@
 package com.proitdevelopers.bega.adapters;
 
 import android.content.Context;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,28 +21,55 @@ import com.squareup.picasso.Picasso;
 import java.util.Collections;
 import java.util.List;
 
+import static com.proitdevelopers.bega.helper.Common.SPAN_COUNT_ONE;
+import static com.proitdevelopers.bega.helper.Common.VIEW_TYPE_BIG;
+import static com.proitdevelopers.bega.helper.Common.VIEW_TYPE_SMALL;
+
 public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.ItemViewHolder> {
+
+
+    private GridLayoutManager mLayoutManager;
+
 
     private Context context;
     private List<Categoria> categoriaList;
     private ItemClickListener itemClickListener;
 
-    public CategoriaAdapter(Context context, List<Categoria> categoriaList) {
+    public CategoriaAdapter(Context context, List<Categoria> categoriaList,GridLayoutManager layoutManager) {
         this.context = context;
         this.categoriaList = categoriaList;
-
+        this.mLayoutManager = layoutManager;
     }
 
 
+    @Override
+    public int getItemViewType(int position) {
+        int spanCount = mLayoutManager.getSpanCount();
+        if (spanCount == SPAN_COUNT_ONE) {
+            return VIEW_TYPE_BIG;
+        } else {
+            return VIEW_TYPE_SMALL;
+        }
+    }
 
 
 
 
     @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_category_layout, parent, false);
-        return new ItemViewHolder(itemView);
+//        View itemView = LayoutInflater.from(parent.getContext())
+//                .inflate(R.layout.item_category_layout, parent, false);
+//        return new ItemViewHolder(itemView);
+
+        View view;
+        if (viewType == VIEW_TYPE_BIG) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_category_layout, parent, false);
+        } else {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_category_layout_grid, parent, false);
+        }
+
+        return new ItemViewHolder(view, viewType);
+
     }
 
 
@@ -84,12 +112,22 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.Item
 
 
 
-        public ItemViewHolder(View itemView) {
+        public ItemViewHolder(View itemView, int viewType) {
             super(itemView);
 
-            progress_bar = (ProgressBar) itemView.findViewById(R.id.progress_bar);
-            category_image = (ImageView) itemView.findViewById(R.id.category_image);
-            category_name = (TextView) itemView.findViewById(R.id.category_name);
+//            progress_bar = (ProgressBar) itemView.findViewById(R.id.progress_bar);
+//            category_image = (ImageView) itemView.findViewById(R.id.category_image);
+//            category_name = (TextView) itemView.findViewById(R.id.category_name);
+
+            if (viewType == VIEW_TYPE_BIG) {
+                progress_bar = (ProgressBar) itemView.findViewById(R.id.progress_bar);
+                category_image = (ImageView) itemView.findViewById(R.id.category_image);
+                category_name = (TextView) itemView.findViewById(R.id.category_name);
+            } else {
+                progress_bar = (ProgressBar) itemView.findViewById(R.id.progress_bar);
+                category_image = (ImageView) itemView.findViewById(R.id.category_image);
+                category_name = (TextView) itemView.findViewById(R.id.category_name);
+            }
 
 
             itemView.setTag(itemView);
