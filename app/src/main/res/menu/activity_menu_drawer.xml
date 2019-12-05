@@ -24,7 +24,7 @@
             <group android:id="@+id/menu_config" android:checkableBehavior="single">
 
                 <item android:id="@+id/nav_menu_settings" android:icon="@drawable/ic_settings_orange_24dp" android:title="Definições"/>
-                <item android:id="@+id/nav_menu_logout" android:icon="@drawable/ic_logout_orange_24dp" android:title="Sair"/>
+                <item android:id="@+id/nav_menu_logout" android:icon="@drawable/ic_exit_to_app_orange_24dp" android:title="Sair"/>
             </group>
         </menu>
     </item>
