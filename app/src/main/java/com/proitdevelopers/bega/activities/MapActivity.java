@@ -273,18 +273,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        try {
-
-            boolean isSucess = googleMap.setMapStyle(
-                    MapStyleOptions.loadRawResourceStyle(this, R.raw.uber_style_map)
-            );
-
-            if (!isSucess)
-                Log.e("ERROR", "Map style load failed !!!");
-
-        } catch (Resources.NotFoundException ex) {
-            ex.printStackTrace();
-        }
+//        try {
+//
+//            boolean isSucess = googleMap.setMapStyle(
+//                    MapStyleOptions.loadRawResourceStyle(this, R.raw.uber_style_map)
+//            );
+//
+//            if (!isSucess)
+//                Log.e("ERROR", "Map style load failed !!!");
+//
+//        } catch (Resources.NotFoundException ex) {
+//            ex.printStackTrace();
+//        }
 
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);

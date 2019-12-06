@@ -8,12 +8,6 @@
 
     You can also add your credentials to an existing key, using these values:
 
-    Package name:
-    F0:BC:66:B8:92:92:A1:B1:0C:57:D1:23:11:91:CE:BF:96:14:0C:27
-
-    SHA-1 certificate fingerprint:
-    F0:BC:66:B8:92:92:A1:B1:0C:57:D1:23:11:91:CE:BF:96:14:0C:27
-
     Alternatively, follow the directions here:
     https://developers.google.com/maps/documentation/android/start#get-key
 
