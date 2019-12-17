@@ -204,6 +204,7 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
 
         dialogConfirmTelefoneSuccesso = new Dialog(this);
         dialogConfirmTelefoneSuccesso.setContentView(R.layout.layout_confirmacao_sucesso);
+        caixa_dialogo_foto.setCancelable(false);
         txtConfirmSucesso = dialogConfirmTelefoneSuccesso.findViewById(R.id.txtConfirmSucesso);
         Button dialog_btn_telefone_sucesso = dialogConfirmTelefoneSuccesso.findViewById(R.id.dialog_btn_telefone_sucesso);
         dialog_btn_telefone_sucesso.setOnClickListener(this);
@@ -382,7 +383,7 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
         }
 
         if (nCasa.length()==1){
-            nCasa = "0"+nCasa;
+            nCasa = "nº"+nCasa;
         }
 
         if (selectedImage == null) {
@@ -447,7 +448,27 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if (response.isSuccessful()){
+
+                    imageView.setImageResource(R.drawable.ic_camera);
+
+                    editNomeUtilizador.setText("");
+                    editPrimeiroNome.setText("");
+                    editUltimoNome.setText("");
+                    editEmail.setText("");
+                    editTelefone.setText("");
+                    editPass.setText("");
+                    editConfirmPass.setText("");
+                    editMunicipio.setText("");
+                    editBairro.setText("");
+                    editRua.setText("");
+                    editNCasa.setText("");
+
+
                     progressDialog.dismiss();
+
+
+
+
                     txtConfirmSucesso.setText(getString(R.string.msg_conta_criada_sucesso));
                     dialogConfirmTelefoneSuccesso.show();
 

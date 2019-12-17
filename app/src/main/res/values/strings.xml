@@ -37,6 +37,7 @@
     <string name="hit_enviar_telef">Insira o nº do telefone e o endereço para fazer o seu pedido</string>
     <string name="hit_redif_telef">Insira o seu número do telefone</string>
     <string name="hit_redif_cod">Insira o Seu Código de Confirmação</string>
+    <string name="hit_pagamento_cod">Que Recebeu por SMS</string>
     <string name="hit_codigo_confirm">Código de Confirmação</string>
     <string name="txtCodigoenviado">O código foi reenviado.</string>
     <string name="hit_receber_denovo">Não Recebeu o código ?</string>
@@ -67,7 +68,7 @@
 
 
     <string name="price_with_currency">Kz%.2f</string>
-<!--    <string name="btn_checkout">CHECKOUT (%s)</string>-->
+    <string name="order_id">Factura #%s</string>
     <string name="btn_checkout">Enviar Pedido</string>
     <string name="lbl_item_price_quantity">%s x %d</string>
     <string name="cart_info_bar_data">%d Items | Kz%s</string>
@@ -103,6 +104,7 @@
     <string name="title_activity_pagamento">PagamentoActivity</string>
     <string name="msg_sucesso_senha_alterada">Aceda a sua conta com a nova senha!</string>
     <string name="msg_conta_criada_sucesso">A sua conta foi criada!</string>
+    <string name="title_activity_pedidos">PedidosActivity</string>
     <string-array name="genero">
         <item>Feminino</item>
         <item>Masculino</item>

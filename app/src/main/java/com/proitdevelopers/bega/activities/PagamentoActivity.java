@@ -1,9 +1,11 @@
 package com.proitdevelopers.bega.activities;
 
+import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -20,16 +22,21 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.annotations.SerializedName;
 import com.proitdevelopers.bega.R;
 import com.proitdevelopers.bega.api.ApiClient;
 import com.proitdevelopers.bega.api.ApiInterface;
+import com.proitdevelopers.bega.api.ErrorResponce;
+import com.proitdevelopers.bega.api.ErrorUtils;
 import com.proitdevelopers.bega.helper.NotificationHelper;
 import com.proitdevelopers.bega.localDB.AppDatabase;
 import com.proitdevelopers.bega.localDB.AppPref;
@@ -38,6 +45,7 @@ import com.proitdevelopers.bega.model.LocalEncomenda;
 import com.proitdevelopers.bega.model.Order;
 import com.proitdevelopers.bega.model.OrderItem;
 import com.proitdevelopers.bega.model.UsuarioPerfil;
+import com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
@@ -45,15 +53,22 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.proitdevelopers.bega.helper.Common.msgEnviandoCodigo;
+import static com.proitdevelopers.bega.helper.Common.msgErro;
+import static com.proitdevelopers.bega.helper.MetodosUsados.conexaoInternetTrafego;
+import static com.proitdevelopers.bega.helper.MetodosUsados.esconderTeclado;
 import static com.proitdevelopers.bega.helper.MetodosUsados.mostrarMensagem;
 
-public class PagamentoActivity extends AppCompatActivity {
-
+public class PagamentoActivity extends AppCompatActivity implements View.OnClickListener {
+    private String TAG = "PagamentoActivity";
     NotificationHelper notificationHelper;
     String mNotificationTitle = "Facturação";
     String mNotificationMessage;
@@ -74,6 +89,18 @@ public class PagamentoActivity extends AppCompatActivity {
     private Realm realm;
 
     List<OrderItem> orderItems;
+
+
+
+    @SerializedName("codigoconfirmacao")
+    public String codigoConfirmacao;
+
+    @SerializedName("codoperacao")
+    public String codigoOperacao;
+
+    private Dialog dialogSenhaEnviarTelefoneCodReset;
+    private ShowHidePasswordEditText pinCodigoConfirmacaoTelef;
+    ProgressDialog progressDialog;
 
 
 
@@ -98,6 +125,9 @@ public class PagamentoActivity extends AppCompatActivity {
             longitude = getIntent().getStringExtra("longitude");
         }
 
+        progressDialog = new ProgressDialog(PagamentoActivity.this);
+        progressDialog.setCancelable(false);
+
         initViews();
         prepareOrder();
 
@@ -120,6 +150,81 @@ public class PagamentoActivity extends AppCompatActivity {
 
                 });
 
+        //-------------------------------------------------------------
+        //Dialog enviar codigo de confirmacao telefone
+        dialogSenhaEnviarTelefoneCodReset = new Dialog(this);
+        dialogSenhaEnviarTelefoneCodReset.setContentView(R.layout.layout_enviar_codigo_pagamento);
+        dialogSenhaEnviarTelefoneCodReset.setCancelable(false);
+
+        pinCodigoConfirmacaoTelef = dialogSenhaEnviarTelefoneCodReset.findViewById(R.id.pinCodigoConfirmacaoTelef);
+
+        Button btn_enviar_cod_resetTelef = dialogSenhaEnviarTelefoneCodReset.findViewById(R.id.btn_enviar_cod_resetTelef);
+        LinearLayout linearBtnFecharTelef = dialogSenhaEnviarTelefoneCodReset.findViewById(R.id.linearBtnFecharTelef);
+
+        btn_enviar_cod_resetTelef.setOnClickListener(this);
+        linearBtnFecharTelef.setOnClickListener(this);
+        //-------------------------------------------------------------
+
+        btnCheckOrders.setOnClickListener(this);
+
+
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        switch (view.getId()) {
+
+
+            case R.id.btn_enviar_cod_resetTelef:
+                if (verificarCampoCodigo()){
+                    esconderTeclado(PagamentoActivity.this);
+                    enviarCodConrfirmacaoPagamento();
+                }
+                break;
+
+            case R.id.linearBtnFecharTelef:
+                limparPinView(pinCodigoConfirmacaoTelef);
+                esconderTeclado(PagamentoActivity.this);
+                dialogSenhaEnviarTelefoneCodReset.cancel();
+                showOrderStatus(false);
+                break;
+
+            case R.id.btn_check_orders:
+                startActivity(new Intent(PagamentoActivity.this, PedidosActivity.class));
+                finish();
+                break;
+
+
+
+        }
+
+
+    }
+
+    private void limparPinView(ShowHidePasswordEditText pinCodigoConfirmacaoTelef) {
+        pinCodigoConfirmacaoTelef.setText(null);
+
+    }
+
+    private boolean verificarCampoCodigo() {
+        codigoConfirmacao = pinCodigoConfirmacaoTelef.getText().toString();
+
+
+        if (codigoConfirmacao.isEmpty()) {
+            mostrarMensagem(PagamentoActivity.this, R.string.txtMsgCondConf);
+            pinCodigoConfirmacaoTelef.requestFocus();
+            pinCodigoConfirmacaoTelef.setError(msgErro);
+            return false;
+        }
+        if (codigoConfirmacao.length() <2) {
+            mostrarMensagem(PagamentoActivity.this, R.string.txtMsgCondConfCod);
+            return false;
+        }
+
+
+
+        return true;
 
     }
 
@@ -140,8 +245,8 @@ public class PagamentoActivity extends AppCompatActivity {
         orderItems = new ArrayList<>();
         for (CartItemProdutos cartItem : cartItems) {
             OrderItem orderItem = new OrderItem();
-            orderItem.productId = cartItem.produtos.getIdProduto();
-            orderItem.quantity = cartItem.quantity;
+            orderItem.produtoId = cartItem.produtos.getIdProduto();
+            orderItem.quantidade = cartItem.quantity;
 
 
             orderItems.add(orderItem);
@@ -199,13 +304,22 @@ public class PagamentoActivity extends AppCompatActivity {
 
     private void facturacaoWallet(Order order) {
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<ResponseBody> facturaWallet = apiInterface.facturaWallet(order);
-        facturaWallet.enqueue(new Callback<ResponseBody>() {
+        Call<List<String>> facturaWallet = apiInterface.facturaWallet(order);
+        facturaWallet.enqueue(new Callback<List<String>>() {
             @Override
-            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+            public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
 
                 if (response.isSuccessful()) {
-                    showOrderStatus(true);
+
+                    if (response.body()!=null){
+
+                        codigoOperacao = response.body().get(0);
+
+                        dialogSenhaEnviarTelefoneCodReset.show();
+                    }
+
+
+//                    showOrderStatus(true);
 
                 } else {
 
@@ -215,7 +329,7 @@ public class PagamentoActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable t) {
                 showOrderStatus(false);
                 if ("timeout".equals(t.getMessage())) {
                     mostrarMensagem(PagamentoActivity.this,R.string.txtTimeout);
@@ -259,6 +373,55 @@ public class PagamentoActivity extends AppCompatActivity {
         });
     }
 
+    private void enviarCodConrfirmacaoPagamento() {
+
+        progressDialog.setMessage(msgEnviandoCodigo);
+        progressDialog.show();
+
+
+        RequestBody codigoconfirmacao = RequestBody.create(MediaType.parse("multipart/form-data"),codigoConfirmacao);
+        RequestBody codoperacao = RequestBody.create(MediaType.parse("multipart/form-data"), codigoOperacao);
+
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<List<String>> enviarCod = apiInterface.enviarConfirCodigoPagamento(codigoconfirmacao,codoperacao);
+        enviarCod.enqueue(new Callback<List<String>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
+                if (!response.isSuccessful()) {
+//                    ErrorResponce errorResponce = ErrorUtils.parseError(response);
+//                    mostrarMensagem(PagamentoActivity.this, "errorResponce.getError()");
+                    progressDialog.dismiss();
+//                    showOrderStatus(false);
+                } else {
+
+
+                    progressDialog.dismiss();
+                    limparPinView(pinCodigoConfirmacaoTelef);
+                    dialogSenhaEnviarTelefoneCodReset.cancel();
+                    showOrderStatus(true);
+
+
+
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable t) {
+                progressDialog.dismiss();
+                showOrderStatus(false);
+                if (!conexaoInternetTrafego(PagamentoActivity.this,TAG)) {
+                    mostrarMensagem(PagamentoActivity.this, R.string.txtMsg);
+                } else if ("timeout".equals(t.getMessage())) {
+                    mostrarMensagem(PagamentoActivity.this, R.string.txtTimeout);
+                } else {
+                    mostrarMensagem(PagamentoActivity.this, R.string.txtProblemaMsg);
+                }
+
+            }
+        });
+
+
+
+    }
 
 
     /*
@@ -293,12 +456,7 @@ public class PagamentoActivity extends AppCompatActivity {
         }
 
         layoutOrderPlaced.setVisibility(View.VISIBLE);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-               finish();
-            }
-        }, 3000);
+
     }
 
 
@@ -329,5 +487,6 @@ public class PagamentoActivity extends AppCompatActivity {
             realm.close();
         }
     }
+
 
 }

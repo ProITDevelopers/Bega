@@ -26,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,6 +57,9 @@ import static com.proitdevelopers.bega.helper.MetodosUsados.mostrarMensagem;
 
 public class MenuActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+
+    public TextView txtToolbar;
+    public ImageView imageViewToolBar;
 
     private String TAG = "MenuActivity";
     private static final String BACK_STACK_ROOT_TAG = "root_fragment";
@@ -96,11 +100,13 @@ public class MenuActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_menu);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
-        notificationHelper = new NotificationHelper(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
+        txtToolbar = toolbar.findViewById(R.id.txtToolbar);
+        imageViewToolBar = toolbar.findViewById(R.id.imgToolbar);
         setSupportActionBar(toolbar);
 
+        notificationHelper = new NotificationHelper(this);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -377,6 +383,12 @@ public class MenuActivity extends AppCompatActivity implements
 //            Intent intent = new Intent(this,FavoritosActivity.class);
 //            startActivity(intent);
 //        }
+
+        else if (id == R.id.nav_menu_pedidos) {
+
+            Intent intent = new Intent(this,PedidosActivity.class);
+            startActivity(intent);
+        }
 
         else if (id == R.id.nav_menu_mapa) {
 

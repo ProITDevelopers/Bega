@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -126,7 +127,7 @@ public class WalletActivity extends AppCompatActivity {
         btnCriarWallet = findViewById(R.id.btnCriarWallet);
 
         String minDate = "1914-09-01";
-        String maxDate = "2001-12-31";
+        String maxDate = "2000-12-31";
 
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
@@ -135,9 +136,16 @@ public class WalletActivity extends AppCompatActivity {
             Date daymax = f.parse(maxDate);
             minDateMilliseconds = daymin.getTime();
             maxDateMilliseconds = daymax.getTime();
+
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+//        Date dataMIN = new Date();
+//        Date dataMAX = new Date();
+//        minDateMilliseconds = dataMIN.getDate() - 36500;
+//        maxDateMilliseconds = dataMAX.getDate() - 19;
 
         editTextDataNasc.setOnClickListener(view -> {
             Calendar cal = Calendar.getInstance();
@@ -311,17 +319,17 @@ public class WalletActivity extends AppCompatActivity {
         walletRequest.dataNasc = dataNasc;
 
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<Void> call = apiInterface.criarContaWallet(walletRequest);
-        call.enqueue(new Callback<Void>() {
+        Call<ResponseBody> call = apiInterface.criarContaWallet(walletRequest);
+        call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
 
                 //response.body()==null
                 if (response.isSuccessful()) {
 
                     progressDialog.dismiss();
                     walletContaLayout.setVisibility(View.GONE);
-                    carregarMeuPerfilOffline(Common.mCurrentUser);
+                    verifConecxaoSaldoWallet();
 
 
                 } else {
@@ -332,7 +340,7 @@ public class WalletActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 progressDialog.dismiss();
                 if (!conexaoInternetTrafego(WalletActivity.this,TAG)){
                     mostrarMensagem(WalletActivity.this,R.string.txtMsg);

@@ -28,7 +28,8 @@ public class Utils {
     }
 
     public static String getOrderTimestamp(String timestamp) {
-        SimpleDateFormat inputFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        SimpleDateFormat inputFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat inputFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         SimpleDateFormat outputFormatter = new SimpleDateFormat("d MMM, YYYY");
         try {
             Date date = inputFormatter.parse(timestamp);

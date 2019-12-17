@@ -193,7 +193,7 @@ public class EstabelecimentoFragment extends Fragment {
                 public void onClick(View view, int position) {
 
                     Estabelecimento estabelecimento = estabelecimentoList.get(position);
-                    Toast.makeText(getContext(), "Id: "+estabelecimento.estabelecimentoID+", "+estabelecimento.nomeEstabelecimento, Toast.LENGTH_SHORT).show();
+
                     Intent intent = new Intent(getContext(), ProdutosActivity.class);
                     intent.putExtra("idEstabelecimento",estabelecimento.estabelecimentoID);
                     intent.putExtra("imagemCapa",estabelecimento.imagemCapa);

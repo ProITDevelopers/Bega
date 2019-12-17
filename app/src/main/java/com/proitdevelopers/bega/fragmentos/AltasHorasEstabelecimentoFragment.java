@@ -16,10 +16,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.proitdevelopers.bega.R;
+import com.proitdevelopers.bega.activities.MenuActivity;
 import com.proitdevelopers.bega.activities.ProdutosActivity;
 import com.proitdevelopers.bega.adapters.EstabelecimentoAdapter;
 import com.proitdevelopers.bega.adapters.ItemClickListener;
@@ -194,7 +196,7 @@ public class AltasHorasEstabelecimentoFragment extends Fragment {
                 public void onClick(View view, int position) {
 
                     Estabelecimento estabelecimento = estabelecimentoList.get(position);
-                    Toast.makeText(getContext(), "Id: "+estabelecimento.estabelecimentoID+", "+estabelecimento.nomeEstabelecimento, Toast.LENGTH_SHORT).show();
+
                     Intent intent = new Intent(getContext(), ProdutosActivity.class);
                     intent.putExtra("idEstabelecimento",estabelecimento.estabelecimentoID);
                     intent.putExtra("imagemCapa",estabelecimento.imagemCapa);

@@ -7,7 +7,7 @@
     android:id="@+id/activity_shop"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activities.ShoppingCartActivity"
-    android:background="@color/white"
+    android:background="@drawable/categoria_bk"
     tools:showIn="@layout/activity_shopping_cart">
 
 
@@ -39,7 +39,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@drawable/button_bkg_color"
+        android:background="@color/colorText"
         android:text="@string/btn_checkout"
         android:textAllCaps="false"
         android:textColor="@color/white"

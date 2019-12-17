@@ -1,6 +1,7 @@
 package com.proitdevelopers.bega.api;
 
 import com.proitdevelopers.bega.model.Estabelecimento;
+import com.proitdevelopers.bega.model.Factura;
 import com.proitdevelopers.bega.model.LoginRequest;
 import com.proitdevelopers.bega.model.Order;
 import com.proitdevelopers.bega.model.Produtos;
@@ -19,6 +20,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -59,7 +62,7 @@ public interface ApiInterface {
     );
 
     @POST("/WalletAbrirContaCliente")
-    Call<Void> criarContaWallet(@Body WalletRequest walletRequest);
+    Call<ResponseBody> criarContaWallet(@Body WalletRequest walletRequest);
 
     @GET("/WalletConsultarSaldo")
     Call<List<Wallet>> getSaldoWallet();
@@ -71,8 +74,15 @@ public interface ApiInterface {
 
     @POST("/ReporSenha/{numero}")
     Call<String> enviarConfirCodigo(
-            @Path("numero") String numero_telefone,
-            @Body ReporSenha reporSenha);
+                    @Path("numero") String numero_telefone,
+                    @Body ReporSenha reporSenha);
+
+
+    @Multipart
+    @POST("/ConfirmacaoPagamentoWallet/{codigoconfirmacao},{codoperacao}")
+    Call<List<String>> enviarConfirCodigoPagamento(
+            @Part("codigoconfirmacao") RequestBody codigoconfirmacao,
+            @Part("codoperacao") RequestBody codoperacao);
 
 
 
@@ -97,10 +107,13 @@ public interface ApiInterface {
 
 
     @POST("/FacturaWallet")
-    Call<ResponseBody> facturaWallet(@Body Order order);
+    Call<List<String>> facturaWallet(@Body Order order);
 
     @POST("/FacturaTpa")
     Call<ResponseBody> facturaTPA(@Body Order order);
+
+    @GET("/FacturasActualCliente")
+    Call<List<Factura>> getTodasFacturas();
 
 
     @GET("/ListarEstabA24h")

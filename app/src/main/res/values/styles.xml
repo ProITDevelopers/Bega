@@ -21,4 +21,9 @@
         <item name="colorAccent">@color/colorOrange</item>
     </style>
 
+    <style name="NavigationView" parent="Base.Theme.AppCompat">
+        <item name="android:listDivider">@color/colorPrimary</item>
+        <item name="android:textColorSecondary">@color/colorPrimary</item>
+    </style>
+
 </resources>

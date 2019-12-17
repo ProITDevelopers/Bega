@@ -5,10 +5,11 @@ import com.google.gson.annotations.SerializedName;
 public class OrderItem {
 
     @SerializedName("produtoId")
-    public int productId;
+    public int produtoId;
 
     @SerializedName("quantidade")
-    public int quantity;
+    public int quantidade;
 
+    @SerializedName("produtos")
     public Produtos produtos;
 }

@@ -9,6 +9,8 @@
 
 <!--        <item android:id="@+id/nav_menu_favoritos" android:icon="@drawable/ic_favorite_orange_24dp" android:title="Favoritos"/>-->
 
+        <item android:id="@+id/nav_menu_pedidos" android:icon="@drawable/ic_pedidos_orange_24dp" android:title="Meus Pedidos"/>
+
         <item android:id="@+id/nav_menu_mapa" android:icon="@drawable/ic_map_orange_24dp" android:title="Mapa"/>
     </group>
     <item android:title="Redes Sociais">

@@ -142,11 +142,14 @@ public class PerfilActivity extends AppCompatActivity {
             txtSexo.setText(usuarioPerfil.sexo);
             txtProvincia.setText(usuarioPerfil.provincia);
 
+
+
+
             txtEndereco.setText("Município de "+
                     usuarioPerfil.municipio +", "+
                     "Bairro "+usuarioPerfil.bairro+", "+
                     "Rua "+usuarioPerfil.rua+", "+
-                    "Casa nº"+usuarioPerfil.nCasa);
+                    "Casa "+usuarioPerfil.nCasa);
 
 
 

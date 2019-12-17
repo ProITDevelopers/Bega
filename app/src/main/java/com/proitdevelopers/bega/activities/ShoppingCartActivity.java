@@ -270,7 +270,7 @@ public class ShoppingCartActivity extends AppCompatActivity
             case R.id.dialog_btn_enviar_telefone:
 
                 esconderTeclado(ShoppingCartActivity.this);
-                abrirCheckOutActivity();
+                abrirPagamentoActivity();
                 break;
 
         }
@@ -314,7 +314,7 @@ public class ShoppingCartActivity extends AppCompatActivity
     }
 
 
-    private void abrirCheckOutActivity() {
+    private void abrirPagamentoActivity() {
         if (verificarCamposTelefone()){
             caixa_dialogo_fornecer_numero.dismiss();
             Intent intent = new Intent(this,PagamentoActivity.class);

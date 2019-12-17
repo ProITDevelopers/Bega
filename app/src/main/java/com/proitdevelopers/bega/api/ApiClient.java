@@ -22,7 +22,7 @@ public class ApiClient {
 
 //    private static final String BASE_URL = "http://192.168.10.12:8892/";
 //    private static final String BASE_URL = "http://192.168.10.246:2380/";
-    private static final String BASE_URL = "http://18.221.223.173/";
+    private static final String BASE_URL = "http://3.14.6.56/";
     private static Retrofit retrofit = null;
     private static int REQUEST_TIMEOUT = 30;
     private static OkHttpClient okHttpClient;

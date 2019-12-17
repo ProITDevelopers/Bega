@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -226,6 +227,13 @@ public class EditarPerfilActivity extends AppCompatActivity implements View.OnCl
             editMunicipio.setText(usuarioPerfil.municipio);
             editBairro.setText(usuarioPerfil.bairro);
             editRua.setText(usuarioPerfil.rua);
+
+            if (usuarioPerfil.nCasa.startsWith("nº"))
+                usuarioPerfil.nCasa = usuarioPerfil.nCasa.replace(("nº"),"");
+
+            if (usuarioPerfil.nCasa.startsWith("0"))
+                usuarioPerfil.nCasa = usuarioPerfil.nCasa.replace(("0"),"");
+
             editNCasa.setText(usuarioPerfil.nCasa);
 
 
@@ -351,7 +359,7 @@ public class EditarPerfilActivity extends AppCompatActivity implements View.OnCl
         }
 
         if (nCasa.length()==1){
-            nCasa = "0"+nCasa;
+            nCasa = "nº"+nCasa;
         }
 
 
@@ -487,8 +495,13 @@ public class EditarPerfilActivity extends AppCompatActivity implements View.OnCl
 
 
     private boolean verificaUriFoto() {
-        Toast.makeText(this, "Adicione uma foto", Toast.LENGTH_SHORT).show();
-        return selectedImage != null;
+
+        if (selectedImage == null) {
+            Toast.makeText(this, "Adicione uma foto", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
     }
     private void salvarFoto() {
         File file = new File(postPath);
@@ -506,7 +519,12 @@ public class EditarPerfilActivity extends AppCompatActivity implements View.OnCl
                     public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                         if (response.isSuccessful()) {
                             progressDialog.dismiss();
-                            mostrarMensagem(EditarPerfilActivity.this, R.string.txtFotoAtualizada);
+
+                            Snackbar
+                                    .make(raiz, "Foto atualizada com sucesso!", 3000)
+                                    .setActionTextColor(Color.WHITE)
+                                    .show();
+
 
                         } else {
                             progressDialog.dismiss();
@@ -625,6 +643,13 @@ public class EditarPerfilActivity extends AppCompatActivity implements View.OnCl
                             .make(raiz, "Seus dados foram salvos!", 3000)
                             .setActionTextColor(Color.WHITE)
                             .show();
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            finish();
+                        }
+                    }, 3000);
 
 
                 } else {

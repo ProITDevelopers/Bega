@@ -15,8 +15,10 @@ import android.widget.Toast;
 
 import com.proitdevelopers.bega.R;
 import com.proitdevelopers.bega.adapters.ProdutosAdapter;
+import com.proitdevelopers.bega.helper.MetodosUsados;
 import com.proitdevelopers.bega.localDB.AppDatabase;
 import com.proitdevelopers.bega.model.CartItemProdutos;
+import com.proitdevelopers.bega.model.FavoritosItem;
 import com.proitdevelopers.bega.model.Produtos;
 import com.squareup.picasso.Picasso;
 
@@ -46,6 +48,7 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
     private CartItemProdutos cartItem;
     private RealmResults<CartItemProdutos> cartItems;
 
+    private FavoritosItem favoritosItem;
 
 
 
@@ -95,7 +98,7 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
         imgShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ProdutosDetalheActivity.this, "Partilhando link", Toast.LENGTH_SHORT).show();
+                MetodosUsados.shareTheApp(ProdutosDetalheActivity.this);
             }
         });
 
@@ -198,6 +201,25 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
     private void checkIfCartAsItems(){
         cartItem = realm.where(CartItemProdutos.class).equalTo("produtos.idProduto", produtoId).findFirst();
         if (cartItem != null) {
+            product_count.setText(String.valueOf(cartItem.quantity));
+            ic_add.setVisibility(View.VISIBLE);
+            ic_remove.setVisibility(View.VISIBLE);
+            product_count.setVisibility(View.VISIBLE);
+            btn_addCart.setEnabled(false);
+
+        } else {
+            product_count.setText(String.valueOf(0));
+            ic_add.setVisibility(View.VISIBLE);
+            ic_remove.setVisibility(View.GONE);
+            product_count.setVisibility(View.GONE);
+
+        }
+
+    }
+
+    private void checkIfItemsFavoritos(){
+        favoritosItem = realm.where(FavoritosItem.class).equalTo("produtos.idProduto", produtoId).findFirst();
+        if (favoritosItem != null) {
             product_count.setText(String.valueOf(cartItem.quantity));
             ic_add.setVisibility(View.VISIBLE);
             ic_remove.setVisibility(View.VISIBLE);
