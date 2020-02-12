@@ -18,6 +18,12 @@ public class AppPref {
     private static final String KEY_AUTH_COOKIE_TOKEN = "auth_cookie_token";
     private static final String ListGridViewMode = "list_grid_view_mode";
 
+    private static final String MILLIS_LEFT = "millisLeft";
+    private static final String TIMER_RUNNING = "timerRunning";
+    private static final String END_TIME = "endTime";
+    private static final long START_TIME_IN_MILLIS = 100000;
+
+
 
     private static SharedPreferences sharedPreferences;
     private static SharedPreferences.Editor editor;
@@ -110,6 +116,29 @@ public class AppPref {
     }
 
 
+
+    public void saveTimeCLOCK(long mTimeLeftInMillis,boolean mTimerRunning,long mEndTime) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(MILLIS_LEFT, mTimeLeftInMillis);
+        editor.putBoolean(TIMER_RUNNING, mTimerRunning);
+        editor.putLong(END_TIME, mEndTime);
+        editor.apply();
+    }
+
+    public long getMILLIS_LEFT() {
+
+        return sharedPreferences.getLong(MILLIS_LEFT, START_TIME_IN_MILLIS);
+    }
+
+    public boolean getTIMER_RUNNING() {
+
+        return sharedPreferences.getBoolean(TIMER_RUNNING, false);
+    }
+
+    public long getEND_TIME() {
+
+        return sharedPreferences.getLong(END_TIME, 0);
+    }
 
 
 

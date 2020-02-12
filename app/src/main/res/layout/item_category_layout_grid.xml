@@ -27,7 +27,7 @@
 
         <TextView
             android:id="@+id/category_name"
-            android:textColor="@color/colorText"
+            android:textColor="@color/white"
             android:textSize="22sp"
             android:gravity="center"
             android:layout_alignParentBottom="true"

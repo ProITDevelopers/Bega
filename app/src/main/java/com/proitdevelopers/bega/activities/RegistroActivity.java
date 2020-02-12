@@ -469,7 +469,8 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
         RequestBody nCasa = RequestBody.create(MultipartBody.FORM, registerRequest.nCasa);
 
 
-        RequestBody filepart = RequestBody.create(MediaType.parse(getContentResolver().getType(selectedImage)),file);
+//        RequestBody filepart = RequestBody.create(MediaType.parse(getContentResolver().getType(selectedImage)),file);
+        RequestBody filepart = RequestBody.create(MediaType.parse("image/*"),file);
 
         MultipartBody.Part file1 = MultipartBody.Part.createFormData("imagem",file.getName(),filepart);
 

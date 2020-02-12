@@ -65,12 +65,22 @@ public class EstabelecimentoAdapter extends RecyclerView.Adapter<Estabelecimento
 
 
         Estabelecimento item = mItems.get(position);
-        holder.title.setText(item.nomeEstabelecimento);
-        Picasso.with(context).load(item.logotipo).placeholder(R.drawable.shop_placeholder).into(holder.iv);
 
-        if (getItemViewType(position) == VIEW_TYPE_BIG) {
-            holder.info.setText(item.descricao);
+        if (item.estadoEstabelecimento != null){
+
+            if (item.estadoEstabelecimento.equals("Aberto")){
+
+                holder.title.setText(item.nomeEstabelecimento);
+                Picasso.with(context).load(item.logotipo).placeholder(R.drawable.shop_placeholder).into(holder.iv);
+
+                if (getItemViewType(position) == VIEW_TYPE_BIG) {
+                    holder.info.setText(item.descricao);
+                }
+
+            }
         }
+
+
 
 //        if (item.estadoEstabelecimento != null){
 //

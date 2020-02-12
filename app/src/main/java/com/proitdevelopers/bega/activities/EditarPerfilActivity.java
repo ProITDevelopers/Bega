@@ -539,7 +539,8 @@ public class EditarPerfilActivity extends AppCompatActivity implements View.OnCl
     private void salvarFoto() {
         File file = new File(postPath);
         try {
-            RequestBody filepart = RequestBody.create(MediaType.parse(getContentResolver().getType(selectedImage)), file);
+//            RequestBody filepart = RequestBody.create(MediaType.parse(getContentResolver().getType(selectedImage)), file);
+            RequestBody filepart = RequestBody.create(MediaType.parse("image/*"), file);
             MultipartBody.Part file1 = MultipartBody.Part.createFormData("FotoCapa", file.getName(), filepart);
             if (verificaUriFoto()) {
                 progressDialog.setMessage("Salvando a foto...");

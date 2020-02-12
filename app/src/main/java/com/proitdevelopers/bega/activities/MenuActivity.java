@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -30,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.proitdevelopers.bega.MyApplication;
 import com.proitdevelopers.bega.R;
 import com.proitdevelopers.bega.utilsClasses.TimerInfoBar;
 import com.proitdevelopers.bega.api.ApiClient;
@@ -287,20 +289,27 @@ public class MenuActivity extends AppCompatActivity implements
 
     private void logOut() {
 
-        resetTimer();
 
-        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.clear();
+        if (mTimerRunning) {
+            pauseTimer();
+            resetTimer();
+        }
 
-        editor.apply();
 
-        AppPref.getInstance().clearAppPrefs();
-        AppDatabase.clearData();
-        Intent intent = new Intent(MenuActivity.this, SplashActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        finish();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                AppPref.getInstance().clearAppPrefs();
+                AppDatabase.clearData();
+                Intent intent = new Intent(MenuActivity.this, SplashActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+            }
+        },2000);
+
+
+
 
     }
 
@@ -546,14 +555,17 @@ public class MenuActivity extends AppCompatActivity implements
     protected void onStop() {
         super.onStop();
 
-        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
 
-        editor.putLong("millisLeft", mTimeLeftInMillis);
-        editor.putBoolean("timerRunning", mTimerRunning);
-        editor.putLong("endTime", mEndTime);
+        AppPref.getInstance().saveTimeCLOCK(mTimeLeftInMillis, mTimerRunning, mEndTime);
 
-        editor.apply();
+//        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+//        SharedPreferences.Editor editor = prefs.edit();
+//
+//        editor.putLong("millisLeft", mTimeLeftInMillis);
+//        editor.putBoolean("timerRunning", mTimerRunning);
+//        editor.putLong("endTime", mEndTime);
+//
+//        editor.apply();
 
         if (mCountDownTimer != null) {
             mCountDownTimer.cancel();
@@ -564,16 +576,21 @@ public class MenuActivity extends AppCompatActivity implements
     protected void onStart() {
         super.onStart();
 
-        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+//        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+////
+////        mTimeLeftInMillis = prefs.getLong("millisLeft", START_TIME_IN_MILLIS);
+////        mTimerRunning = prefs.getBoolean("timerRunning", false);
 
-        mTimeLeftInMillis = prefs.getLong("millisLeft", START_TIME_IN_MILLIS);
-        mTimerRunning = prefs.getBoolean("timerRunning", false);
+
+        mTimeLeftInMillis = AppPref.getInstance().getMILLIS_LEFT();
+        mTimerRunning = AppPref.getInstance().getTIMER_RUNNING();
 
         updateCountDownText();
         updateButtons();
 
         if (mTimerRunning) {
-            mEndTime = prefs.getLong("endTime", 0);
+//            mEndTime = prefs.getLong("endTime", 0);
+            mEndTime = AppPref.getInstance().getEND_TIME();
             mTimeLeftInMillis = mEndTime - System.currentTimeMillis();
 
             if (mTimeLeftInMillis < 0) {

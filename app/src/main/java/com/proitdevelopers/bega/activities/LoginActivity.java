@@ -710,57 +710,68 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void autenticacaoFaceBook(FaceBookLoginRequest faceBookLoginRequest,UsuarioPerfil usuarioPerfil) {
 
+        progressDialog.setMessage("Validando os dados...");
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                carregarMeuPerfilFaceBook(usuarioPerfil);
+
+            }
+        },2000);
+
+
 //        progressDialog.setMessage("Verificando...");
 //        progressDialog.show();
 
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<UsuarioAuth> call = apiInterface.autenticarFaceBook(faceBookLoginRequest);
-        call.enqueue(new Callback<UsuarioAuth>() {
-            @Override
-            public void onResponse(@NonNull Call<UsuarioAuth> call, @NonNull Response<UsuarioAuth> response) {
-
-                //response.body()==null
-                progressDialog.setMessage("Validando os dados...");
-                if (response.isSuccessful() && response.body() != null) {
-                    UsuarioAuth userToken = response.body();
-
-//                    AppPref.getInstance().saveAuthToken(userToken.tokenuser);
-//                    AppPref.getInstance().saveTokenTime(userToken.expiracao);
-
-                    carregarMeuPerfilFaceBook(usuarioPerfil);
-
-
-
-
-                } else {
-                    ErrorResponce errorResponce = ErrorUtils.parseError(response);
-                    progressDialog.dismiss();
-
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<UsuarioAuth> call, @NonNull Throwable t) {
-                progressDialog.dismiss();
-                if (!conexaoInternetTrafego(LoginActivity.this,TAG)){
-                    mostrarMensagem(LoginActivity.this,R.string.txtMsg);
-                }else  if ("timeout".equals(t.getMessage())) {
-                    mostrarMensagem(LoginActivity.this,R.string.txtTimeout);
-                }else {
-                    mostrarMensagem(LoginActivity.this,R.string.txtProblemaMsg);
-                }
-                Log.i(TAG,"onFailure" + t.getMessage());
-
-                try {
-                    Snackbar
-                            .make(raiz, t.getMessage(), 4000)
-                            .setActionTextColor(Color.MAGENTA)
-                            .show();
-                } catch (Exception e) {
-                    Log.d(TAG, String.valueOf(e.getMessage()));
-                }
-            }
-        });
+//        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+//        Call<UsuarioAuth> call = apiInterface.autenticarFaceBook(faceBookLoginRequest);
+//        call.enqueue(new Callback<UsuarioAuth>() {
+//            @Override
+//            public void onResponse(@NonNull Call<UsuarioAuth> call, @NonNull Response<UsuarioAuth> response) {
+//
+//                //response.body()==null
+//                progressDialog.setMessage("Validando os dados...");
+//                if (response.isSuccessful() && response.body() != null) {
+//                    UsuarioAuth userToken = response.body();
+//
+////                    AppPref.getInstance().saveAuthToken(userToken.tokenuser);
+////                    AppPref.getInstance().saveTokenTime(userToken.expiracao);
+//
+//                    carregarMeuPerfilFaceBook(usuarioPerfil);
+//
+//
+//
+//
+//                } else {
+//                    ErrorResponce errorResponce = ErrorUtils.parseError(response);
+//                    progressDialog.dismiss();
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(@NonNull Call<UsuarioAuth> call, @NonNull Throwable t) {
+//                progressDialog.dismiss();
+//                if (!conexaoInternetTrafego(LoginActivity.this,TAG)){
+//                    mostrarMensagem(LoginActivity.this,R.string.txtMsg);
+//                }else  if ("timeout".equals(t.getMessage())) {
+//                    mostrarMensagem(LoginActivity.this,R.string.txtTimeout);
+//                }else {
+//                    mostrarMensagem(LoginActivity.this,R.string.txtProblemaMsg);
+//                }
+//                Log.i(TAG,"onFailure" + t.getMessage());
+//
+//                try {
+//                    Snackbar
+//                            .make(raiz, t.getMessage(), 4000)
+//                            .setActionTextColor(Color.MAGENTA)
+//                            .show();
+//                } catch (Exception e) {
+//                    Log.d(TAG, String.valueOf(e.getMessage()));
+//                }
+//            }
+//        });
 
     }
 
@@ -834,6 +845,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     String image_url = "https://graph.facebook.com/"+id+ "/picture?type=normal";
 
                     UsuarioPerfil usuarioPerfil = new UsuarioPerfil(first_name,last_name,email,image_url);
+
+
 
                     faceBookLoginRequest.accessToken = facebookToken;
 
