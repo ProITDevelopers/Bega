@@ -1,4 +1,4 @@
-package com.proitdevelopers.bega;
+package com.proitdevelopers.bega.utilsClasses;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.proitdevelopers.bega.R;
 import com.proitdevelopers.bega.model.FacturaItens;
 
 import java.util.ArrayList;

@@ -9,364 +9,405 @@
     tools:context=".activities.EditarPerfilActivity"
     tools:showIn="@layout/activity_editar_perfil">
 
-    <android.support.v7.widget.CardView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        app:cardElevation="10dp"
-        app:cardCornerRadius="5dp">
+        android:layout_height="match_parent">
 
-        <android.support.constraint.ConstraintLayout
+        <View
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="20dp">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/img"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="15dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/hint_nome"
-                android:src="@drawable/ic_camera"
-                android:layout_width="110dp"
-                android:layout_height="110dp"
-                android:contentDescription="@string/bega_logo"
-                app:civ_border_color="@color/colorButton"
-                app:civ_border_width="2dp"
-                />
-
-
-
-            <LinearLayout
-                android:weightSum="2"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@+id/img"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginTop="15dp"
-                android:paddingTop="5dp"
-                android:id="@+id/hint_nome"
-                >
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:id="@+id/hint_nome1">
-
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/editPrimeiroNome"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/primeiro_nome"
-                        android:maxLength="20"
-                        android:inputType="textCapSentences|textPersonName"
-                        />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/hint_nome2">
-
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/editUltimoNome"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/sobrenome"
-                        android:maxLength="20"
-                        android:inputType="textCapSentences|textPersonName"
-                        />
-                </android.support.design.widget.TextInputLayout>
-
-
-
-            </LinearLayout>
-
-
-
-
-
-            <LinearLayout
-                android:weightSum="2"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@+id/hint_nome"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:paddingTop="5dp"
-                android:id="@+id/hint_telefones"
-                >
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:id="@+id/hint_telefone1">
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/editTelefone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/txtTelef_rec"
-                        android:maxLength="9"
-                        android:inputType="phone"
-                        />
-                </android.support.design.widget.TextInputLayout>
-
-
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:id="@+id/hint_telefone2">
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/editTelefoneAlternativo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/telefone_alternativo"
-                        android:maxLength="9"
-                        android:inputType="phone"
-                        />
-                </android.support.design.widget.TextInputLayout>
-
-
-
-
-
-            </LinearLayout>
-
-
-
-
-            <LinearLayout
-                android:weightSum="2"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@+id/hint_telefones"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:paddingTop="5dp"
-                android:id="@+id/hint_provincia_municipio"
-                >
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
-                    android:layout_gravity="center"
-                    android:background="@drawable/borda_spinner"
-                    >
-
-                    <Spinner
-                        android:id="@+id/editCidadeSpiner"
-                        android:layout_width="match_parent"
-                        app:backgroundTint="@color/spinner_bg"
-                        android:popupBackground="@color/colorText"
-                        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                        android:layout_height="40dp" />
-
-                </LinearLayout>
-
-
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/hint_municipio">
-
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/editMunicipio"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/municipio"
-                        android:maxLength="20"
-                        android:inputType="textCapSentences|textPersonName"
-                        />
-                </android.support.design.widget.TextInputLayout>
-
-
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/hint_sexo_bairro"
-                android:weightSum="2"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@+id/hint_provincia_municipio"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:paddingTop="5dp">
-
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:background="@drawable/borda_spinner"
-                    >
-
-                    <ImageView
-                        android:src="@drawable/ic_gender"
-                        android:layout_gravity="center_vertical"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                    <RadioGroup
-                        android:id="@+id/radioGroup"
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="10dp"
-                        android:orientation="horizontal">
-
-                        <RadioButton
-                            android:id="@+id/radioBtnFem"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:checked="false"
-                            android:textColorHint="#BDBDBD"
-                            android:textColor="@color/black"
-                            android:text="F"
-                            android:textSize="16sp"/>
-
-                        <RadioButton
-                            android:id="@+id/radioBtnMasc"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:textColor="@color/black"
-                            android:checked="true"
-                            android:textColorHint="#BDBDBD"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginStart="8dp"
-                            android:text="M"
-                            android:textSize="16sp"/>
-                    </RadioGroup>
-
-
-
-                </LinearLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:id="@+id/hint_bairro">
-
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/editBairro"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/bairro"
-                        android:maxLength="25"
-                        android:inputType="textCapSentences|textPersonName"
-                        />
-                </android.support.design.widget.TextInputLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:weightSum="2"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@+id/hint_sexo_bairro"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:paddingTop="5dp"
-                android:id="@+id/hint_bairro_rua"
-                >
-
-
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/hint_rua">
-
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/editRua"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/rua"
-                        android:maxLength="20"
-                        android:inputType="textCapSentences|textPersonName"
-                        />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/hint_nCasa">
-
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/editNCasa"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/numero_da_casa"
-                        android:maxLength="5"
-                        android:inputType="text"
-                        />
-                </android.support.design.widget.TextInputLayout>
-
-
-
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/btnSalvar"
-                app:layout_constraintTop_toBottomOf="@+id/hint_bairro_rua"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:background="@drawable/button_bkg_color"
-                android:text="@string/salvar"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:layout_margin="20dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/toolbar_bk"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/img"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:src="@drawable/ic_camera"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:layout_centerHorizontal="true"
+                    android:contentDescription="@string/bega_logo"
+                    app:civ_border_color="@color/colorButton"
+                    app:civ_border_width="5dp"
+                    android:elevation="1dp"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="85dp"
+                        app:cardElevation="10dp"
+                        app:cardCornerRadius="5dp">
+
+                        <android.support.constraint.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingTop="40dp"
+                            android:paddingBottom="20dp">
 
 
 
-        </android.support.constraint.ConstraintLayout>
 
-    </android.support.v7.widget.CardView>
+
+                            <LinearLayout
+                                android:weightSum="2"
+                                android:orientation="horizontal"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginEnd="15dp"
+                                android:layout_marginTop="15dp"
+                                android:paddingTop="5dp"
+                                android:id="@+id/hint_nome"
+                                >
+
+                                <android.support.design.widget.TextInputLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:id="@+id/hint_nome1">
+
+
+                                    <android.support.v7.widget.AppCompatEditText
+                                        android:id="@+id/editPrimeiroNome"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:hint="@string/primeiro_nome"
+                                        android:maxLength="20"
+                                        android:inputType="textCapSentences|textPersonName"
+                                        />
+                                </android.support.design.widget.TextInputLayout>
+
+                                <android.support.design.widget.TextInputLayout
+                                    android:layout_weight="1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/hint_nome2">
+
+
+                                    <android.support.v7.widget.AppCompatEditText
+                                        android:id="@+id/editUltimoNome"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:hint="@string/sobrenome"
+                                        android:maxLength="20"
+                                        android:inputType="textCapSentences|textPersonName"
+                                        />
+                                </android.support.design.widget.TextInputLayout>
+
+
+
+                            </LinearLayout>
+
+
+
+
+
+                            <LinearLayout
+                                android:weightSum="2"
+                                android:orientation="horizontal"
+                                app:layout_constraintTop_toBottomOf="@+id/hint_nome"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginEnd="15dp"
+                                android:paddingTop="5dp"
+                                android:id="@+id/hint_telefones"
+                                >
+
+                                <android.support.design.widget.TextInputLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:id="@+id/hint_telefone1">
+
+                                    <android.support.v7.widget.AppCompatEditText
+                                        android:id="@+id/editTelefone"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:hint="@string/txtTelef_rec"
+                                        android:maxLength="9"
+                                        android:inputType="phone"
+                                        />
+                                </android.support.design.widget.TextInputLayout>
+
+
+
+                                <android.support.design.widget.TextInputLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:id="@+id/hint_telefone2">
+
+                                    <android.support.v7.widget.AppCompatEditText
+                                        android:id="@+id/editTelefoneAlternativo"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:hint="@string/telefone_alternativo"
+                                        android:maxLength="9"
+                                        android:inputType="phone"
+                                        />
+                                </android.support.design.widget.TextInputLayout>
+
+
+
+
+
+                            </LinearLayout>
+
+
+
+
+                            <LinearLayout
+                                android:weightSum="2"
+                                android:orientation="horizontal"
+                                app:layout_constraintTop_toBottomOf="@+id/hint_telefones"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginEnd="15dp"
+                                android:paddingTop="5dp"
+                                android:id="@+id/hint_municipio_bairro"
+                                >
+
+
+                                <android.support.design.widget.TextInputLayout
+                                    android:layout_weight="1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/hint_municipio">
+
+
+                                    <android.support.v7.widget.AppCompatEditText
+                                        android:id="@+id/editMunicipio"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:hint="@string/municipio"
+                                        android:maxLength="20"
+                                        android:inputType="textCapSentences|textPersonName"
+                                        />
+                                </android.support.design.widget.TextInputLayout>
+
+
+                                <android.support.design.widget.TextInputLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:id="@+id/hint_bairro">
+
+
+                                    <android.support.v7.widget.AppCompatEditText
+                                        android:id="@+id/editBairro"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:hint="@string/bairro"
+                                        android:maxLength="25"
+                                        android:inputType="textCapSentences|textPersonName"
+                                        />
+                                </android.support.design.widget.TextInputLayout>
+
+
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:weightSum="2"
+                                android:orientation="horizontal"
+                                app:layout_constraintTop_toBottomOf="@+id/hint_municipio_bairro"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginEnd="15dp"
+                                android:paddingTop="5dp"
+                                android:id="@+id/hint_rua_ncasa"
+                                >
+
+
+
+                                <android.support.design.widget.TextInputLayout
+                                    android:layout_weight="1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/hint_rua">
+
+
+                                    <android.support.v7.widget.AppCompatEditText
+                                        android:id="@+id/editRua"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:hint="@string/rua"
+                                        android:maxLength="20"
+                                        android:inputType="textCapSentences|textPersonName"
+                                        />
+                                </android.support.design.widget.TextInputLayout>
+
+                                <android.support.design.widget.TextInputLayout
+                                    android:layout_weight="1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/hint_nCasa">
+
+
+                                    <android.support.v7.widget.AppCompatEditText
+                                        android:id="@+id/editNCasa"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:hint="@string/numero_da_casa"
+                                        android:maxLength="5"
+                                        android:inputType="text"
+                                        />
+                                </android.support.design.widget.TextInputLayout>
+
+
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:id="@+id/hint_cidade_sexo"
+                                android:weightSum="2"
+                                android:orientation="horizontal"
+                                app:layout_constraintTop_toBottomOf="@+id/hint_rua_ncasa"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginEnd="15dp"
+                                android:paddingTop="5dp">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    android:background="@drawable/spinner_bk"
+                                    android:gravity="center"
+                                    >
+
+                                    <Spinner
+                                        android:id="@+id/editCidadeSpiner"
+                                        android:layout_width="match_parent"
+                                        app:backgroundTint="@color/spinner_bg"
+                                        android:popupBackground="@color/colorText"
+                                        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                                        android:layout_height="40dp" />
+
+                                </LinearLayout>
+
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:layout_marginStart="5dp"
+                                    android:layout_marginLeft="5dp"
+                                    android:background="@drawable/spinner_bk"
+                                    >
+
+                                    <ImageView
+                                        android:src="@drawable/ic_gender"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"/>
+
+                                    <RadioGroup
+                                        android:id="@+id/radioGroup"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="40dp"
+
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_marginStart="10dp"
+                                        android:orientation="horizontal">
+
+                                        <RadioButton
+                                            android:id="@+id/radioBtnFem"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:checked="false"
+                                            android:textColorHint="#BDBDBD"
+                                            android:textColor="@color/black"
+                                            android:text="F"
+                                            android:textSize="16sp"/>
+
+                                        <RadioButton
+                                            android:id="@+id/radioBtnMasc"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:textColor="@color/black"
+                                            android:checked="true"
+                                            android:textColorHint="#BDBDBD"
+                                            android:layout_marginLeft="8dp"
+                                            android:layout_marginStart="8dp"
+                                            android:text="M"
+                                            android:textSize="16sp"/>
+                                    </RadioGroup>
+
+
+
+                                </LinearLayout>
+
+
+
+                            </LinearLayout>
+
+
+
+                            <Button
+                                android:id="@+id/btnSalvar"
+                                app:layout_constraintTop_toBottomOf="@+id/hint_cidade_sexo"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                android:background="@drawable/orange_btn_small_bk"
+                                android:text="@string/salvar"
+                                android:textAllCaps="false"
+                                android:textColor="@color/white"
+                                android:textSize="16sp"
+                                android:layout_margin="20dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+
+
+                        </android.support.constraint.ConstraintLayout>
+
+                    </android.support.v7.widget.CardView>
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
 
 </android.support.v4.widget.NestedScrollView>

@@ -26,4 +26,11 @@
         <item name="android:textColorSecondary">@color/colorPrimary</item>
     </style>
 
+    <style name="NavigationTheme" parent="AppTheme">
+        <item name="android:listDivider">@color/colorPrimary</item>
+        <item name="android:textColorSecondary">@color/colorPrimary</item>
+
+    </style>
+
+
 </resources>

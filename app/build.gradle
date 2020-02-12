@@ -88,9 +88,8 @@ dependencies {
     implementation "android.arch.navigation:navigation-fragment-ktx:1.0.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
+    //FACEBOOK
+    implementation 'com.facebook.android:facebook-android-sdk:5.0.0'
+
 
 }
-
-//repositories {
-//    mavenCentral()
-//}

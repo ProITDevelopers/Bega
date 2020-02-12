@@ -11,7 +11,7 @@
 
         <item android:id="@+id/nav_menu_pedidos" android:icon="@drawable/ic_pedidos_orange_24dp" android:title="Meus Pedidos"/>
 
-        <item android:id="@+id/nav_menu_mapa" android:icon="@drawable/ic_map_orange_24dp" android:title="Mapa"/>
+<!--        <item android:id="@+id/nav_menu_mapa" android:icon="@drawable/ic_map_orange_24dp" android:title="Mapa"/>-->
     </group>
     <item android:title="Redes Sociais">
         <menu>
@@ -26,7 +26,7 @@
             <group android:id="@+id/menu_config" android:checkableBehavior="single">
 
                 <item android:id="@+id/nav_menu_settings" android:icon="@drawable/ic_settings_orange_24dp" android:title="Definições"/>
-                <item android:id="@+id/nav_menu_logout" android:icon="@drawable/ic_exit_to_app_orange_24dp" android:title="Sair"/>
+                <item android:id="@+id/nav_menu_logout" android:icon="@drawable/ic_return_logout_orange_24dp" android:title="Sair"/>
             </group>
         </menu>
     </item>

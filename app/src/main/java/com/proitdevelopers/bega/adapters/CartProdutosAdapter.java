@@ -58,7 +58,7 @@ public class CartProdutosAdapter extends RecyclerView.Adapter<CartProdutosAdapte
         Produtos product = cartItem.produtos;
         Picasso.with(context).load(product.getImagemProduto()).placeholder(R.drawable.hamburger_placeholder).into(holder.thumbnail);
         holder.name.setText(product.getDescricaoProdutoC());
-        holder.price.setText(holder.name.getContext().getString(R.string.lbl_item_price_quantity, context.getString(R.string.price_with_currency, product.getPrecoUnid()), cartItem.quantity));
+        holder.price.setText(holder.name.getContext().getString(R.string.lbl_item_price_quantity, context.getString(R.string.price_with_currency, product.getPrecoUnid())+ " AKZ", cartItem.quantity));
         holder.estabelecimento.setText(product.getEstabelecimento());
 
 

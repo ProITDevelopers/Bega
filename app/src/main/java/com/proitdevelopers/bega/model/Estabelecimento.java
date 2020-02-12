@@ -33,6 +33,7 @@ public class Estabelecimento {
     public TipoDeEstabelecimento tipoDeEstabelecimento;
     public int tipoDeEstabelecimentoID;
     public String endereco;
+    public String estadoEstabelecimento;
 
     public Estabelecimento() {}
 

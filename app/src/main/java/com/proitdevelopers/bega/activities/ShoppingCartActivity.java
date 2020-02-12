@@ -4,6 +4,8 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -19,22 +21,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.proitdevelopers.bega.CartInfoBar;
-import com.proitdevelopers.bega.RecyclerSectionItemDecoration;
+import com.proitdevelopers.bega.utilsClasses.CartInfoBar;
+import com.proitdevelopers.bega.utilsClasses.RecyclerSectionItemDecoration;
 import com.proitdevelopers.bega.localDB.AppPref;
 import com.proitdevelopers.bega.R;
 import com.proitdevelopers.bega.helper.Utils;
 import com.proitdevelopers.bega.adapters.CartProdutosAdapter;
 import com.proitdevelopers.bega.localDB.AppDatabase;
 import com.proitdevelopers.bega.model.CartItemProdutos;
-
-import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -125,7 +124,11 @@ public class ShoppingCartActivity extends AppCompatActivity
         //Botão em caixa_dialogo_tipo_pagamento
         Button btnWallet = caixa_dialogo_tipo_pagamento.findViewById(R.id.btnWallet);
         Button btnMulticaixa = caixa_dialogo_tipo_pagamento.findViewById(R.id.btnMulticaixa);
-        Button btnCancelar_dialog = caixa_dialogo_tipo_pagamento.findViewById(R.id.btnCancelar_dialog);
+//        Button btnCancelar_dialog = caixa_dialogo_tipo_pagamento.findViewById(R.id.btnCancelar_dialog);
+        ImageView btnCancelar_dialog = caixa_dialogo_tipo_pagamento.findViewById(R.id.btnCancelar_dialog);
+
+        if (caixa_dialogo_tipo_pagamento.getWindow()!=null)
+            caixa_dialogo_tipo_pagamento.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         btnWallet.setOnClickListener(this);
         btnMulticaixa.setOnClickListener(this);
@@ -146,6 +149,9 @@ public class ShoppingCartActivity extends AppCompatActivity
         dialog_btn_meu_telefone.setOnClickListener(this);
         dialog_btn_cancelar_enviar_telefone.setOnClickListener(this);
         dialog_btn_enviar_telefone.setOnClickListener(this);
+
+        if (caixa_dialogo_fornecer_numero.getWindow()!=null)
+            caixa_dialogo_fornecer_numero.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
 
 
@@ -286,7 +292,7 @@ public class ShoppingCartActivity extends AppCompatActivity
             return false;
         }
 
-        if (!telefone.matches("9[1-9][1-9]\\d{6}")){
+        if (!telefone.matches("9[1-9][0-9]\\d{6}")){
             dialog_editTelefone_telefone.setError(msgErroTelefone);
             return false;
         }

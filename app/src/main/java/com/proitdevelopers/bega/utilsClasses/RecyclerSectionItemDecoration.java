@@ -1,4 +1,4 @@
-package com.proitdevelopers.bega;
+package com.proitdevelopers.bega.utilsClasses;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.proitdevelopers.bega.R;
 
 public class RecyclerSectionItemDecoration extends RecyclerView.ItemDecoration {
 

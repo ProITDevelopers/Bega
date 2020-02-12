@@ -111,13 +111,13 @@ public class CategoriaFragment extends Fragment {
         recyclerCategory =  view.findViewById(R.id.recyclerCategory);
         recyclerCategory.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getContext());
-//        gridLayoutManager = new GridLayoutManager(getContext(), AppPref.getInstance().getListGridViewMode());
-        gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        gridLayoutManager = new GridLayoutManager(getContext(), AppPref.getInstance().getListGridViewMode());
+//        gridLayoutManager = new GridLayoutManager(getContext(), 2);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
 
-                if (position % 3 == 0){
+                if (position % 5 == 0){
                     return 2;
                 }else{
                     return 1;
@@ -125,14 +125,14 @@ public class CategoriaFragment extends Fragment {
 
             }
         });
-        recyclerCategory.setLayoutManager(gridLayoutManager);
-//        if (AppPref.getInstance().getListGridViewMode() ==  SPAN_COUNT_THREE) {
-//
-//            recyclerCategory.setLayoutManager(gridLayoutManager);
-//        } else {
-//
-//            recyclerCategory.setLayoutManager(layoutManager);
-//        }
+//        recyclerCategory.setLayoutManager(gridLayoutManager);
+        if (AppPref.getInstance().getListGridViewMode() ==  SPAN_COUNT_THREE) {
+
+            recyclerCategory.setLayoutManager(gridLayoutManager);
+        } else {
+
+            recyclerCategory.setLayoutManager(layoutManager);
+        }
 
         Picasso.with(getContext())
                 .load(TOP_MENU_CATEGORY)
@@ -201,8 +201,8 @@ public class CategoriaFragment extends Fragment {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-//        MenuItem item =  menu.findItem(R.id.menu_view);
-//        loadIcon(item);
+        MenuItem item =  menu.findItem(R.id.menu_view);
+        loadIcon(item);
         super.onPrepareOptionsMenu(menu);
     }
 
@@ -216,11 +216,11 @@ public class CategoriaFragment extends Fragment {
             return true;
         }
 
-//        if (itemId == R.id.menu_view) {
-//            switchLayout();
-//            switchIcon(item);
-//            return true;
-//        }
+        if (itemId == R.id.menu_view) {
+            switchLayout();
+            switchIcon(item);
+            return true;
+        }
 
 
 

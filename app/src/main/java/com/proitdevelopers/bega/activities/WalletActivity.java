@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.proitdevelopers.bega.localDB.AppPref;
@@ -53,7 +54,7 @@ import static com.proitdevelopers.bega.helper.MetodosUsados.mostrarMensagem;
 public class WalletActivity extends AppCompatActivity {
 
     private static final String TAG = "WalletActivity";
-    private CardView cardView_hint;
+    private RelativeLayout cardView_hint;
     private CircleImageView imageView;
     private TextView txtNomeCompleto,txtTelefone,txtTelefoneAlternativo,txtEmail,txtContaNumber,txtSaldo;
 
@@ -61,7 +62,7 @@ public class WalletActivity extends AppCompatActivity {
     AppCompatEditText editTextBI,editTextDataNasc;
     Button btnCriarWallet;
 
-    String bi, dataNasc;
+    String bi, dataNasc, data_toShow, date;
 
     private DatePickerDialog.OnDateSetListener mDateSetListener;
 
@@ -166,7 +167,10 @@ public class WalletActivity extends AppCompatActivity {
 
         mDateSetListener = (datePicker, ano, mes, dia) -> {
             mes = mes + 1;
-            String date = ano + "-" + mes + "-" + dia;
+
+
+
+            date = ano + "-" + mes + "-" + dia;
             editTextDataNasc.setText(date);
         };
     }

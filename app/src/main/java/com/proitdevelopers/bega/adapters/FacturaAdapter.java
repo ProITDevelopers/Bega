@@ -11,16 +11,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.proitdevelopers.bega.OrderItemsListView;
+import com.proitdevelopers.bega.utilsClasses.OrderItemsListView;
 import com.proitdevelopers.bega.R;
 import com.proitdevelopers.bega.helper.Utils;
 import com.proitdevelopers.bega.model.Factura;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.List;
-
-import static android.text.TextUtils.concat;
 
 public class FacturaAdapter extends RecyclerView.Adapter<FacturaAdapter.FacturaViewHolder>{
 
@@ -47,39 +43,49 @@ public class FacturaAdapter extends RecyclerView.Adapter<FacturaAdapter.FacturaV
     public void onBindViewHolder(@NonNull FacturaViewHolder holder, int position) {
 
         Factura factura = facturaList.get(position);
-        holder.txtFacturaId.setText(context.getString(R.string.order_id, String.valueOf(factura.idFactura)));
-        holder.txtDataPedido.setText(Utils.getOrderTimestamp(factura.dataPedido));
-        holder.orderItems.setOrderItems(factura.itens);
-        holder.txtEstado.setText(factura.estado);
+        if (factura != null){
 
-        if (factura.estadoPagamento.equals("Pagamento Efectuado")){
-            holder.txtEstadoPagamento.setTextColor(ContextCompat.getColor(context, R.color.white));
-            holder.txtEstadoPagamento.setBackgroundColor(ContextCompat.getColor(context, R.color.colorTextGreen));
-        }else{
-            holder.txtEstadoPagamento.setTextColor(ContextCompat.getColor(context, R.color.white));
-            holder.txtEstadoPagamento.setBackgroundColor(ContextCompat.getColor(context, R.color.colorText));
+            holder.txtFacturaId.setText(context.getString(R.string.order_id, String.valueOf(factura.idFactura)));
+            holder.txtDataPedido.setText(Utils.getOrderTimestamp(factura.dataPedido));
+            holder.orderItems.setOrderItems(factura.itens);
+            holder.txtEstado.setText(factura.estado);
+
+            if (factura.estadoPagamento.equals("Pagamento Efectuado")){
+                holder.txtEstadoPagamento.setTextColor(ContextCompat.getColor(context, R.color.white));
+                holder.txtEstadoPagamento.setBackgroundColor(ContextCompat.getColor(context, R.color.colorTextGreen));
+            }else{
+                holder.txtEstadoPagamento.setTextColor(ContextCompat.getColor(context, R.color.white));
+                holder.txtEstadoPagamento.setBackgroundColor(ContextCompat.getColor(context, R.color.colorText));
+            }
+            holder.txtEstadoPagamento.setText(factura.estadoPagamento);
+
+            int imageWallet = R.drawable.ic__wallet_orange_24dp;
+            int imageTPA = R.drawable.ic_bi_card_orange_24dp;
+
+            if (factura.metododPagamento!=null){
+                if(factura.metododPagamento.equals("WalletProit-consulting")){
+                    holder.imgMetododPagamento.setImageResource(imageWallet);
+                } else {
+                    holder.imgMetododPagamento.setImageResource(imageTPA);
+                }
+            }
+
+            holder.txtMetododPagamento.setText(factura.metododPagamento);
+
+            String total = String.valueOf(factura.total);
+            holder.txtTotal.setText(context.getString(R.string.price_with_currency, Float.parseFloat(total))+ " AKZ");
+
+            holder.txtDataPagamento.setText(Utils.getOrderTimestamp(factura.dataPagamento));
+
+
+
+            boolean isExpanded = facturaList.get(position).isExpanded();
+            holder.expandableLayout.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+
+
         }
-        holder.txtEstadoPagamento.setText(factura.estadoPagamento);
-
-        int imageWallet = R.drawable.ic_wallet_green_24dp;
-        int imageTPA = R.drawable.ic_bi_card_orange_24dp;
-
-        if (factura.metododPagamento.equals("TPA")){
-            holder.imgMetododPagamento.setImageResource(imageTPA);
-        }else{
-            holder.imgMetododPagamento.setImageResource(imageWallet);
-        }
-        holder.txtMetododPagamento.setText(factura.metododPagamento);
-
-        String total = String.valueOf(factura.total);
-        holder.txtTotal.setText(context.getString(R.string.price_with_currency, Float.parseFloat(total)));
-
-        holder.txtDataPagamento.setText(Utils.getOrderTimestamp(factura.dataPagamento));
 
 
-
-        boolean isExpanded = facturaList.get(position).isExpanded();
-        holder.expandableLayout.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
 
     }
 

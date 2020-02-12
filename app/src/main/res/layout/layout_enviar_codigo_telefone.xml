@@ -1,34 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    android:padding="10dp"
-    android:gravity="center"
-    android:background="#efefef"
-    android:layout_gravity="center">
+    android:layout_gravity="center"
+    app:cardElevation="10dp"
+    app:cardCornerRadius="40dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/linearLayoutopc_redif_senha"
-        android:gravity="center"
         android:orientation="vertical">
 
 
 
         <LinearLayout
             android:id="@+id/linearBtnFecharTelef"
-            android:layout_width="50dp"
+            android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:gravity="center"
+            android:gravity="end|center_vertical"
             android:layout_gravity="end">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
                 android:src="@drawable/ic_clear_black_24dp"/>
 
         </LinearLayout>
@@ -36,40 +34,45 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
             android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/img"
-                android:src="@drawable/bega_grupo"
+                android:src="@drawable/barra_dialog_box"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_gravity="center"
+                android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:textColor="@color/colorText"
                 android:text="@string/hit_recuperar_senha"
                 android:textSize="25sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"/>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
+                    android:gravity="center"
                     android:text="@string/hit_redif_cod"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -78,21 +81,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:textColor="@color/black"
+                    android:gravity="center"
                     android:layout_gravity="center"
                     android:text="@string/hit_receber_denovo"/>
 
                 <TextView
                     android:id="@+id/receberDeNovoTelefone"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:textStyle="bold"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
+                    android:gravity="center"
                     android:textColor="@color/colorText"
                     android:layout_height="wrap_content"
                     android:text="@string/txtTentarNovamente"/>
@@ -106,12 +113,18 @@
                 android:layout_marginTop="10dp"
                 android:layout_gravity="center"
                 android:textColor="@color/colorText"
-                android:textSize="12sp" />
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:gravity="center"
+                android:lines="2"
+                android:textSize="14sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:layout_gravity="center"
                 android:background="@android:color/transparent"
                 android:gravity="center"
@@ -147,6 +160,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:layout_gravity="center"
                 android:background="@android:color/transparent"
                 android:gravity="center"
@@ -181,16 +196,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
                 android:background="@android:color/transparent"
                 android:gravity="center"
                 android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/btn_enviar_cod_resetTelef"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:text="@string/hit_btn_enviar_cod"
                     android:textColor="@color/white"
-                    android:background="@drawable/button_bkg_color"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/orange_btn_big_bk"
                     android:layout_height="44dp"
                      />
 
@@ -202,4 +220,4 @@
 
     </LinearLayout>
 
-</RelativeLayout>
+</android.support.v7.widget.CardView>

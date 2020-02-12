@@ -149,7 +149,7 @@ public class PerfilActivity extends AppCompatActivity {
                     usuarioPerfil.municipio +", "+
                     "Bairro "+usuarioPerfil.bairro+", "+
                     "Rua "+usuarioPerfil.rua+", "+
-                    "Casa "+usuarioPerfil.nCasa);
+                    "Casa nº"+usuarioPerfil.nCasa);
 
 
 

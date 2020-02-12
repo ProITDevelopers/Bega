@@ -1,6 +1,7 @@
 package com.proitdevelopers.bega.activities;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -49,8 +50,10 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
     private RealmResults<CartItemProdutos> cartItems;
 
     private FavoritosItem favoritosItem;
+    private RealmResults<FavoritosItem> favoritosItems;
 
-
+    Drawable btn_addCart_green_bk,btn_addCart_grey_bk;
+    int ic_favorito_vazio,ic_favorito_preenchido;
 
 
 
@@ -70,7 +73,17 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
         setContentView(R.layout.activity_produtos_detalhe);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
+        btn_addCart_green_bk = getResources().getDrawable( R.drawable.button_bkg_color );
+        btn_addCart_grey_bk = getResources().getDrawable( R.drawable.button_bkg_inative );
+
+
+        ic_favorito_vazio = R.drawable.ic_favorite_border_orange_24dp;
+        ic_favorito_preenchido = R.drawable.ic_favorite_orange_24dp;
+
         if (getSupportActionBar()!=null){
+            Drawable myIcon = getResources().getDrawable( R.drawable.toolbar_bk );
+
+            getSupportActionBar().setBackgroundDrawable(myIcon);
             getSupportActionBar().setTitle(nomeEstabelecimento);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -86,6 +99,7 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
         cartItem = realm.where(CartItemProdutos.class).equalTo("produtos.idProduto", produtoId).findFirst();
 
         checkIfCartAsItems();
+        checkIfItemsFavoritos();
 
         Picasso.with(this).load(produtos.getImagemProduto()).placeholder(R.drawable.hamburger_placeholder).into(productImg);
 
@@ -93,7 +107,7 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
         txtDescricao.setText(produtos.getDescricaoProduto());
 
         String preco = String.valueOf(produtos.getPrecoUnid());
-        txtPrice.setText(getString(R.string.price_with_currency, Float.parseFloat(preco)));
+        txtPrice.setText(getString(R.string.price_with_currency, Float.parseFloat(preco))+ " AKZ");
 
         imgShare.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,10 +116,7 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
             }
         });
 
-        int favoriteblack = R.drawable.ic_favorite_black_24dp;
-        int favoriteorange = R.drawable.ic_favorite_orange_24dp;
-        imgFavorite.setImageResource(favoriteblack);
-        imgFavorite.setTag(favoriteblack);
+        imgFavorite.setTag(ic_favorito_vazio);
         imgFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,17 +129,17 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
                 integer = integer == null ? 0 : integer;
 
                 switch(integer) {
-                    case R.drawable.ic_favorite_black_24dp:
-                        imageView.setImageResource(favoriteorange);
-                        imageView.setTag(favoriteorange);
+                    case R.drawable.ic_favorite_border_orange_24dp:
+                        imageView.setImageResource(ic_favorito_preenchido);
+                        imageView.setTag(ic_favorito_preenchido);
                         AppDatabase.addItemToFavourite(produtos);
                         Snackbar.make(view, produtos.getDescricaoProdutoC()+" adicionado aos Favoritos!", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                         break;
                     case R.drawable.ic_favorite_orange_24dp:
                     default:
-                        imageView.setImageResource(favoriteblack);
-                        imageView.setTag(favoriteblack);
+                        imageView.setImageResource(ic_favorito_vazio);
+                        imageView.setTag(ic_favorito_vazio);
 
                         AppDatabase.removeFavouriteItem(produtos);
                         Snackbar.make(view, produtos.getDescricaoProdutoC()+" removido dos Favoritos!", Snackbar.LENGTH_LONG)
@@ -141,6 +152,46 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
 
             }
         });
+
+//        int favoriteblack = R.drawable.ic_favorite_border_orange_24dp;
+//        int favoriteorange = R.drawable.ic_favorite_orange_24dp;
+//        imgFavorite.setImageResource(favoriteblack);
+//        imgFavorite.setTag(favoriteblack);
+//        imgFavorite.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                ImageView imageView = (ImageView) view;
+//                assert(R.id.imgFavorite == imageView.getId());
+//
+//                // See here
+//                Integer integer = (Integer) imageView.getTag();
+//                integer = integer == null ? 0 : integer;
+//
+//                switch(integer) {
+//                    case R.drawable.ic_favorite_border_orange_24dp:
+//                        imageView.setImageResource(favoriteorange);
+//                        imageView.setTag(favoriteorange);
+//                        AppDatabase.addItemToFavourite(produtos);
+//                        Snackbar.make(view, produtos.getDescricaoProdutoC()+" adicionado aos Favoritos!", Snackbar.LENGTH_LONG)
+//                                .setAction("Action", null).show();
+//                        break;
+//                    case R.drawable.ic_favorite_orange_24dp:
+//                    default:
+//                        imageView.setImageResource(favoriteblack);
+//                        imageView.setTag(favoriteblack);
+//
+//                        AppDatabase.removeFavouriteItem(produtos);
+//                        Snackbar.make(view, produtos.getDescricaoProdutoC()+" removido dos Favoritos!", Snackbar.LENGTH_LONG)
+//                                .setAction("Action", null).show();
+//                        break;
+//                }
+//
+////                imgFavorite.setImageResource(favorite);
+//
+//
+//            }
+//        });
 
 
         ic_add.setOnClickListener(new View.OnClickListener() {
@@ -199,6 +250,7 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
     }
 
     private void checkIfCartAsItems(){
+
         cartItem = realm.where(CartItemProdutos.class).equalTo("produtos.idProduto", produtoId).findFirst();
         if (cartItem != null) {
             product_count.setText(String.valueOf(cartItem.quantity));
@@ -206,12 +258,18 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
             ic_remove.setVisibility(View.VISIBLE);
             product_count.setVisibility(View.VISIBLE);
             btn_addCart.setEnabled(false);
+            btn_addCart.setText("Adicionado");
+            btn_addCart.setBackground(btn_addCart_grey_bk);
+
 
         } else {
             product_count.setText(String.valueOf(0));
             ic_add.setVisibility(View.VISIBLE);
             ic_remove.setVisibility(View.GONE);
             product_count.setVisibility(View.GONE);
+            btn_addCart.setText("Adicionar ao Carrinho");
+            btn_addCart.setEnabled(true);
+            btn_addCart.setBackground(btn_addCart_green_bk);
 
         }
 
@@ -220,17 +278,12 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
     private void checkIfItemsFavoritos(){
         favoritosItem = realm.where(FavoritosItem.class).equalTo("produtos.idProduto", produtoId).findFirst();
         if (favoritosItem != null) {
-            product_count.setText(String.valueOf(cartItem.quantity));
-            ic_add.setVisibility(View.VISIBLE);
-            ic_remove.setVisibility(View.VISIBLE);
-            product_count.setVisibility(View.VISIBLE);
-            btn_addCart.setEnabled(false);
+            imgFavorite.setImageResource(ic_favorito_preenchido);
+            imgFavorite.setTag(ic_favorito_preenchido);
 
         } else {
-            product_count.setText(String.valueOf(0));
-            ic_add.setVisibility(View.VISIBLE);
-            ic_remove.setVisibility(View.GONE);
-            product_count.setVisibility(View.GONE);
+            imgFavorite.setImageResource(ic_favorito_vazio);
+            imgFavorite.setTag(ic_favorito_vazio);
 
         }
 
@@ -275,6 +328,7 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
     protected void onResume() {
         super.onResume();
         checkIfCartAsItems();
+        checkIfItemsFavoritos();
     }
 
 
@@ -293,11 +347,15 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
     public void onProductAddedCart(int index, Produtos product) {
         AppDatabase.addItemToCart(product);
         cartItem = cartItems.where().equalTo("produtos.idProduto", product.getIdProduto()).findFirst();
+
+
         if (cartItem != null) {
             product_count.setText(String.valueOf(cartItem.quantity));
             ic_remove.setVisibility(View.VISIBLE);
             product_count.setVisibility(View.VISIBLE);
+            btn_addCart.setText("Adicionado");
             btn_addCart.setEnabled(false);
+            btn_addCart.setBackground(btn_addCart_grey_bk);
 
         }
 
@@ -317,7 +375,9 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
             product_count.setText(String.valueOf(0));
             ic_remove.setVisibility(View.GONE);
             product_count.setVisibility(View.GONE);
+            btn_addCart.setText("Adicionar ao Carrinho");
             btn_addCart.setEnabled(true);
+            btn_addCart.setBackground(btn_addCart_green_bk);
 
         }
     }

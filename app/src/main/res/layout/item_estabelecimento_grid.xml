@@ -7,6 +7,14 @@
     android:orientation="vertical"
     app:cardElevation="10dp">
 
+<!--    <ImageView-->
+<!--        android:id="@+id/image_estado"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="end"-->
+<!--        android:layout_margin="10dp"-->
+<!--        android:src="@drawable/ic_wb_sunny_yellow_24dp" />-->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,7 +28,7 @@
             android:scaleType="centerCrop"
             android:layout_marginTop="8dp"
             android:src="@drawable/logo_bkg"
-            app:civ_border_width="2dp"
+            app:civ_border_width="5dp"
             app:civ_border_color="@color/colorOrange"/>
 
         <TextView
@@ -30,6 +38,7 @@
             android:padding="6dp"
             android:gravity="center"
             android:text="Image 1"
+            android:maxLines="1"
             android:textStyle="bold"
             android:textColor="@color/colorText"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium" />

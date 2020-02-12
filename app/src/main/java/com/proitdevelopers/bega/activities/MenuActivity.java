@@ -6,14 +6,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -31,7 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.proitdevelopers.bega.R;
-import com.proitdevelopers.bega.TimerInfoBar;
+import com.proitdevelopers.bega.utilsClasses.TimerInfoBar;
 import com.proitdevelopers.bega.api.ApiClient;
 import com.proitdevelopers.bega.api.ApiInterface;
 import com.proitdevelopers.bega.fragmentos.CategoriaFragment;
@@ -70,6 +70,7 @@ public class MenuActivity extends AppCompatActivity implements
     private CircleImageView image_User_avatar;
     private TextView txtName;
     private TextView txtEmail;
+
 
     //Esqueceu a senha? ----EnviarCodRedifinicao Telefone
     private Dialog dialogTerminarSessao;
@@ -115,11 +116,12 @@ public class MenuActivity extends AppCompatActivity implements
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
         View navigationHeaderView = navigationView.getHeaderView(0);
+
+
 
 
         image_User_avatar = (CircleImageView) navigationHeaderView.findViewById(R.id.image_User_avatar);
@@ -135,6 +137,8 @@ public class MenuActivity extends AppCompatActivity implements
         dialog_btn_cancelar_sessao.setOnClickListener(this);
         dialog_btn_terminar_sessao.setOnClickListener(this);
 
+        if (dialogTerminarSessao.getWindow()!=null)
+            dialogTerminarSessao.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
 
 
@@ -190,8 +194,10 @@ public class MenuActivity extends AppCompatActivity implements
         try {
 
             Picasso.with(this).load(usuarioPerfil.imagem).placeholder(R.drawable.ic_camera).into(image_User_avatar);
-            txtName.setText(usuarioPerfil.primeiroNome + " "+ Common.mCurrentUser.ultimoNome);
+            txtName.setText(usuarioPerfil.primeiroNome + " "+ usuarioPerfil.ultimoNome);
             txtEmail.setText(usuarioPerfil.email);
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -263,13 +269,13 @@ public class MenuActivity extends AppCompatActivity implements
             @Override
             public void onClick(final DialogInterface dialogInterface, int i) {
 
+
                 dialogInterface.dismiss();
 
                 logOut();
 
             }
         });
-
 
 
 
@@ -358,6 +364,12 @@ public class MenuActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dialogTerminarSessao.dismiss();
+    }
+
+    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -390,11 +402,11 @@ public class MenuActivity extends AppCompatActivity implements
             startActivity(intent);
         }
 
-        else if (id == R.id.nav_menu_mapa) {
-
-            Intent intent = new Intent(this,MapActivity.class);
-            startActivity(intent);
-        }
+//        else if (id == R.id.nav_menu_mapa) {
+//
+//            Intent intent = new Intent(this,MapActivity.class);
+//            startActivity(intent);
+//        }
 
         else if (id == R.id.nav_menu_share) {
             MetodosUsados.shareTheApp(this);

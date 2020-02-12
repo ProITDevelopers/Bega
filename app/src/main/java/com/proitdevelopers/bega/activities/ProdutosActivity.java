@@ -3,6 +3,7 @@ package com.proitdevelopers.bega.activities;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -70,9 +71,9 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
     private RealmResults<CartItemProdutos> cartItems;
     private RealmChangeListener<RealmResults<CartItemProdutos>> cartRealmChangeListener;
 
+    Toolbar toolbar;
 
-
-
+    Drawable toolbarBK;
 
 
     @Override
@@ -87,13 +88,13 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
         setContentView(R.layout.activity_produtos);
 
 
-
+        toolbarBK = getResources().getDrawable( R.drawable.toolbar_bk );
 
         realm = Realm.getDefaultInstance();
         cartItems = realm.where(CartItemProdutos.class).findAllAsync();
 
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(nomeEstabelecimento);
         setSupportActionBar(toolbar);
         if (getSupportActionBar()!=null){
@@ -156,8 +157,10 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
                 if (scrollRange + verticalOffset == 0) {
 //                    collapsingToolbar.setTitle(getString(R.string.app_name));
                     collapsingToolbar.setTitle(nomeEstabelecimento);
+                    toolbar.setBackground(toolbarBK);
                     isShow = true;
                 } else if (isShow) {
+                    toolbar.setBackground(null);
                     collapsingToolbar.setTitle(" ");
                     isShow = false;
                 }
@@ -262,7 +265,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
                 public void onClick(View view, int position) {
 
                     Produtos produto = produtosList.get(position);
-                    Toast.makeText(ProdutosActivity.this, "Item: "+produto.getDescricaoProdutoC(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(ProdutosActivity.this, "Item: "+produto.getDescricaoProdutoC(), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(ProdutosActivity.this,ProdutosDetalheActivity.class);
                     intent.putExtra("nomeEstabelecimento",nomeEstabelecimento);
                     intent.putExtra("produtoId",produto.getIdProduto());

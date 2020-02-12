@@ -13,9 +13,12 @@ import com.proitdevelopers.bega.R;
 import com.proitdevelopers.bega.model.CartItemProdutos;
 import com.proitdevelopers.bega.model.FavoritosItem;
 import com.proitdevelopers.bega.model.Produtos;
+import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FavoritosItemAdapter extends RecyclerView.Adapter<FavoritosItemAdapter.ItemViewHolder> {
 
@@ -59,7 +62,8 @@ public class FavoritosItemAdapter extends RecyclerView.Adapter<FavoritosItemAdap
         holder.name.setText(product.getDescricaoProdutoC());
         holder.estabelecimento.setText(product.getEstabelecimento());
 
-//        Picasso.with(context).load(product.imageUrl).into(holder.thumbnail);
+//        Picasso.with(context).load(product.imagemProduto).into(holder.thumbnail);
+        Picasso.with(context).load(product.getImagemProduto()).placeholder(R.drawable.hamburger_placeholder).into(holder.thumbnail);
 
         if (listener != null)
             holder.btn_remove.setOnClickListener(view -> listener.onFavoritoItemRemoved(position, favoritosItem));
@@ -72,7 +76,8 @@ public class FavoritosItemAdapter extends RecyclerView.Adapter<FavoritosItemAdap
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
-        private ImageView thumbnail;
+//        private ImageView thumbnail;
+        private CircleImageView thumbnail;
         private TextView name;
         private TextView estabelecimento;
         private Button btn_remove;
@@ -81,7 +86,8 @@ public class FavoritosItemAdapter extends RecyclerView.Adapter<FavoritosItemAdap
         public ItemViewHolder(View itemView) {
             super(itemView);
 
-            thumbnail = (ImageView) itemView.findViewById(R.id.thumbnail);
+//            thumbnail = (ImageView) itemView.findViewById(R.id.thumbnail);
+            thumbnail = (CircleImageView) itemView.findViewById(R.id.thumbnail);
             name = (TextView) itemView.findViewById(R.id.name);
             estabelecimento = (TextView) itemView.findViewById(R.id.estabelecimento);
             btn_remove = (Button) itemView.findViewById(R.id.btn_remove);

@@ -47,6 +47,7 @@ public class Common {
     public static String msgErroEspaco = "Preencha o campo sem espaço.";
     public static String msgErroTentar = "Tentar de Novo";
     public static String msgErroLetras = "Preencha o com letras.";
+    public static String msgErroLetrasCaracteres = "Preencha no mínimo com 3 letras.";
     public static String msgErroSenha = "Senha fraca.";
     public static String msgErroSenhaDiferente = "As senhas devem ser iguais";
     public static String msgErroSTelefone = "Preencha o campo com um nº telefone.";
@@ -68,12 +69,12 @@ public class Common {
     public static String CATEGORY_QUITUTES_2="https://firebasestorage.googleapis.com/v0/b/firetutorial-9cfcc.appspot.com/o/bega%2Fquitutes_category_2.jpg?alt=media&token=95fbb7d3-26b6-4f6c-b3ce-a770db6d5d37";
 
     public static String TOP_MENU_CATEGORY="https://firebasestorage.googleapis.com/v0/b/firetutorial-9cfcc.appspot.com/o/bega%2Fmenu_pics_official%2Ftop_menu_category.png?alt=media&token=222cd49c-bd2e-47ea-ba73-9ff1b676fb90";
-    public static String CATEGORY_EVENTOS="https://firebasestorage.googleapis.com/v0/b/firetutorial-9cfcc.appspot.com/o/bega%2Fmenu_pics_official%2Feventos_category.png?alt=media&token=4ae28af5-0b59-4563-ab24-105d91a727dd";
+    public static String CATEGORY_EVENTOS="https://firebasestorage.googleapis.com/v0/b/firetutorial-9cfcc.appspot.com/o/bega%2Fmenu_pics_official%2FEVENTOS.jpg?alt=media&token=03576d3f-841d-4dac-bacc-ac73edb3ad67";
+    public static String CATEGORY_RESTAURANTE="https://firebasestorage.googleapis.com/v0/b/firetutorial-9cfcc.appspot.com/o/bega%2Fmenu_pics_official%2FRESTAURANTES.jpg?alt=media&token=34cc6a22-0414-4df6-9753-51abc78e3533";
+    public static String CATEGORY_CASEIRO="https://firebasestorage.googleapis.com/v0/b/firetutorial-9cfcc.appspot.com/o/bega%2Fmenu_pics_official%2FCASEIROS.jpg?alt=media&token=00391823-7026-4dc2-9d88-8683b6ef2f67";
+    public static String CATEGORY_ALTAS_HORAS="https://firebasestorage.googleapis.com/v0/b/firetutorial-9cfcc.appspot.com/o/bega%2Fmenu_pics_official%2FALTAS_HORAS.jpg?alt=media&token=82fd4849-7883-4ae1-9dcf-a2e6fd8ae32f";
+    public static String CATEGORY_COVENIENCIA="https://firebasestorage.googleapis.com/v0/b/firetutorial-9cfcc.appspot.com/o/bega%2Fmenu_pics_official%2FCONVENIENCIA.jpg?alt=media&token=fe9b1085-0d6f-437f-b93c-e9b700cc8ff4";
     public static String CATEGORY_ESTAFETAS="https://firebasestorage.googleapis.com/v0/b/firetutorial-9cfcc.appspot.com/o/bega%2Fmenu_pics_official%2FEstafetas_category.png?alt=media&token=6a787123-d251-41f9-8729-e10f18c09c1d";
-    public static String CATEGORY_RESTAURANTE="https://firebasestorage.googleapis.com/v0/b/firetutorial-9cfcc.appspot.com/o/bega%2Fmenu_pics_official%2FRestaurante_category.png?alt=media&token=9be53dde-998b-4203-b425-7cd0e103bced";
-    public static String CATEGORY_CASEIRO="https://firebasestorage.googleapis.com/v0/b/firetutorial-9cfcc.appspot.com/o/bega%2Fmenu_pics_official%2Fcaseiro_category.png?alt=media&token=f4203e6d-d5b4-47ad-9637-0b2c882506ee";
-    public static String CATEGORY_ALTAS_HORAS="https://firebasestorage.googleapis.com/v0/b/firetutorial-9cfcc.appspot.com/o/bega%2Fmenu_pics_official%2Faltashoras_category.png?alt=media&token=90e284c6-ea03-4269-bb2c-66583ea43abb";
-    public static String CATEGORY_COVENIENCIA="https://firebasestorage.googleapis.com/v0/b/firetutorial-9cfcc.appspot.com/o/bega%2Fmenu_pics_official%2FConveniencia_category.png?alt=media&token=ea92e16e-b687-453f-b584-10a2460ac5a9";
     public static String CATEGORY_QUITUTES="https://firebasestorage.googleapis.com/v0/b/firetutorial-9cfcc.appspot.com/o/bega%2Fmenu_pics_official%2Fquitutes_category.png?alt=media&token=e1cd7edd-3cb7-4c7f-9aa1-76fb1abc9245";
 
 
@@ -81,13 +82,13 @@ public class Common {
     public static List<Categoria> getCategoryList(){
         List<Categoria> categoriaList = new ArrayList<>();
 
-        categoriaList.add(new Categoria(1,"Eventos",CATEGORY_EVENTOS));
-        categoriaList.add(new Categoria(2,"Estafetas",CATEGORY_ESTAFETAS));
-        categoriaList.add(new Categoria(3,"Restaurantes",CATEGORY_RESTAURANTE));
-        categoriaList.add(new Categoria(6,"Caseiros",CATEGORY_CASEIRO));
-        categoriaList.add(new Categoria(4,"Altas Horas",CATEGORY_ALTAS_HORAS));
-        categoriaList.add(new Categoria(5,"Conveniência",CATEGORY_COVENIENCIA));
-        categoriaList.add(new Categoria(7,"Quitutes",CATEGORY_QUITUTES));
+        categoriaList.add(new Categoria(1,"Restaurantes",CATEGORY_RESTAURANTE));
+        categoriaList.add(new Categoria(2,"Conveniência",CATEGORY_COVENIENCIA));
+        categoriaList.add(new Categoria(3,"Caseiros",CATEGORY_CASEIRO));
+        categoriaList.add(new Categoria(4,"Eventos",CATEGORY_EVENTOS));
+        categoriaList.add(new Categoria(5,"Altas Horas",CATEGORY_ALTAS_HORAS));
+//        categoriaList.add(new Categoria(2,"Estafetas",CATEGORY_ESTAFETAS));
+//        categoriaList.add(new Categoria(7,"Quitutes",CATEGORY_QUITUTES));
 
 //        categoriaList.add(new Categoria(1,"Bebidas",CATEGORY_DRINKS));
 //        categoriaList.add(new Categoria(2,"Hambúrgers",CATEGORY_HAMBURGER));

@@ -1,49 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    android:padding="10dp"
-    android:gravity="center"
-    android:background="#efefef"
-    android:layout_gravity="center">
+    android:layout_gravity="center"
+    app:cardElevation="10dp"
+    app:cardCornerRadius="40dp">
 
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:id="@+id/linearLayoutopc_redif_senha"
+        android:paddingBottom="10dp"
         android:gravity="center"
+        android:id="@+id/linearLayoutopc_redif_senha"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:gravity="right"
-            android:layout_height="wrap_content">
+            android:layout_height="40dp"
+            android:gravity="end|center_vertical">
 
-            <Button
+            <ImageView
                 android:id="@+id/btnCancelar_dialog"
-                android:layout_width="30dp"
-                android:layout_marginRight="5dp"
-                android:layout_height="15dp"
-                android:background="@android:color/transparent"
-                android:drawableLeft="@drawable/ic_cancelar_24dp"
-                android:layout_marginEnd="5dp"
-                android:padding="8dp"
-                android:drawableStart="@drawable/ic_cancelar_24dp"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/ic_clear_black_24dp"/>
+
+<!--            <Button-->
+<!--                android:id="@+id/btnCancelar_dialog"-->
+<!--                android:layout_width="30dp"-->
+<!--                android:layout_marginRight="5dp"-->
+<!--                android:layout_height="15dp"-->
+<!--                android:background="@android:color/transparent"-->
+<!--                android:drawableLeft="@drawable/ic_cancelar_24dp"-->
+<!--                android:layout_marginEnd="5dp"-->
+<!--                android:padding="8dp"-->
+<!--                android:drawableStart="@drawable/ic_cancelar_24dp"/>-->
         </LinearLayout>
 
         <ImageView
             android:id="@+id/img"
-            android:src="@drawable/bega_grupo"
+            android:src="@drawable/barra_dialog_box"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_gravity="center"
+            android:layout_height="wrap_content"
             android:scaleType="centerCrop"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             />
 
@@ -57,7 +62,9 @@
             android:textSize="20sp"
             android:gravity="center"
             android:paddingTop="4dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"/>
 
 
 
@@ -66,46 +73,50 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="44dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:background="@android:color/transparent"
             android:gravity="center"
+            android:weightSum="2"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btnCamara"
+                android:text="@string/dialogo_escolher_foto_opc_camera"
+                android:background="@drawable/orange_btn_small_bk"
+                android:drawableLeft="@drawable/ic_photo_camera_white_24dp"
+                android:textSize="14sp"
+                android:padding="4dp"
+                android:drawableStart="@drawable/ic_photo_camera_white_24dp"
                 android:layout_width="0dp"
-                android:layout_weight="30"
+                android:layout_weight="1"
                 android:layout_marginRight="5dp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:layout_height="44dp"
-                android:background="@color/colorButton"
-                android:text="@string/dialogo_escolher_foto_opc_camera"
-                android:drawableLeft="@drawable/ic_photo_camera_orange_24dp"
-                android:textSize="14sp"
                 android:textColor="@color/white"
-                android:layout_marginEnd="5dp"
-                android:padding="4dp"
-                android:drawableStart="@drawable/ic_photo_camera_orange_24dp"
+                android:layout_height="44dp"
+                android:layout_marginEnd="10dp"
 
                 />
 
             <Button
                 android:id="@+id/btnGaleria"
-                android:layout_width="0dp"
-                android:layout_weight="30"
-                android:gravity="center"
-                android:padding="5dp"
-                android:layout_gravity="center"
-                android:layout_height="44dp"
-                android:background="@color/colorButton"
                 android:text="@string/dialogo_escolher_foto_opc_galeria"
-                android:drawableLeft="@drawable/ic_image_orange_24dp"
+                android:padding="5dp"
+                android:background="@drawable/orange_btn_small_bk"
+                android:drawableLeft="@drawable/ic_image_white_24dp"
                 android:textSize="14sp"
-                android:textColor="@color/white"
                 android:layout_marginStart="5dp"
                 android:layout_marginLeft="5dp"
-                android:drawableStart="@drawable/ic_image_orange_24dp"
+                android:drawableStart="@drawable/ic_image_white_24dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:layout_height="44dp"
                 />
 
         </LinearLayout>
@@ -114,7 +125,7 @@
 
     <!--    <include layout="@layout/activity_sem_internet" />-->
 
-</RelativeLayout>
+</android.support.v7.widget.CardView>
 <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
 <!--    android:orientation="vertical"-->
 <!--    android:layout_width="wrap_content"-->

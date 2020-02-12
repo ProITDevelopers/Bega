@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.proitdevelopers.bega.R;
@@ -27,6 +28,9 @@ public class EstabelecimentoAdapter extends RecyclerView.Adapter<Estabelecimento
     private GridLayoutManager mLayoutManager;
     private Context context;
     private ItemClickListener itemClickListener;
+
+    int image_aberto = R.drawable.ic_wb_sunny_yellow_24dp;
+    int image_fechado = R.drawable.ic_moon_grey_24dp;
 
     public EstabelecimentoAdapter(Context context, List<Estabelecimento> items, GridLayoutManager layoutManager) {
         this.context = context;
@@ -59,15 +63,25 @@ public class EstabelecimentoAdapter extends RecyclerView.Adapter<Estabelecimento
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
 
+
         Estabelecimento item = mItems.get(position);
-
         holder.title.setText(item.nomeEstabelecimento);
-
         Picasso.with(context).load(item.logotipo).placeholder(R.drawable.shop_placeholder).into(holder.iv);
-//        holder.iv.setImageResource(item.logotipo);
+
         if (getItemViewType(position) == VIEW_TYPE_BIG) {
             holder.info.setText(item.descricao);
         }
+
+//        if (item.estadoEstabelecimento != null){
+//
+//            if (item.estadoEstabelecimento.equals("Aberto")){
+//                holder.image_estado.setImageResource(image_aberto);
+//            }else{
+//                holder.image_estado.setImageResource(image_fechado);
+//            }
+//        }
+
+
     }
 
     @Override
@@ -76,7 +90,7 @@ public class EstabelecimentoAdapter extends RecyclerView.Adapter<Estabelecimento
     }
 
     class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-//        ImageView iv;
+//        ImageView image_estado;
         CircleImageView iv;
         TextView title;
         TextView info;
@@ -84,10 +98,12 @@ public class EstabelecimentoAdapter extends RecyclerView.Adapter<Estabelecimento
         ItemViewHolder(View itemView, int viewType) {
             super(itemView);
             if (viewType == VIEW_TYPE_BIG) {
+//                image_estado = (ImageView) itemView.findViewById(R.id.image_estado);
                 iv = (CircleImageView) itemView.findViewById(R.id.image_big);
                 title = (TextView) itemView.findViewById(R.id.title_big);
                 info = (TextView) itemView.findViewById(R.id.tv_info);
             } else {
+//                image_estado = (ImageView) itemView.findViewById(R.id.image_estado);
                 iv = (CircleImageView) itemView.findViewById(R.id.image_small);
                 title = (TextView) itemView.findViewById(R.id.title_small);
             }

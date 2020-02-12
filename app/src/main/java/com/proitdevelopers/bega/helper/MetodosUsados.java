@@ -20,7 +20,15 @@ import android.widget.Toast;
 
 import com.proitdevelopers.bega.R;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.text.Normalizer;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.regex.Pattern;
 
 public class MetodosUsados {
@@ -129,6 +137,29 @@ public class MetodosUsados {
         Log.i(TAG,"webView " + valorRetorno[0]);
 
         return valorRetorno[0];
+    }
+
+
+    public static boolean isConnected(int timeOut) {
+        InetAddress inetAddress = null;
+        try {
+            Future<InetAddress> future = Executors.newSingleThreadExecutor().submit(new Callable<InetAddress>() {
+                @Override
+                public InetAddress call() {
+                    try {
+                        return InetAddress.getByName("google.com");
+                    } catch (UnknownHostException e) {
+                        return null;
+                    }
+                }
+            });
+            inetAddress = future.get(timeOut, TimeUnit.MILLISECONDS);
+            future.cancel(true);
+        } catch (InterruptedException e) {
+        } catch (ExecutionException e) {
+        } catch (TimeoutException e) {
+        }
+        return inetAddress != null && !inetAddress.equals("");
     }
 
 

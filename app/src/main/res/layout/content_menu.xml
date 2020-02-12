@@ -10,6 +10,7 @@
         android:id="@+id/frame_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@drawable/categoria_bk"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,7 +46,7 @@
             android:visibility="invisible"
             tools:visibility="visible"/>
 
-        <com.proitdevelopers.bega.TimerInfoBar
+        <com.proitdevelopers.bega.utilsClasses.TimerInfoBar
             android:id="@+id/timer_info_bar"
             android:layout_gravity="center"
             android:layout_width="wrap_content"

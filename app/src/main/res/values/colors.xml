@@ -34,8 +34,10 @@
 
     <color name="border_add_item">#5da60e</color>
     <color name="btn_add_item">#5da60e</color>
-    <color name="txt_price_color">#5da60e</color>
+<!--    <color name="txt_price_color">#5da60e</color>-->
+    <color name="txt_price_color">#ff6600</color>
     <color name="red_dull">#FC5A5A</color>
+    <color name="cor_padra_nav">#8b555453</color>
 
 
 </resources>

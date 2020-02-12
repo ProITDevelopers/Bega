@@ -9,6 +9,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -155,6 +156,9 @@ public class PagamentoActivity extends AppCompatActivity implements View.OnClick
         dialogSenhaEnviarTelefoneCodReset = new Dialog(this);
         dialogSenhaEnviarTelefoneCodReset.setContentView(R.layout.layout_enviar_codigo_pagamento);
         dialogSenhaEnviarTelefoneCodReset.setCancelable(false);
+
+        if (dialogSenhaEnviarTelefoneCodReset.getWindow()!=null)
+            dialogSenhaEnviarTelefoneCodReset.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         pinCodigoConfirmacaoTelef = dialogSenhaEnviarTelefoneCodReset.findViewById(R.id.pinCodigoConfirmacaoTelef);
 
@@ -433,7 +437,7 @@ public class PagamentoActivity extends AppCompatActivity implements View.OnClick
         lblStatus.setVisibility(View.GONE);
         if (isSuccess) {
             iconStatus.setImageResource(R.drawable.ic_checkmark);
-            iconStatus.setColorFilter(ContextCompat.getColor(this, R.color.colorGreen));
+//            iconStatus.setColorFilter(ContextCompat.getColor(this, R.color.colorGreen));
             responseTitle.setText(R.string.thank_you);
             statusMessage.setText(R.string.msg_order_placed_successfully);
 
@@ -445,8 +449,8 @@ public class PagamentoActivity extends AppCompatActivity implements View.OnClick
 
             notificationHelper.createNotification(mNotificationTitle,mNotificationMessage);
         } else {
-            iconStatus.setImageResource(R.drawable.ic_camera);
-            iconStatus.setColorFilter(ContextCompat.getColor(this, R.color.btn_remove_item));
+            iconStatus.setImageResource(R.drawable.ic_checkmark_denial);
+//            iconStatus.setColorFilter(ContextCompat.getColor(this, R.color.btn_remove_item));
             responseTitle.setText(R.string.order_failed);
             statusMessage.setText(R.string.msg_order_placed_failed);
 

@@ -6,25 +6,38 @@
     android:layout_margin="4dp"
     app:cardElevation="10dp">
 
+<!--    <ImageView-->
+<!--        android:id="@+id/image_estado"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="end"-->
+<!--        android:layout_margin="10dp"-->
+<!--        android:src="@drawable/ic_wb_sunny_yellow_24dp" />-->
+
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/image_big"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:scaleType="centerCrop"
-            android:layout_margin="8dp"
-            android:layout_gravity="center_horizontal"
+            android:layout_margin="10dp"
+            android:layout_gravity="center_vertical"
             android:src="@drawable/logo_bkg"
-            app:civ_border_width="2dp"
+            app:civ_border_width="5dp"
             app:civ_border_color="@color/colorOrange"/>
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:orientation="vertical"
             >
 
@@ -35,7 +48,7 @@
                 android:layout_marginBottom="4dp"
                 android:text="Image 1"
                 android:textColor="@color/colorOrange"
-                android:gravity="center"
+
                 android:textStyle="bold"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
@@ -44,8 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="20 likes · 33 comments"
-                android:gravity="center"
-                android:textColor="@color/colorTextGreen"
+
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
         </LinearLayout>

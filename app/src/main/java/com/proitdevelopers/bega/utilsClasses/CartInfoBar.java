@@ -1,4 +1,4 @@
-package com.proitdevelopers.bega;
+package com.proitdevelopers.bega.utilsClasses;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.proitdevelopers.bega.R;
 
 public class CartInfoBar extends RelativeLayout implements View.OnClickListener {
 
@@ -48,7 +50,7 @@ public class CartInfoBar extends RelativeLayout implements View.OnClickListener 
 
     public void setData(int itemCount, String price) {
         cartInfo.setText(getContext().getString(R.string.cart_info_bar_items, itemCount));
-        cart_total.setText(getContext().getString(R.string.cart_info_bar_total, price));
+        cart_total.setText(getContext().getString(R.string.cart_info_bar_total, Float.parseFloat(price)) + " AKZ");
     }
 
     @Override

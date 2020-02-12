@@ -1,6 +1,7 @@
 package com.proitdevelopers.bega.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.GridLayoutManager;
@@ -24,6 +25,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.RealmResults;
 
 import static com.proitdevelopers.bega.helper.Common.SPAN_COUNT_ONE;
@@ -42,6 +44,8 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.ItemVi
     private ProductsAdapterListener listener;
 
     private ItemClickListener itemClickListener;
+
+
 
     public ProdutosAdapter(Context context, List<Produtos> produtosList, ProductsAdapterListener listener, GridLayoutManager layoutManager) {
         this.context = context;
@@ -92,7 +96,8 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.ItemVi
 
             String preco = String.valueOf(produto.getPrecoUnid());
 
-            holder.price.setText(context.getString(R.string.price_with_currency, Float.parseFloat(preco)));
+//            holder.price.setText(context.getString(R.string.price_with_currency, Float.parseFloat(preco)));
+            holder.price.setText(context.getString(R.string.price_with_currency, Float.parseFloat(preco)) + " AKZ");
 
 
 //        holder.iv.setImageResource(item.logotipo);
@@ -146,7 +151,8 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.ItemVi
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private ImageView thumbnail;
+//        private ImageView thumbnail;
+        private CircleImageView thumbnail;
         private TextView name;
         private TextView descricao;
         private TextView price;
@@ -158,7 +164,7 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.ItemVi
         public ItemViewHolder(View itemView, int viewType) {
             super(itemView);
             if (viewType == VIEW_TYPE_BIG) {
-                thumbnail = (ImageView) itemView.findViewById(R.id.thumbnail);
+                thumbnail = (CircleImageView) itemView.findViewById(R.id.thumbnail);
                 name = (TextView) itemView.findViewById(R.id.name);
                 descricao = (TextView) itemView.findViewById(R.id.descricao);
                 price = (TextView) itemView.findViewById(R.id.price);
@@ -169,10 +175,14 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.ItemVi
                 product_count = (TextView) itemView.findViewById(R.id.product_count);
 
             } else {
-                thumbnail = (ImageView) itemView.findViewById(R.id.thumbnail);
+                thumbnail = (CircleImageView) itemView.findViewById(R.id.thumbnail);
                 name = (TextView) itemView.findViewById(R.id.name);
                 price = (TextView) itemView.findViewById(R.id.price);
                 btn_addCart = (Button) itemView.findViewById(R.id.btn_addCart);
+
+                ic_add = (ImageView) itemView.findViewById(R.id.ic_add);
+                ic_remove = (ImageView) itemView.findViewById(R.id.ic_remove);
+                product_count = (TextView) itemView.findViewById(R.id.product_count);
             }
 
 

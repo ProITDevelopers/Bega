@@ -9,14 +9,14 @@ public class Factura implements Comparator<Factura> {
 
     public int idFactura;
     public String metododPagamento;
-    public String horaEntregueMotoboy;
-    public String horaRecebidoCliente;
     public String estado;
     public String estadoPagamento;
-    public int clienteID;
     public String dataPagamento,dataPedido;
     public float total;
 
+    public String horaEntregueMotoboy;
+    public String horaRecebidoCliente;
+    public int clienteID;
 
     public List<FacturaItens> itens;
 

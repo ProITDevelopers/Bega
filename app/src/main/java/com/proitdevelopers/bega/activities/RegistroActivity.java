@@ -1,13 +1,16 @@
 package com.proitdevelopers.bega.activities;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -31,6 +34,7 @@ import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -45,6 +49,7 @@ import com.proitdevelopers.bega.api.ErrorResponce;
 import com.proitdevelopers.bega.api.ErrorUtils;
 import com.proitdevelopers.bega.helper.MetodosUsados;
 import com.proitdevelopers.bega.model.RegisterRequest;
+import com.proitdevelopers.bega.model.RegistoResposta;
 import com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -60,6 +65,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -67,6 +73,7 @@ import retrofit2.Response;
 import static com.proitdevelopers.bega.helper.Common.msgErro;
 import static com.proitdevelopers.bega.helper.Common.msgErroEspaco;
 import static com.proitdevelopers.bega.helper.Common.msgErroLetras;
+import static com.proitdevelopers.bega.helper.Common.msgErroLetrasCaracteres;
 import static com.proitdevelopers.bega.helper.Common.msgErroSTelefone;
 import static com.proitdevelopers.bega.helper.Common.msgErroSenha;
 import static com.proitdevelopers.bega.helper.Common.msgErroSenhaDiferente;
@@ -111,7 +118,7 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        Common.changeStatusBarColor(this, ContextCompat.getColor(this, R.color.white));
+        MetodosUsados.changeStatusBarColor(this, ContextCompat.getColor(this, R.color.white));
         setContentView(R.layout.activity_registro);
         initViews();
 
@@ -191,11 +198,14 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
         caixa_dialogo_foto = new Dialog(this);
         caixa_dialogo_foto.setContentView(R.layout.caixa_de_dialogo_foto);
         caixa_dialogo_foto.setCancelable(false);
+        if (caixa_dialogo_foto.getWindow()!=null)
+            caixa_dialogo_foto.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         //Botão em caixa de dialogo foto
         Button btnCamara = caixa_dialogo_foto.findViewById(R.id.btnCamara);
         Button btnGaleria = caixa_dialogo_foto.findViewById(R.id.btnGaleria);
-        Button btnCancelar_dialog = caixa_dialogo_foto.findViewById(R.id.btnCancelar_dialog);
+//        Button btnCancelar_dialog = caixa_dialogo_foto.findViewById(R.id.btnCancelar_dialog);
+        ImageView btnCancelar_dialog = caixa_dialogo_foto.findViewById(R.id.btnCancelar_dialog);
 
         btnCamara.setOnClickListener(this);
         btnGaleria.setOnClickListener(this);
@@ -208,6 +218,9 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
         txtConfirmSucesso = dialogConfirmTelefoneSuccesso.findViewById(R.id.txtConfirmSucesso);
         Button dialog_btn_telefone_sucesso = dialogConfirmTelefoneSuccesso.findViewById(R.id.dialog_btn_telefone_sucesso);
         dialog_btn_telefone_sucesso.setOnClickListener(this);
+
+        if (dialogConfirmTelefoneSuccesso.getWindow()!=null)
+            dialogConfirmTelefoneSuccesso.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
     }
 
@@ -298,6 +311,11 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
             return false;
         }
 
+        if (primeiroNome.length()<3){
+            editPrimeiroNome.setError(msgErroLetrasCaracteres);
+            return false;
+        }
+
         if (sobreNome.isEmpty()){
             editUltimoNome.setError(msgErro);
             return false;
@@ -305,6 +323,11 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
 
         if (!sobreNome.matches("^[a-zA-Z\\s]+$")){
             editUltimoNome.setError(msgErroLetras);
+            return false;
+        }
+
+        if (sobreNome.length()<3){
+            editUltimoNome.setError(msgErroLetrasCaracteres);
             return false;
         }
 
@@ -324,7 +347,7 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
             return false;
         }
 
-        if (!telefone.matches("9[1-9][1-9]\\d{6}")){
+        if (!telefone.matches("9[1-9][0-9]\\d{6}")){
             editTelefone.setError(msgErroTelefone);
             return false;
         }
@@ -357,6 +380,11 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
             return false;
         }
 
+        if (municipio.length()<3){
+            editMunicipio.setError(msgErroLetrasCaracteres);
+            return false;
+        }
+
 //        if (!municipio.matches("^[a-zA-Z\\s]+$")){
 //            editMunicipio.setError(msgErroLetras);
 //            return false;
@@ -364,6 +392,11 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
 
         if (bairro.isEmpty()){
             editBairro.setError(msgErro);
+            return false;
+        }
+
+        if (bairro.length()<3){
+            editBairro.setError(msgErroLetrasCaracteres);
             return false;
         }
 
@@ -377,20 +410,25 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
             return false;
         }
 
+        if (rua.length()<3){
+            editRua.setError(msgErroLetrasCaracteres);
+            return false;
+        }
+
         if (nCasa.isEmpty()){
             editNCasa.setError(msgErro);
             return false;
         }
 
-        if (nCasa.length()==1){
-            nCasa = "nº"+nCasa;
-        }
+//        if (nCasa.length()==1){
+//            nCasa = "nº"+nCasa;
+//        }
+
 
         if (selectedImage == null) {
-            Toast.makeText(this, "Adicione a foto", Toast.LENGTH_SHORT).show();
+            mensagemRegistoSemFoto();
             return false;
         }
-
 
 
         return true;
@@ -477,8 +515,13 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
                     progressDialog.dismiss();
 
                     try {
-                        Snackbar
-                                .make(raiz, errorResponce.getError(), 4000)
+
+//                        Snackbar
+//                                .make(raiz, response.errorBody().string(), 4000)
+//                                .setActionTextColor(Color.WHITE)
+//                                .show();
+
+                        Snackbar.make(raiz, errorResponce.getError(), 4000)
                                 .setActionTextColor(Color.WHITE)
                                 .show();
                     }catch (Exception e){
@@ -519,6 +562,34 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
+    private void mensagemRegistoSemFoto() {
+
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Registro sem foto!");
+        dialog.setMessage("Adiciona uma foto para continuar!");
+
+
+        //Set button
+        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialogInterface, int i) {
+
+
+                dialogInterface.dismiss();
+                verificarPermissaoFotoCameraGaleria();
+
+
+            }
+        });
+
+
+
+
+
+        dialog.show();
+    }
+
+
 
     private void launchHomeScreen() {
         Intent intent = new Intent(RegistroActivity.this, LoginActivity.class);
@@ -530,10 +601,10 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+        ((TextView) parent.getChildAt(0)).setTextColor(Color.parseColor("#ffffff"));
         if (parent.getId() == R.id.editCidadeSpiner) {
             valorCidadeItem = parent.getItemAtPosition(position).toString();
         }
-
     }
 
     @Override

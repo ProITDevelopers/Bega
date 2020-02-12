@@ -19,6 +19,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <ImageView
+                android:id="@+id/imgTop"
+                android:layout_marginTop="35dp"
+                android:background="@drawable/toolbar_bk"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="match_parent"
+                android:layout_height="69dp"/>
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/img"
                 android:layout_marginTop="15dp"
@@ -32,7 +42,7 @@
                 android:layout_height="110dp"
                 android:contentDescription="@string/bega_logo"
                 app:civ_border_color="@color/colorButton"
-                app:civ_border_width="2dp"
+                app:civ_border_width="5dp"
                 />
 
             <LinearLayout
@@ -231,33 +241,15 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
                 android:paddingTop="5dp"
-                android:id="@+id/hint_provincia_municipio"
+                android:id="@+id/hint_municipio_bairro"
                 >
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
-                    android:layout_gravity="center"
-                    android:background="@drawable/borda_spinner"
-                    >
-
-                    <Spinner
-                        android:id="@+id/editCidadeSpiner"
-                        android:layout_width="match_parent"
-                        app:backgroundTint="@color/spinner_bg"
-                        android:popupBackground="@color/colorTextGreen"
-                        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                        android:layout_height="40dp" />
-
-                </LinearLayout>
 
 
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_weight="1"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/hint_municipio">
 
@@ -271,76 +263,6 @@
                         android:inputType="textCapSentences|textPersonName"
                         />
                 </android.support.design.widget.TextInputLayout>
-
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/hint_sexo_bairro"
-                android:weightSum="2"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@+id/hint_provincia_municipio"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:paddingTop="5dp">
-
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:background="@drawable/borda_spinner"
-                    >
-
-                    <ImageView
-                        android:src="@drawable/ic_gender"
-                        android:layout_gravity="center_vertical"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                    <RadioGroup
-                        android:id="@+id/radioGroup"
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="10dp"
-                        android:orientation="horizontal">
-
-                        <RadioButton
-                            android:id="@+id/radioBtnFem"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:checked="false"
-                            android:textColorHint="#BDBDBD"
-                            android:textColor="@color/black"
-                            android:text="F"
-                            android:textSize="16sp"/>
-
-                        <RadioButton
-                            android:id="@+id/radioBtnMasc"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:textColor="@color/black"
-                            android:checked="true"
-                            android:textColorHint="#BDBDBD"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginStart="8dp"
-                            android:text="M"
-                            android:textSize="16sp"/>
-                    </RadioGroup>
-
-
-
-                </LinearLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="0dp"
@@ -359,12 +281,15 @@
                         />
                 </android.support.design.widget.TextInputLayout>
 
+
+
             </LinearLayout>
+
 
             <LinearLayout
                 android:weightSum="2"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@+id/hint_sexo_bairro"
+                app:layout_constraintTop_toBottomOf="@+id/hint_municipio_bairro"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_width="0dp"
@@ -372,7 +297,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
                 android:paddingTop="5dp"
-                android:id="@+id/hint_bairro_rua"
+                android:id="@+id/hint_rua_nCasa"
                 >
 
 
@@ -415,12 +340,104 @@
 
             </LinearLayout>
 
-            <Button
-                android:id="@+id/btnRegistro"
-                app:layout_constraintTop_toBottomOf="@+id/hint_bairro_rua"
+
+            <LinearLayout
+                android:id="@+id/hint_cidade_sexo"
+                android:weightSum="2"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/hint_rua_nCasa"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:background="@drawable/button_bkg_color"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:paddingTop="5dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:background="@drawable/spinner_bk"
+                    android:gravity="center"
+                    >
+
+                    <Spinner
+                        android:id="@+id/editCidadeSpiner"
+                        android:layout_width="match_parent"
+                        app:backgroundTint="@color/spinner_bg"
+                        android:popupBackground="@color/colorOrange"
+                        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                        android:layout_height="40dp" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:background="@drawable/spinner_bk"
+                    >
+
+                    <ImageView
+                        android:src="@drawable/ic_gender"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <RadioGroup
+                        android:id="@+id/radioGroup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radioBtnFem"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:checked="false"
+                            android:textColorHint="#ffffff"
+                            android:textColor="@color/white"
+                            android:text="F"
+                            android:textSize="16sp"/>
+
+                        <RadioButton
+                            android:id="@+id/radioBtnMasc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:textColor="@color/white"
+                            android:checked="true"
+                            android:textColorHint="#ffffff"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:text="M"
+                            android:textSize="16sp"/>
+                    </RadioGroup>
+
+
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnRegistro"
+                app:layout_constraintTop_toBottomOf="@+id/hint_cidade_sexo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:background="@drawable/orange_btn_big_bk"
                 android:text="@string/btn_hint_registrar"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
@@ -437,7 +454,7 @@
                 android:background="@null"
                 android:text="@string/j_tenho_uma_conta"
                 android:textAllCaps="false"
-                android:textColor="@color/colorTextGreen"
+                android:textColor="@color/colorText"
                 android:textSize="16sp"
                 android:layout_margin="20dp"
                 android:layout_width="match_parent"

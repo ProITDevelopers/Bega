@@ -1,4 +1,4 @@
-package com.proitdevelopers.bega
+package com.proitdevelopers.bega.utilsClasses
 
 import android.graphics.Rect
 import android.support.v7.widget.RecyclerView

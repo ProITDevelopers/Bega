@@ -3,7 +3,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorGreen"
+    android:background="@drawable/grey_btn_big_bk"
     android:padding="8dp">
 
     <!--android:textColor="@color/gradient_2"-->

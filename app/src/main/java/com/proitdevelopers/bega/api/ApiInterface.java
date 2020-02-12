@@ -1,6 +1,7 @@
 package com.proitdevelopers.bega.api;
 
 import com.proitdevelopers.bega.model.Estabelecimento;
+import com.proitdevelopers.bega.model.FaceBookLoginRequest;
 import com.proitdevelopers.bega.model.Factura;
 import com.proitdevelopers.bega.model.LoginRequest;
 import com.proitdevelopers.bega.model.Order;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,6 +38,9 @@ public interface ApiInterface {
 //    @Headers("Content-type: application/json")
     @POST("/authenticate2")
     Call<UsuarioAuth> autenticarCliente(@Body LoginRequest loginRequest);
+
+    @POST("/Facebook")
+    Call<UsuarioAuth> autenticarFaceBook(@Body FaceBookLoginRequest faceBookLoginRequest);
 
 
     @POST("/cadastrarcliente")
@@ -60,6 +65,8 @@ public interface ApiInterface {
             @Part("NCasa") RequestBody nCasa,
             @Part MultipartBody.Part imagem
     );
+
+
 
     @POST("/WalletAbrirContaCliente")
     Call<ResponseBody> criarContaWallet(@Body WalletRequest walletRequest);

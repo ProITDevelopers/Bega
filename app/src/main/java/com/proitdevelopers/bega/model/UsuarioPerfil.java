@@ -71,4 +71,12 @@ public class UsuarioPerfil implements Serializable {
         this.nCasa = nCasa;
         this.sexo = sexo;
     }
+
+    public UsuarioPerfil(String primeiroNome, String ultimoNome, String email, String imagem) {
+        this.primeiroNome = primeiroNome;
+        this.ultimoNome = ultimoNome;
+        this.email = email;
+        this.imagem = imagem;
+    }
+
 }

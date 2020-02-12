@@ -1,4 +1,4 @@
-package com.proitdevelopers.bega.activities;
+package com.proitdevelopers.bega.Testes;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -27,6 +27,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.proitdevelopers.bega.activities.ProdutosActivity;
+import com.proitdevelopers.bega.activities.RegistroActivity;
+import com.proitdevelopers.bega.activities.SplashActivity;
 import com.proitdevelopers.bega.localDB.AppPref;
 import com.proitdevelopers.bega.helper.Common;
 import com.proitdevelopers.bega.R;
@@ -190,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     Estabelecimento estabelecimento = estabelecimentoList.get(position);
                     Toast.makeText(MainActivity.this, "Id: "+estabelecimento.estabelecimentoID+", "+estabelecimento.nomeEstabelecimento, Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(MainActivity.this,ProdutosActivity.class);
+                    Intent intent = new Intent(MainActivity.this, ProdutosActivity.class);
                     intent.putExtra("idEstabelecimento",estabelecimento.estabelecimentoID);
                     intent.putExtra("logotipo",estabelecimento.logotipo);
                     intent.putExtra("nomeEstabelecimento",estabelecimento.nomeEstabelecimento);

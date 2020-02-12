@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">Bega</string>
     <string name="google_browser_key">google_browser_key</string>
+
+    <string name="facebook_app_id">facebook_app_id</string>
+    <string name="fb_login_protocol_scheme">fb_login_protocol_scheme</string>
+
+
     <string name="action_settings">Definições</string>
     <string name="bega_logo">bega_logo</string>
     <string name="text_hint_email">Email</string>
@@ -28,7 +33,7 @@
     <string name="rua">Rua</string>
     <string name="numero_da_casa">NºCasa</string>
     <string name="recuperar_a_senha">Esqueci a senha</string>
-    <string name="txt_direitos">Copyright © 2019 Pro-it Consulting</string>
+    <string name="txt_direitos">Copyright © 2020 Pro-IT Consulting</string>
 
     <string name="hit_recuperar_senha">Redifinir Senha</string>
     <string name="hit_receber_cod_confirmacao">Como deseja receber o código de confirmação?</string>
@@ -47,7 +52,7 @@
     <string name="txtTentarmaistarde">Tentar mais tarde.</string>
     <string name="txtMsgCondConf">Insira o código de confirmação.</string>
     <string name="txtMsgCondConfCod">Termina de inserir o código.</string>
-    <string name="hit_nova_senha">Senha Nova</string>
+    <string name="hit_nova_senha">Nova Senha</string>
     <string name="hit_conf_senha">Confirmar Senha</string>
     <string name="hit_senha_antiga">Senha Antiga</string>
     <string name="cancelar">Cancelar</string>
@@ -67,13 +72,15 @@
     <string name="msg_order_placed_failed">O seu pedido não foi enviado.</string>
 
 
-    <string name="price_with_currency">Kz%.2f</string>
+    <!--    <string name="price_with_currency">Kz%.2f</string>-->
+    <string name="price_with_currency">%.2f</string>
     <string name="order_id">Factura #%s</string>
     <string name="btn_checkout">Enviar Pedido</string>
     <string name="lbl_item_price_quantity">%s x %d</string>
     <string name="cart_info_bar_data">%d Items | Kz%s</string>
     <string name="cart_info_bar_items">%d Items</string>
-    <string name="cart_info_bar_total">Total: Kz%s</string>
+    <!--    <string name="cart_info_bar_total">Total: Kz%s</string>-->
+    <string name="cart_info_bar_total">Total: %.2f</string>
     <string name="timer_info_bar">%s</string>
 
 

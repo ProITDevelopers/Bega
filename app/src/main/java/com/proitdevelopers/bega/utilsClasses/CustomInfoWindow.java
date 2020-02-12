@@ -1,4 +1,4 @@
-package com.proitdevelopers.bega;
+package com.proitdevelopers.bega.utilsClasses;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
+import com.proitdevelopers.bega.R;
 import com.proitdevelopers.bega.model.UsuarioPerfil;
 import com.squareup.picasso.Picasso;
 

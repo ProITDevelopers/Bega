@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -33,9 +34,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.proitdevelopers.bega.R;
@@ -70,6 +73,7 @@ import retrofit2.Response;
 
 import static com.proitdevelopers.bega.helper.Common.msgErro;
 import static com.proitdevelopers.bega.helper.Common.msgErroLetras;
+import static com.proitdevelopers.bega.helper.Common.msgErroLetrasCaracteres;
 import static com.proitdevelopers.bega.helper.Common.msgErroSTelefone;
 import static com.proitdevelopers.bega.helper.Common.msgErroTelefone;
 import static com.proitdevelopers.bega.helper.Common.msgErroTelefoneIguais;
@@ -181,10 +185,14 @@ public class EditarPerfilActivity extends AppCompatActivity implements View.OnCl
         caixa_dialogo_foto.setContentView(R.layout.caixa_de_dialogo_foto);
         caixa_dialogo_foto.setCancelable(false);
 
+        if (caixa_dialogo_foto.getWindow()!=null)
+            caixa_dialogo_foto.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         //Botão em caixa de dialogo foto
         Button btnCamara = caixa_dialogo_foto.findViewById(R.id.btnCamara);
         Button btnGaleria = caixa_dialogo_foto.findViewById(R.id.btnGaleria);
-        Button btnCancelar_dialog = caixa_dialogo_foto.findViewById(R.id.btnCancelar_dialog);
+//        Button btnCancelar_dialog = caixa_dialogo_foto.findViewById(R.id.btnCancelar_dialog);
+        ImageView btnCancelar_dialog = caixa_dialogo_foto.findViewById(R.id.btnCancelar_dialog);
 
         btnCamara.setOnClickListener(this);
         btnGaleria.setOnClickListener(this);
@@ -228,11 +236,11 @@ public class EditarPerfilActivity extends AppCompatActivity implements View.OnCl
             editBairro.setText(usuarioPerfil.bairro);
             editRua.setText(usuarioPerfil.rua);
 
-            if (usuarioPerfil.nCasa.startsWith("nº"))
-                usuarioPerfil.nCasa = usuarioPerfil.nCasa.replace(("nº"),"");
-
-            if (usuarioPerfil.nCasa.startsWith("0"))
-                usuarioPerfil.nCasa = usuarioPerfil.nCasa.replace(("0"),"");
+//            if (usuarioPerfil.nCasa.startsWith("nº"))
+//                usuarioPerfil.nCasa = usuarioPerfil.nCasa.replace(("nº"),"");
+//
+//            if (usuarioPerfil.nCasa.startsWith("0"))
+//                usuarioPerfil.nCasa = usuarioPerfil.nCasa.replace(("0"),"");
 
             editNCasa.setText(usuarioPerfil.nCasa);
 
@@ -290,6 +298,11 @@ public class EditarPerfilActivity extends AppCompatActivity implements View.OnCl
             return false;
         }
 
+        if (primeiroNome.length()<3){
+            editPrimeiroNome.setError(msgErroLetrasCaracteres);
+            return false;
+        }
+
         if (sobreNome.isEmpty()){
             editUltimoNome.setError(msgErro);
             return false;
@@ -300,13 +313,18 @@ public class EditarPerfilActivity extends AppCompatActivity implements View.OnCl
             return false;
         }
 
+        if (sobreNome.length()<3){
+            editUltimoNome.setError(msgErroLetrasCaracteres);
+            return false;
+        }
+
 
         if (telefone.isEmpty()){
             editTelefone.setError(msgErroSTelefone);
             return false;
         }
 
-        if (!telefone.matches("9[1-9][1-9]\\d{6}")){
+        if (!telefone.matches("9[1-9][0-9]\\d{6}")){
             editTelefone.setError(msgErroTelefone);
             return false;
         }
@@ -333,6 +351,11 @@ public class EditarPerfilActivity extends AppCompatActivity implements View.OnCl
             return false;
         }
 
+        if (municipio.length()<3){
+            editMunicipio.setError(msgErroLetrasCaracteres);
+            return false;
+        }
+
 //        if (!municipio.matches("^[a-zA-Z\\s]+$")){
 //            editMunicipio.setError(msgErroLetras);
 //            return false;
@@ -340,6 +363,11 @@ public class EditarPerfilActivity extends AppCompatActivity implements View.OnCl
 
         if (bairro.isEmpty()){
             editBairro.setError(msgErro);
+            return false;
+        }
+
+        if (bairro.length()<3){
+            editBairro.setError(msgErroLetrasCaracteres);
             return false;
         }
 
@@ -353,14 +381,19 @@ public class EditarPerfilActivity extends AppCompatActivity implements View.OnCl
             return false;
         }
 
+        if (rua.length()<3){
+            editRua.setError(msgErroLetrasCaracteres);
+            return false;
+        }
+
         if (nCasa.isEmpty()){
             editNCasa.setError(msgErro);
             return false;
         }
 
-        if (nCasa.length()==1){
-            nCasa = "nº"+nCasa;
-        }
+//        if (nCasa.length()==1){
+//            nCasa = "nº"+nCasa;
+//        }
 
 
 
@@ -653,13 +686,13 @@ public class EditarPerfilActivity extends AppCompatActivity implements View.OnCl
 
 
                 } else {
-
+                    ErrorResponce errorResponce = ErrorUtils.parseError(response);
                     progressDialog.dismiss();
 
                     try {
 
                         Snackbar
-                                .make(raiz, response.errorBody().string(), 4000)
+                                .make(raiz, errorResponce.getError(), 4000)
                                 .setActionTextColor(Color.WHITE)
                                 .show();
                     }catch (Exception e){
@@ -688,6 +721,7 @@ public class EditarPerfilActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
 
+        ((TextView) parent.getChildAt(0)).setTextColor(Color.parseColor("#ffffff"));
         int id = parent.getId();
 
         if (id == R.id.editCidadeSpiner){
