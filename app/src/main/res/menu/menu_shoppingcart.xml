@@ -2,16 +2,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_cart"
+        android:id="@+id/delete_cart"
         app:showAsAction="always"
         android:orderInCategory="100"
-        android:icon="@drawable/ic_shopping_cart_white_24dp"
-        android:title="@string/carrinho" />
+        android:icon="@drawable/ic_delete_white_24dp"
+        android:title="Remover" />
 
     <item
-        android:id="@+id/action_favoritos"
+        android:id="@+id/action_settings"
         android:orderInCategory="101"
-        android:title="@string/action_favoritos"
+        android:title="@string/action_settings"
         app:showAsAction="never" />
 
 

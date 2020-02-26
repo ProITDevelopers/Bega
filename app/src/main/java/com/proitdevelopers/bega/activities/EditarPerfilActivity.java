@@ -381,10 +381,10 @@ public class EditarPerfilActivity extends AppCompatActivity implements View.OnCl
             return false;
         }
 
-        if (rua.length()<3){
-            editRua.setError(msgErroLetrasCaracteres);
-            return false;
-        }
+//        if (rua.length()<3){
+//            editRua.setError(msgErroLetrasCaracteres);
+//            return false;
+//        }
 
         if (nCasa.isEmpty()){
             editNCasa.setError(msgErro);
@@ -678,12 +678,7 @@ public class EditarPerfilActivity extends AppCompatActivity implements View.OnCl
                             .setActionTextColor(Color.WHITE)
                             .show();
 
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            finish();
-                        }
-                    }, 3000);
+
 
 
                 } else {

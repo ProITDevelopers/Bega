@@ -21,9 +21,11 @@ import com.proitdevelopers.bega.localDB.AppDatabase;
 import com.proitdevelopers.bega.model.CartItemProdutos;
 import com.proitdevelopers.bega.model.FavoritosItem;
 import com.proitdevelopers.bega.model.Produtos;
+import com.proitdevelopers.bega.utilsClasses.Converter;
 import com.squareup.picasso.Picasso;
 
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
 public class ProdutosDetalheActivity extends AppCompatActivity implements ProdutosAdapter.ProductsAdapterListener {
@@ -48,6 +50,7 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
     private ProdutosAdapter.ProductsAdapterListener listener;
     private CartItemProdutos cartItem;
     private RealmResults<CartItemProdutos> cartItems;
+    private RealmChangeListener<RealmResults<CartItemProdutos>> cartRealmChangeListener;
 
     private FavoritosItem favoritosItem;
     private RealmResults<FavoritosItem> favoritosItems;
@@ -55,7 +58,7 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
     Drawable btn_addCart_green_bk,btn_addCart_grey_bk;
     int ic_favorito_vazio,ic_favorito_preenchido;
 
-
+    int cart_count = 0;
 
 
 
@@ -227,10 +230,33 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
             }
         });
 
+        cartRealmChangeListener = cartItems -> {
+//            Timber.d("Cart items changed! " + this.cartItems.size());
+            if (cartItems != null && cartItems.size() > 0) {
+                setCartInfoBar(cartItems);
+//                toggleCartBar(true);
+            } else {
+//                toggleCartBar(false);
+                cart_count = 0;
+                invalidateOptionsMenu();
+            }
+
+
+            invalidateOptionsMenu();
+        };
 
 
 
 
+    }
+
+    private void setCartInfoBar(RealmResults<CartItemProdutos> cartItems) {
+        int itemCount = 0;
+        for (CartItemProdutos cartItem : cartItems) {
+            itemCount += cartItem.quantity;
+        }
+//        cart_count = itemCount;
+        cart_count = cartItems.size();
     }
 
     private void initViews() {
@@ -294,12 +320,8 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
         // Inflate the menu_navigation_bottom; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_produtos, menu);
 
-//        MenuItem item = menu.findItem(R.id.menu_cart);
-//        MenuItemCompat.setActionView(item, R.layout.cart_items_notification);
-//        RelativeLayout notifCount = (RelativeLayout) MenuItemCompat.getActionView(item);
-//
-//        TextView txtCartItems = (TextView) notifCount.findViewById(R.id.actionbar_notifcation_textview);
-//        txtCartItems.setText("12");
+        MenuItem menuItem = menu.findItem(R.id.menu_cart);
+        menuItem.setIcon(Converter.convertLayoutToImage(ProdutosDetalheActivity.this,cart_count,R.drawable.ic_shopping_cart_white_24dp));
         return true;
     }
 
@@ -316,6 +338,10 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
             startActivity(new Intent(this, ShoppingCartActivity.class));
         }
 
+        if (id == R.id.action_favoritos) {
+            startActivity(new Intent(this, FavoritosActivity.class));
+        }
+
 
         return super.onOptionsItemSelected(item);
 
@@ -329,6 +355,9 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
         super.onResume();
         checkIfCartAsItems();
         checkIfItemsFavoritos();
+        if (cartItems != null) {
+            cartItems.addChangeListener(cartRealmChangeListener);
+        }
     }
 
 
@@ -336,8 +365,9 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
     protected void onDestroy() {
         super.onDestroy();
 
-
-
+        if (cartItems != null) {
+            cartItems.addChangeListener(cartRealmChangeListener);
+        }
         if (realm != null) {
             realm.close();
         }
@@ -351,11 +381,15 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
 
         if (cartItem != null) {
             product_count.setText(String.valueOf(cartItem.quantity));
+
+
+
             ic_remove.setVisibility(View.VISIBLE);
             product_count.setVisibility(View.VISIBLE);
             btn_addCart.setText("Adicionado");
             btn_addCart.setEnabled(false);
             btn_addCart.setBackground(btn_addCart_grey_bk);
+
 
         }
 
@@ -369,10 +403,14 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
         cartItem = cartItems.where().equalTo("produtos.idProduto", product.getIdProduto()).findFirst();
 
         if (cartItem != null) {
+
             product_count.setText(String.valueOf(cartItem.quantity));
+
 
         }else {
             product_count.setText(String.valueOf(0));
+
+
             ic_remove.setVisibility(View.GONE);
             product_count.setVisibility(View.GONE);
             btn_addCart.setText("Adicionar ao Carrinho");

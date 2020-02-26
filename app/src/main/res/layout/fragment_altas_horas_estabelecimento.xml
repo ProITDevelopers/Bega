@@ -7,6 +7,7 @@
     tools:context=".fragmentos.EstabelecimentoFragment">
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -36,6 +37,8 @@
 
 
     </android.support.constraint.ConstraintLayout>
+
+    <include layout="@layout/activity_sem_internet"/>
 
 
 </FrameLayout>

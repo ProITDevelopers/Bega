@@ -90,7 +90,7 @@ public class FavoritosActivity extends AppCompatActivity implements FavoritosIte
                 // if the price is zero, dismiss the dialog
 //                dismiss();
 
-                Toast.makeText(this, "Favoritos is empty", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Sem items nos favoritos", Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -1,7 +1,11 @@
 package com.proitdevelopers.bega.fragmentos;
 
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -17,6 +21,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.proitdevelopers.bega.R;
@@ -60,6 +66,10 @@ public class CategoriaFragment extends Fragment {
 
     ImageView category_image_bega,category_image_top;
 
+    private ConstraintLayout coordinatorLayout;
+    private RelativeLayout errorLayout;
+    private TextView btnTentarDeNovo;
+
 
     public CategoriaFragment() {
         // Required empty public constructor
@@ -100,6 +110,12 @@ public class CategoriaFragment extends Fragment {
         view =  inflater.inflate(R.layout.fragment_categoria, container, false);
 
         categoriaList = Common.getCategoryList();
+
+        coordinatorLayout = view.findViewById(R.id.coordinatorLayout);
+        errorLayout = (RelativeLayout) view.findViewById(R.id.erroLayout);
+        btnTentarDeNovo = (TextView) view.findViewById(R.id.btn);
+        btnTentarDeNovo.setText("Tentar de Novo");
+
 
 
         category_image_bega =  view.findViewById(R.id.category_image_bega);
@@ -151,9 +167,47 @@ public class CategoriaFragment extends Fragment {
                 });
 
 
-        loadCategories();
+        verifConecxaoCategoria();
 
         return view;
+    }
+
+    private void verifConecxaoCategoria() {
+
+        if (getContext()!=null) {
+
+            ConnectivityManager conMgr =  (ConnectivityManager)getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (conMgr!=null) {
+                NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+                if (netInfo == null){
+                    mostarMsnErro();
+                } else {
+                    loadCategories();
+
+                }
+            }
+
+        }
+
+    }
+
+    private void mostarMsnErro(){
+
+        if (errorLayout.getVisibility() == View.GONE){
+            errorLayout.setVisibility(View.VISIBLE);
+
+            coordinatorLayout.setVisibility(View.GONE);
+
+        }
+
+        btnTentarDeNovo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                coordinatorLayout.setVisibility(View.VISIBLE);
+                errorLayout.setVisibility(View.GONE);
+                verifConecxaoCategoria();
+            }
+        });
     }
 
     private void loadCategories() {
@@ -167,14 +221,14 @@ public class CategoriaFragment extends Fragment {
             public void onClick(View view, int position) {
 
                 Categoria categoria = categoriaList.get(position);
-                goToFragment(categoria.getNomeCategoria());
+                goToFragment(categoria.getNomeCategoria(),categoria.getIdCategoria());
 
             }
         });
         progressBar.setVisibility(View.GONE);
     }
 
-    private void goToFragment(String categoria){
+    private void goToFragment(String categoria, int categoriaID){
         if (getActivity()!=null){
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             if (fragmentManager != null){
@@ -184,7 +238,13 @@ public class CategoriaFragment extends Fragment {
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                 }else{
-                    fragmentTransaction.replace(R.id.frame_layout, new EstabelecimentoFragment());
+
+                    EstabelecimentoFragment estabelecimentoFragment = new EstabelecimentoFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("categoriaID", categoriaID);
+                    estabelecimentoFragment.setArguments(bundle);
+
+                    fragmentTransaction.replace(R.id.frame_layout, estabelecimentoFragment);
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                 }
@@ -212,7 +272,7 @@ public class CategoriaFragment extends Fragment {
 
 
         if (itemId == R.id.menu_refresh) {
-            loadCategories();
+            verifConecxaoCategoria();
             return true;
         }
 

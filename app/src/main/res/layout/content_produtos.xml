@@ -9,7 +9,10 @@
     tools:context=".activities.ProdutosActivity"
     tools:showIn="@layout/activity_produtos">
 
-
+<android.support.constraint.ConstraintLayout
+    android:id="@+id/coordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclewProdutos"
@@ -20,5 +23,11 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+
+</android.support.constraint.ConstraintLayout>
+
+
+    <include layout="@layout/activity_sem_internet"/>
 
 </android.support.constraint.ConstraintLayout>

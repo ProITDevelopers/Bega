@@ -129,6 +129,9 @@ public interface ApiInterface {
     @GET("/ListagemEstabelecimentoA")
     Call<List<Estabelecimento>> getAllEstabelecimentos();
 
+    @GET("/ListarEstabPorTipo/{IdTipoEstabelecimento}")
+    Call<List<Estabelecimento>> getEstabelecimentosPorTipo(@Path("IdTipoEstabelecimento") int idTipoEstabelecimento);
+
 
 
     @GET("/ListarProdutosEstab/{idE}")

@@ -2,12 +2,14 @@ package com.proitdevelopers.bega.activities;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
@@ -17,11 +19,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.places.Place;
@@ -75,6 +79,9 @@ public class ShoppingCartActivity extends AppCompatActivity
     Button dialog_btn_meu_telefone;
     Button dialog_btn_cancelar_enviar_telefone;
     Button dialog_btn_enviar_telefone;
+
+    private Dialog dialogRemoverTodosItems;
+    private TextView dialog_txt_items;
 
 
     @Override
@@ -164,6 +171,17 @@ public class ShoppingCartActivity extends AppCompatActivity
 
             }
         });
+
+        dialogRemoverTodosItems = new Dialog(this);
+        dialogRemoverTodosItems.setContentView(R.layout.layout_remover_all_cart_items);
+        dialog_txt_items = dialogRemoverTodosItems.findViewById(R.id.dialog_txt_items);
+        Button dialog_btn_cancelar_remover = dialogRemoverTodosItems.findViewById(R.id.dialog_btn_cancelar_remover);
+        Button dialog_btn_remover_items = dialogRemoverTodosItems.findViewById(R.id.dialog_btn_remover_items);
+        dialog_btn_cancelar_remover.setOnClickListener(this);
+        dialog_btn_remover_items.setOnClickListener(this);
+
+        if (dialogRemoverTodosItems.getWindow()!=null)
+            dialogRemoverTodosItems.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 
     private void init() {
@@ -219,9 +237,10 @@ public class ShoppingCartActivity extends AppCompatActivity
             } else {
                 // if the price is zero, dismiss the dialog
 //                dismiss();
-                btnCheckout.setVisibility(View.INVISIBLE);
+                btnCheckout.setVisibility(View.GONE);
                 btnCheckout.setText(getString(R.string.btn_checkout));
-                Toast.makeText(this, "O carrinho está vazio!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "O carrinho está vazio!", Toast.LENGTH_SHORT).show();
+
             }
         }
     }
@@ -279,7 +298,23 @@ public class ShoppingCartActivity extends AppCompatActivity
                 abrirPagamentoActivity();
                 break;
 
+
+            case R.id.dialog_btn_cancelar_remover:
+                dialogRemoverTodosItems.cancel();
+                break;
+
+
+            case R.id.dialog_btn_remover_items:
+                deleteAllItems();
+
+                break;
+
         }
+    }
+
+    private void deleteAllItems() {
+        AppDatabase.clearAllCart();
+        dialogRemoverTodosItems.dismiss();
     }
 
     private boolean verificarCamposTelefone() {
@@ -345,6 +380,10 @@ public class ShoppingCartActivity extends AppCompatActivity
         if (realm != null) {
             realm.close();
         }
+
+        caixa_dialogo_fornecer_numero.dismiss();
+        caixa_dialogo_tipo_pagamento.dismiss();
+        dialogRemoverTodosItems.dismiss();
     }
 
     @Override
@@ -352,6 +391,13 @@ public class ShoppingCartActivity extends AppCompatActivity
         AppDatabase.removeCartItem(cartItem);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu_navigation_bottom; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_shoppingcart, menu);
+
+        return true;
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -361,8 +407,23 @@ public class ShoppingCartActivity extends AppCompatActivity
             finish();
         }
 
+        if (id == R.id.delete_cart) {
+
+            if (cartItems != null && cartItems.size() > 0) {
+
+                if (cartItems.size()==1){
+                    dialog_txt_items.setText("Remover este item!");
+                }
+                dialogRemoverTodosItems.show();
+            } else {
+                Toast.makeText(this, "O carrinho está vazio!", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
         return super.onOptionsItemSelected(item);
     }
+
 
 
 

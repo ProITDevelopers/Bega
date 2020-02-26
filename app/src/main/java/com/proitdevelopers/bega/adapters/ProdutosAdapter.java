@@ -2,7 +2,6 @@ package com.proitdevelopers.bega.adapters;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,18 +11,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.proitdevelopers.bega.R;
 import com.proitdevelopers.bega.model.CartItemProdutos;
 import com.proitdevelopers.bega.model.Produtos;
 import com.squareup.picasso.Picasso;
 
-import java.io.CharArrayReader;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.List;
-import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.RealmResults;
@@ -45,6 +39,7 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.ItemVi
 
     private ItemClickListener itemClickListener;
 
+    private Drawable btn_add_activo, btn_add_inactivo;
 
 
     public ProdutosAdapter(Context context, List<Produtos> produtosList, ProductsAdapterListener listener, GridLayoutManager layoutManager) {
@@ -52,6 +47,9 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.ItemVi
         this.produtosList = produtosList;
         this.listener = listener;
         this.mLayoutManager = layoutManager;
+
+        btn_add_activo = context.getResources().getDrawable( R.drawable.orange_btn_small_bk );
+        btn_add_inactivo = context.getResources().getDrawable( R.drawable.grey_btn_small_bk );
 
     }
 
@@ -89,6 +87,8 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.ItemVi
 
             Picasso.with(context).load(produto.getImagemProduto()).placeholder(R.drawable.hamburger_placeholder).into(holder.thumbnail);
 
+
+
             holder.name.setText(produto.getDescricaoProdutoC());
 //        holder.descricao.setText(produto.getDescricaoProduto());
 //        holder.price.setText(produto.getPrecoUnid());
@@ -109,8 +109,10 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.ItemVi
                 @Override
                 public void onClick(View view) {
 
-
                     listener.onProductAddedCart(position, produto);
+
+                    Snackbar.make(view, produto.getDescricaoProdutoC()+" adicionado ao Carrinho!", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
 
                 }
             });
@@ -131,12 +133,14 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.ItemVi
                     holder.ic_remove.setVisibility(View.VISIBLE);
                     holder.product_count.setVisibility(View.VISIBLE);
                     holder.btn_addCart.setEnabled(false);
+                    holder.btn_addCart.setBackground(btn_add_inactivo);
                 } else {
                     holder.product_count.setText(String.valueOf(0));
                     holder.ic_add.setVisibility(View.GONE);
                     holder.ic_remove.setVisibility(View.GONE);
                     holder.product_count.setVisibility(View.GONE);
                     holder.btn_addCart.setEnabled(true);
+                    holder.btn_addCart.setBackground(btn_add_activo);
                 }
             }
 

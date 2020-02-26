@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +19,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.proitdevelopers.bega.R;
@@ -69,7 +72,9 @@ public class AltasHorasEstabelecimentoFragment extends Fragment {
     private GridLayoutManager gridLayoutManager;
 
 
-
+    private ConstraintLayout coordinatorLayout;
+    private RelativeLayout errorLayout;
+    private TextView btnTentarDeNovo;
 
     public AltasHorasEstabelecimentoFragment() {
         // Required empty public constructor
@@ -110,6 +115,11 @@ public class AltasHorasEstabelecimentoFragment extends Fragment {
         // Inflate the layout for this fragment
         view =  inflater.inflate(R.layout.fragment_altas_horas_estabelecimento, container, false);
 
+        coordinatorLayout = view.findViewById(R.id.coordinatorLayout);
+        errorLayout = (RelativeLayout) view.findViewById(R.id.erroLayout);
+        btnTentarDeNovo = (TextView) view.findViewById(R.id.btn);
+        btnTentarDeNovo.setText("Tentar de Novo");
+
         gridLayoutManager = new GridLayoutManager(getContext(), AppPref.getInstance().getListGridViewMode());
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewEstab);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
@@ -126,13 +136,32 @@ public class AltasHorasEstabelecimentoFragment extends Fragment {
             if (conMgr!=null) {
                 NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
                 if (netInfo == null){
-                    Toast.makeText(getContext(), "Network offline", Toast.LENGTH_SHORT).show();
+                    mostarMsnErro();
                 } else {
                     carregarListaEstabelicimentos();
                 }
             }
         }
 
+    }
+
+    private void mostarMsnErro(){
+
+        if (errorLayout.getVisibility() == View.GONE){
+            errorLayout.setVisibility(View.VISIBLE);
+
+            coordinatorLayout.setVisibility(View.GONE);
+
+        }
+
+        btnTentarDeNovo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                coordinatorLayout.setVisibility(View.VISIBLE);
+                errorLayout.setVisibility(View.GONE);
+                verifConecxaoEstabelecimentos();
+            }
+        });
     }
 
     private void carregarListaEstabelicimentos() {

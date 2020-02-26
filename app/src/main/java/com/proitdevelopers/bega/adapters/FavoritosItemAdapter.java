@@ -6,11 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.proitdevelopers.bega.R;
-import com.proitdevelopers.bega.model.CartItemProdutos;
 import com.proitdevelopers.bega.model.FavoritosItem;
 import com.proitdevelopers.bega.model.Produtos;
 import com.squareup.picasso.Picasso;
@@ -62,8 +60,10 @@ public class FavoritosItemAdapter extends RecyclerView.Adapter<FavoritosItemAdap
         holder.name.setText(product.getDescricaoProdutoC());
         holder.estabelecimento.setText(product.getEstabelecimento());
 
-//        Picasso.with(context).load(product.imagemProduto).into(holder.thumbnail);
+
         Picasso.with(context).load(product.getImagemProduto()).placeholder(R.drawable.hamburger_placeholder).into(holder.thumbnail);
+
+
 
         if (listener != null)
             holder.btn_remove.setOnClickListener(view -> listener.onFavoritoItemRemoved(position, favoritosItem));

@@ -52,6 +52,7 @@ public class Common {
     public static String msgErroSenhaDiferente = "As senhas devem ser iguais";
     public static String msgErroSTelefone = "Preencha o campo com um nº telefone.";
     public static String msgErroSEmailTelefone = "Preencha o campo com email ou nº telefone.";
+    public static String msgErroSEmail = "Preencha o campo com email válido.";
     public static String msgErroTelefone = "Preencha com um número válido";
     public static String msgQuasePronto = "Quase Pronto...!";
     public static String msgErroTelefoneIguais = "Os números devem ser diferentes";
@@ -82,11 +83,11 @@ public class Common {
     public static List<Categoria> getCategoryList(){
         List<Categoria> categoriaList = new ArrayList<>();
 
-        categoriaList.add(new Categoria(1,"Restaurantes",CATEGORY_RESTAURANTE));
-        categoriaList.add(new Categoria(2,"Conveniência",CATEGORY_COVENIENCIA));
-        categoriaList.add(new Categoria(3,"Caseiros",CATEGORY_CASEIRO));
+        categoriaList.add(new Categoria(5,"Restaurantes",CATEGORY_RESTAURANTE));
+        categoriaList.add(new Categoria(3,"Conveniência",CATEGORY_COVENIENCIA));
+        categoriaList.add(new Categoria(1,"Caseiros",CATEGORY_CASEIRO));
         categoriaList.add(new Categoria(4,"Eventos",CATEGORY_EVENTOS));
-        categoriaList.add(new Categoria(5,"Altas Horas",CATEGORY_ALTAS_HORAS));
+        categoriaList.add(new Categoria(2,"Altas Horas",CATEGORY_ALTAS_HORAS));
 //        categoriaList.add(new Categoria(2,"Estafetas",CATEGORY_ESTAFETAS));
 //        categoriaList.add(new Categoria(7,"Quitutes",CATEGORY_QUITUTES));
 

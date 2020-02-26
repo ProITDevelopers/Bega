@@ -14,6 +14,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        //new code
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -54,6 +57,7 @@ dependencies {
 
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.squareup.okhttp:okhttp:2.5.0'
     //circle imageview
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     //image-cropper
@@ -90,6 +94,9 @@ dependencies {
 
     //FACEBOOK
     implementation 'com.facebook.android:facebook-android-sdk:5.0.0'
+
+    //MULTIDEX
+    implementation 'com.android.support:multidex:1.0.0'
 
 
 }

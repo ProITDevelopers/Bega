@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.proitdevelopers.bega.R;
@@ -65,7 +68,11 @@ public class EstabelecimentoFragment extends Fragment {
     private EstabelecimentoAdapter itemAdapter;
     private GridLayoutManager gridLayoutManager;
 
+    private ConstraintLayout coordinatorLayout;
+    private RelativeLayout errorLayout;
+    private TextView btnTentarDeNovo;
 
+    int idTipoEstabelecimento;
 
 
     public EstabelecimentoFragment() {
@@ -98,7 +105,10 @@ public class EstabelecimentoFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            idTipoEstabelecimento = getArguments().getInt("categoriaID", 0);
         }
+
+
     }
 
     @Override
@@ -106,6 +116,12 @@ public class EstabelecimentoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view =  inflater.inflate(R.layout.fragment_estabelecimento, container, false);
+
+        coordinatorLayout = view.findViewById(R.id.coordinatorLayout);
+        errorLayout = (RelativeLayout) view.findViewById(R.id.erroLayout);
+        btnTentarDeNovo = (TextView) view.findViewById(R.id.btn);
+        btnTentarDeNovo.setText("Tentar de Novo");
+
 
         gridLayoutManager = new GridLayoutManager(getContext(), AppPref.getInstance().getListGridViewMode());
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewEstab);
@@ -123,7 +139,7 @@ public class EstabelecimentoFragment extends Fragment {
             if (conMgr!=null) {
                 NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
                 if (netInfo == null){
-                    Toast.makeText(getContext(), "Network offline", Toast.LENGTH_SHORT).show();
+                    mostarMsnErro();
                 } else {
                     carregarListaEstabelicimentos();
                 }
@@ -132,9 +148,29 @@ public class EstabelecimentoFragment extends Fragment {
 
     }
 
+    private void mostarMsnErro(){
+
+        if (errorLayout.getVisibility() == View.GONE){
+            errorLayout.setVisibility(View.VISIBLE);
+
+            coordinatorLayout.setVisibility(View.GONE);
+
+        }
+
+        btnTentarDeNovo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                coordinatorLayout.setVisibility(View.VISIBLE);
+                errorLayout.setVisibility(View.GONE);
+                verifConecxaoEstabelecimentos();
+            }
+        });
+    }
+
     private void carregarListaEstabelicimentos() {
         progressBar.setVisibility(View.VISIBLE);
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+//        Call<List<Estabelecimento>> rv = apiInterface.getEstabelecimentosPorTipo(idTipoEstabelecimento);
         Call<List<Estabelecimento>> rv = apiInterface.getAllEstabelecimentos();
         rv.enqueue(new Callback<List<Estabelecimento>>() {
             @Override
@@ -143,6 +179,15 @@ public class EstabelecimentoFragment extends Fragment {
                 if (response.isSuccessful()) {
 
                     if (response.body()!=null){
+
+//                        for (Estabelecimento estab:response.body()) {
+//
+//                            if (estab.estadoEstabelecimento!=null){
+//                                if (estab.estadoEstabelecimento.equals("Aberto")){
+//                                    estabelecimentoList.add(estab);
+//                                }
+//                            }
+//                        }
 
                         estabelecimentoList = response.body();
 

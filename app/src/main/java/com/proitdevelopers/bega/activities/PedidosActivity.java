@@ -1,19 +1,24 @@
 package com.proitdevelopers.bega.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.proitdevelopers.bega.R;
@@ -42,6 +47,10 @@ public class PedidosActivity extends AppCompatActivity {
 
     List<Factura> facturaList;
 
+    private ConstraintLayout coordinatorLayout;
+    private RelativeLayout errorLayout;
+    private TextView btnTentarDeNovo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +63,11 @@ public class PedidosActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        coordinatorLayout = findViewById(R.id.coordinatorLayout);
+        errorLayout = (RelativeLayout) findViewById(R.id.erroLayout);
+        btnTentarDeNovo = (TextView) findViewById(R.id.btn);
+        btnTentarDeNovo.setText("Tentar de Novo");
+
         recyclerView = findViewById(R.id.recyclerView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
@@ -62,12 +76,33 @@ public class PedidosActivity extends AppCompatActivity {
 
     }
 
+    private void mostarMsnErro(){
+
+        if (errorLayout.getVisibility() == View.GONE){
+            errorLayout.setVisibility(View.VISIBLE);
+
+            coordinatorLayout.setVisibility(View.GONE);
+
+        }
+
+        btnTentarDeNovo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                coordinatorLayout.setVisibility(View.VISIBLE);
+
+                errorLayout.setVisibility(View.GONE);
+                verifConecxaoPedidos();
+            }
+        });
+    }
+
+
     private void verifConecxaoPedidos() {
         ConnectivityManager conMgr =  (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         if (conMgr!=null) {
             NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
             if (netInfo == null){
-                Toast.makeText(this, "Network offline", Toast.LENGTH_SHORT).show();
+                mostarMsnErro();
             } else {
                 carregarListaFacturas();
             }
@@ -142,12 +177,32 @@ public class PedidosActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_pedidos, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
             finish();
+        }
+
+        if (item.getItemId() == R.id.menu_refresh) {
+            verifConecxaoPedidos();
+            return true;
+        }
+
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_favoritos) {
+            startActivity(new Intent(this, FavoritosActivity.class));
+
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/pref_titlte_geral">
+
+        <Preference
+            android:key="@string/key_meu_perfil"
+            android:title="@string/meu_perfil_pref"
+            android:summary="@string/ver_editar_perfil_pref"
+            />
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_title_seguranca">
+
+        <Preference
+            android:key="@string/key_alterar_senha"
+            android:title="Segurança e login"
+            android:summary="@string/alterar_recuperar_senha"
+            />
+
+    </PreferenceCategory>
+
+
+
+    <PreferenceCategory android:title="@string/pref_header_about">
+
+        <Preference
+            android:selectable="false"
+            android:summary="@string/summary_about" />
+
+        <Preference
+            android:key="@string/key_app_version"
+            android:summary="@string/app_version"
+            android:title="@string/title_version" />
+
+
+    </PreferenceCategory>
+
+
+
+    <PreferenceCategory android:title="@string/pref_header_feedback">
+
+        <Preference
+            android:key="@string/key_send_feedback"
+            android:summary="@string/summary_support"
+            android:title="@string/title_send_feedback" />
+
+        <!-- preference opens url in browser -->
+        <Preference
+            android:selectable="false"
+            android:summary="@string/summary_faq"
+            android:title="@string/title_faq">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/url_faq" />
+        </Preference>
+
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory android:title="@string/pref_header_privacidade">
+
+
+        <Preference
+            android:selectable="false"
+            android:title="@string/privacy_policy">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/url_privacy" />
+        </Preference>
+
+        <Preference
+            android:selectable="false"
+            android:title="@string/title_terms">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/url_terms" />
+        </Preference>
+    </PreferenceCategory>
+
+</PreferenceScreen>

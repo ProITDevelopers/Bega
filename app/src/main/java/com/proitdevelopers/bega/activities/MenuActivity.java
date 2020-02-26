@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.proitdevelopers.bega.MyApplication;
 import com.proitdevelopers.bega.R;
+import com.proitdevelopers.bega.model.Wallet;
 import com.proitdevelopers.bega.utilsClasses.TimerInfoBar;
 import com.proitdevelopers.bega.api.ApiClient;
 import com.proitdevelopers.bega.api.ApiInterface;
@@ -95,6 +96,7 @@ public class MenuActivity extends AppCompatActivity implements
     private long mTimeLeftInMillis;
     private long mEndTime;
 
+    NavigationView navigationView;
 
 
     @Override
@@ -117,7 +119,7 @@ public class MenuActivity extends AppCompatActivity implements
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
@@ -175,6 +177,7 @@ public class MenuActivity extends AppCompatActivity implements
 
 
         gotoCategoriaFragement();
+        verifConecxaoSaldoWallet();
 
     }
 
@@ -184,7 +187,7 @@ public class MenuActivity extends AppCompatActivity implements
             NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
             if (netInfo == null){
                 carregarMeuPerfilOffline(Common.mCurrentUser);
-                Toast.makeText(this, "Network offline", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "Network offline", Toast.LENGTH_SHORT).show();
             } else {
                 carregarMeuPerfil();
             }
@@ -290,23 +293,31 @@ public class MenuActivity extends AppCompatActivity implements
     private void logOut() {
 
 
-        if (mTimerRunning) {
-            pauseTimer();
-            resetTimer();
-        }
+//        if (mTimerRunning) {
+//            pauseTimer();
+//            resetTimer();
+//        }
+//
+//
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                AppPref.getInstance().clearAppPrefs();
+//                AppDatabase.clearData();
+//                Intent intent = new Intent(MenuActivity.this, SplashActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                startActivity(intent);
+//                finish();
+//            }
+//        },2000);
 
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                AppPref.getInstance().clearAppPrefs();
-                AppDatabase.clearData();
-                Intent intent = new Intent(MenuActivity.this, SplashActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                finish();
-            }
-        },2000);
+        AppPref.getInstance().clearAppPrefs();
+        AppDatabase.clearData();
+        Intent intent = new Intent(MenuActivity.this, SplashActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
 
 
 
@@ -323,12 +334,50 @@ public class MenuActivity extends AppCompatActivity implements
         transaction.commit();
     }
 
+
+    private void verifConecxaoSaldoWallet() {
+        ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (conMgr!=null){
+            NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+            if (netInfo != null) {
+                saldoContaWalletApi();
+            }
+        }
+
+    }
+
+    private void saldoContaWalletApi() {
+
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<List<Wallet>> call = apiInterface.getSaldoWallet();
+        call.enqueue(new Callback<List<Wallet>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Wallet>> call, @NonNull Response<List<Wallet>> response) {
+
+                //response.body()==null
+                if (response.isSuccessful()) {
+
+                    if (response.body()!=null){
+                        Common.mCurrentUser.wallet = response.body().get(0);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<Wallet>>call, @NonNull Throwable t) {
+
+            }
+        });
+    }
+
     @Override
     public void onClick(View view) {
 
         switch (view.getId()) {
 
             case R.id.dialog_btn_cancelar_sessao:
+                navigationView.setCheckedItem(R.id.nav_menu_home);
                 dialogTerminarSessao.cancel();
                 break;
 
@@ -370,6 +419,7 @@ public class MenuActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         verificaoPerfil();
+        navigationView.setCheckedItem(R.id.nav_menu_home);
     }
 
     @Override
@@ -424,7 +474,9 @@ public class MenuActivity extends AppCompatActivity implements
 
 
         else if (id == R.id.nav_menu_settings) {
-            Toast.makeText(this, "nav_menu_settings", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "nav_menu_settings", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, ConfiguracoesActivity.class);
+            startActivity(intent);
         }
 
         else if (id == R.id.nav_menu_logout) {
@@ -460,7 +512,8 @@ public class MenuActivity extends AppCompatActivity implements
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Toast.makeText(this, "action_settings", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, ConfiguracoesActivity.class);
+            startActivity(intent);
 
             return true;
         }

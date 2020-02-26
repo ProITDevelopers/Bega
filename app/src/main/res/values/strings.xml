@@ -82,6 +82,7 @@
     <!--    <string name="cart_info_bar_total">Total: Kz%s</string>-->
     <string name="cart_info_bar_total">Total: %.2f</string>
     <string name="timer_info_bar">%s</string>
+    <string name="ocorreuErro">Ocorreu um erro de conexão</string>
 
 
     <string name="title_activity_produtos">ProdutosActivity</string>
@@ -112,6 +113,44 @@
     <string name="msg_sucesso_senha_alterada">Aceda a sua conta com a nova senha!</string>
     <string name="msg_conta_criada_sucesso">A sua conta foi criada!</string>
     <string name="title_activity_pedidos">PedidosActivity</string>
+    <string name="title_activity_configuracoes">ConfiguracoesActivity</string>
+    <string name="pref_header_about">Sobre Nós</string>
+    <string name="pref_header_feedback">Feedback</string>
+
+
+    <string name="pref_header_privacidade">Conteúdo legal e políticas</string>
+    <string name="summary_about">Somos uma equipe de pessoas com idéias semelhantes, especializada no desenvolvimento de aplicativos para Android, iOS e Web, criando novas tendências em todo o espaço do aplicativo. Dispostos em ajudar de qualquer maneira!</string>
+    <string name="app_version">1.0</string>
+    <string name="summary_support">Tem alguma dúvida? Estamos felizes em ajudar!</string>
+    <string name="title_send_feedback">Enviar comentários</string>
+    <string name="title_faq">FAQ</string>
+    <string name="summary_faq">Visualizar perguntas frequentes</string>
+    <string name="url_faq">http://www.unitel.ao/servlet/web/privacidade</string>
+    <string name="privacy_policy">Política de Privacidade</string>
+    <string name="url_privacy">http://www.unitel.ao/servlet/web/privacidade</string>
+    <string name="title_terms">Termos &amp; Condições</string>
+    <string name="url_terms">http://www.unitel.ao/servlet/web/termos_e_condicoes</string>
+    <string name="title_version">Versão</string>
+    <string name="choose_email_client">Enviar email</string>
+    <string name="key_send_feedback">key_send_feedback</string>
+    <string name="key_meu_perfil">key_meu_perfil</string>
+
+    <string name="key_app_version">key_app_version</string>
+    <string name="key_alterar_senha">key_alterar_senha</string>
+    <string name="alterar_recuperar_senha">Altere sua senha</string>
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+
+    <string name="pref_titlte_geral">Informações pessoais</string>
+
+
+    <string name="pref_title_seguranca">Segurança</string>
+
+    <string name="pesquisar">Pesquisar</string>
+    <string name="mudar_vista">Mudar vista</string>
+    <string name="meu_perfil_pref">Editar perfil</string>
+    <string name="ver_editar_perfil_pref">Actualize seu nome, números de telefone e endereço.</string>
+    <string name="carrinho">Carrinho</string>
+    <string name="action_favoritos">Favoritos</string>
     <string-array name="genero">
         <item>Feminino</item>
         <item>Masculino</item>
@@ -136,4 +175,6 @@
         <item>Uíge</item>
         <item>Zaire</item>
     </string-array>
+
+
 </resources>

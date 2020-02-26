@@ -64,7 +64,7 @@ public class AppDatabase {
                 realm.copyToRealmOrUpdate(ci);
             } else {
 
-                if (cartItem.quantity<cartItem.produtos.emStock){
+                if (cartItem.quantity<=cartItem.produtos.emStock){
                     cartItem.quantity += 1;
                     realm.copyToRealmOrUpdate(cartItem);
                 }

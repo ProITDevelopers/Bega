@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.annotations.SerializedName;
@@ -32,6 +35,7 @@ import com.proitdevelopers.bega.helper.MetodosUsados;
 import com.proitdevelopers.bega.localDB.AppDatabase;
 import com.proitdevelopers.bega.model.CartItemProdutos;
 import com.proitdevelopers.bega.model.Produtos;
+import com.proitdevelopers.bega.utilsClasses.Converter;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -74,6 +78,11 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
     Toolbar toolbar;
 
     Drawable toolbarBK;
+    int cart_count = 0;
+
+    private ConstraintLayout coordinatorLayout;
+    private RelativeLayout errorLayout;
+    private TextView btnTentarDeNovo;
 
 
     @Override
@@ -86,6 +95,11 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
             nomeEstabelecimento = getIntent().getStringExtra("nomeEstabelecimento");
         }
         setContentView(R.layout.activity_produtos);
+
+        coordinatorLayout = findViewById(R.id.coordinatorLayout);
+        errorLayout = (RelativeLayout) findViewById(R.id.erroLayout);
+        btnTentarDeNovo = (TextView) findViewById(R.id.btn);
+        btnTentarDeNovo.setText("Tentar de Novo");
 
 
         toolbarBK = getResources().getDrawable( R.drawable.toolbar_bk );
@@ -125,10 +139,14 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
 //                toggleCartBar(true);
             } else {
 //                toggleCartBar(false);
+                cart_count = 0;
+                invalidateOptionsMenu();
             }
 
             if (itemAdapter!=null)
                 itemAdapter.setCartItems(cartItems);
+
+            invalidateOptionsMenu();
         };
 
     }
@@ -142,7 +160,18 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setTitle(" ");
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
-        appBarLayout.setExpanded(true);
+
+        ConnectivityManager conMgr =  (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (conMgr!=null) {
+            NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+            if (netInfo == null){
+                appBarLayout.setExpanded(false);
+            } else {
+                appBarLayout.setExpanded(true);
+            }
+        }
+
+//        appBarLayout.setExpanded(true);
 
         // hiding & showing the title when toolbar expanded & collapsed
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -175,12 +204,32 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
         if (conMgr!=null) {
             NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
             if (netInfo == null){
-                Toast.makeText(this, "Network offline", Toast.LENGTH_SHORT).show();
+                mostarMsnErro();
             } else {
                 carregarProductsList();
 //                renderProducts();
             }
         }
+    }
+
+    private void mostarMsnErro(){
+
+        if (errorLayout.getVisibility() == View.GONE){
+            errorLayout.setVisibility(View.VISIBLE);
+
+            coordinatorLayout.setVisibility(View.GONE);
+
+        }
+
+        btnTentarDeNovo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                coordinatorLayout.setVisibility(View.VISIBLE);
+
+                errorLayout.setVisibility(View.GONE);
+                verifConecxaoProdutos();
+            }
+        });
     }
 
     private void setCartInfoBar(RealmResults<CartItemProdutos> cartItems) {
@@ -189,6 +238,9 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
             itemCount += cartItem.quantity;
         }
 //        cartInfoBar.setData(itemCount, String.valueOf(Utils.getCartPrice(cartItems)));
+//        cart_count = itemCount;
+        cart_count = cartItems.size();
+
 
 
     }
@@ -198,6 +250,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
         AppDatabase.addItemToCart(product);
         if (cartItems != null) {
             itemAdapter.updateItem(index, cartItems);
+
         }
     }
 
@@ -206,7 +259,9 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
         AppDatabase.removeCartItem(product);
         if (cartItems != null) {
             itemAdapter.updateItem(index, cartItems);
+
         }
+
     }
 
     private void carregarProductsList() {
@@ -278,67 +333,18 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
 
     }
 
-//    private void renderProducts() {
-//
-//
-//
-//
-//
-//        produtosListRealm = AppDatabase.getProducts(nomeEstabelecimento);
-//
-//
-//
-//        setProductAdapters(produtosListRealm);
-//
-//    }
-
-//    private void setProductAdapters(RealmResults<Produtos> produtosListRealm) {
-//
-//        if (produtosListRealm.size()>0){
-//
-//            itemAdapter = new ProdutosAdapter(this, produtosListRealm,this, gridLayoutManager);
-//            itemAdapter.notifyDataSetChanged();
-//            recyclerView.setAdapter(itemAdapter);
-//
-//
-//            itemAdapter.setItemClickListener(new ItemClickListener() {
-//                @Override
-//                public void onClick(View view, int position) {
-//
-//                    Produtos produto = produtosListRealm.get(position);
-//                    Toast.makeText(ProdutosActivity.this, "Item: "+produto.getDescricaoProdutoC(), Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(ProdutosActivity.this,ProdutosDetalheActivity.class);
-//                    intent.putExtra("nomeEstabelecimento",nomeEstabelecimento);
-//                    intent.putExtra("produtoId",produto.getIdProduto());
-//                    intent.putExtra("position",position);
-//                    startActivity(intent);
-//                }
-//            });
-//        }
-//
-//
-//    }
-
-
-
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu_navigation_bottom; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_produtos, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.menu_cart);
+        menuItem.setIcon(Converter.convertLayoutToImage(ProdutosActivity.this,cart_count,R.drawable.ic_shopping_cart_white_24dp));
+//        MenuItem menuItem2 = menu.findItem(R.id.notification_action);
+//        menuItem2.setIcon(Converter.convertLayoutToImage(MainActivity.this,2,R.drawable.ic_notifications_white_24dp));
 //
-//        MenuItem item = menu.findItem(R.id.menu_cart);
-//        MenuItemCompat.setActionView(item, R.layout.cart_items_notification);
-//        RelativeLayout notifCount = (RelativeLayout) MenuItemCompat.getActionView(item);
-//
-//        TextView txtCartItems = (TextView) notifCount.findViewById(R.id.actionbar_notifcation_textview);
-//        txtCartItems.setText(String.valueOf(this.itemCount));
-
-
-
-
-
 
         return true;
     }
@@ -357,6 +363,9 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
             startActivity(new Intent(this, ShoppingCartActivity.class));
         }
 
+        if (id == R.id.action_favoritos) {
+            startActivity(new Intent(this, FavoritosActivity.class));
+        }
 
         return super.onOptionsItemSelected(item);
 
@@ -378,6 +387,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
         if (cartItems != null) {
             cartItems.addChangeListener(cartRealmChangeListener);
         }
+
     }
 
     @Override

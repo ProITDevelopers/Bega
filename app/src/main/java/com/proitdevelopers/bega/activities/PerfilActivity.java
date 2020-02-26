@@ -82,7 +82,7 @@ public class PerfilActivity extends AppCompatActivity {
         initViews();
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Carregando...");
-        progressDialog.setCancelable(false);
+
 
 
         //carregar dados do Usuario

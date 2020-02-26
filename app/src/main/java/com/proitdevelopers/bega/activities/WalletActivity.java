@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -17,11 +18,13 @@ import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.proitdevelopers.bega.localDB.AppPref;
 import com.proitdevelopers.bega.helper.Common;
@@ -73,6 +76,10 @@ public class WalletActivity extends AppCompatActivity {
 
     Wallet wallet = new Wallet();
 
+    private ConstraintLayout coordinatorLayout;
+    private RelativeLayout errorLayout;
+    private TextView btnTentarDeNovo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,6 +114,13 @@ public class WalletActivity extends AppCompatActivity {
     }
 
     private void initViews() {
+
+        coordinatorLayout = findViewById(R.id.coordinatorLayout);
+        errorLayout = (RelativeLayout) findViewById(R.id.erroLayout);
+        btnTentarDeNovo = (TextView) findViewById(R.id.btn);
+        btnTentarDeNovo.setText("Tentar de Novo");
+
+
         raiz = findViewById(android.R.id.content);
 
         cardView_hint = findViewById(R.id.cardView_hint);
@@ -168,9 +182,19 @@ public class WalletActivity extends AppCompatActivity {
         mDateSetListener = (datePicker, ano, mes, dia) -> {
             mes = mes + 1;
 
+            String monthString = String.valueOf(mes);
+            String dayString = String.valueOf(dia);
+            if (monthString.length() == 1) {
+                monthString = "0" + monthString;
+            }
+
+            if (dayString.length() == 1) {
+                dayString = "0" + dayString;
+            }
 
 
-            date = ano + "-" + mes + "-" + dia;
+//            date = ano + "-" + mes + "-" + dia;
+            date = ano + "-" + monthString + "-" + dayString;
             editTextDataNasc.setText(date);
         };
     }
@@ -234,7 +258,7 @@ public class WalletActivity extends AppCompatActivity {
         if (conMgr!=null){
             NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
             if (netInfo == null) {
-                mostrarMensagem(WalletActivity.this,R.string.txtMsg);
+                mostarMsnErro();
             } else {
                 saldoContaWalletApi();
             }
@@ -295,6 +319,26 @@ public class WalletActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     Log.d(TAG, String.valueOf(e.getMessage()));
                 }
+            }
+        });
+    }
+
+    private void mostarMsnErro(){
+
+        if (errorLayout.getVisibility() == View.GONE){
+            errorLayout.setVisibility(View.VISIBLE);
+
+            coordinatorLayout.setVisibility(View.GONE);
+
+        }
+
+        btnTentarDeNovo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                coordinatorLayout.setVisibility(View.VISIBLE);
+
+                errorLayout.setVisibility(View.GONE);
+                verifConecxaoSaldoWallet();
             }
         });
     }
@@ -371,8 +415,6 @@ public class WalletActivity extends AppCompatActivity {
     private void carregarMeuPerfilOffline(UsuarioPerfil usuarioPerfil) {
         try {
 
-            String contaID = UUID.randomUUID().toString();
-
             Picasso.with(this).load(usuarioPerfil.imagem).placeholder(R.drawable.ic_camera).into(imageView);
 
             txtNomeCompleto.setText(usuarioPerfil.nomeCompleto);
@@ -383,7 +425,7 @@ public class WalletActivity extends AppCompatActivity {
 
 
             txtContaNumber.setText(wallet.number);
-            txtSaldo.setText(wallet.amount+" Kzs");
+            txtSaldo.setText(wallet.amount);
 
             cardView_hint.setVisibility(View.VISIBLE);
 
@@ -393,6 +435,12 @@ public class WalletActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_wallet, menu);
+        return true;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -401,6 +449,20 @@ public class WalletActivity extends AppCompatActivity {
 
         if (id == android.R.id.home) {
             finish();
+        }
+
+        if (item.getItemId() == R.id.menu_refresh) {
+            verifConecxaoSaldoWallet();
+            return true;
+        }
+
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, ConfiguracoesActivity.class);
+            startActivity(intent);
+
+            return true;
         }
 
 

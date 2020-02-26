@@ -133,7 +133,7 @@
             android:id="@+id/loginBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
+            android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -165,7 +165,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginStart="20dp"
                 android:background="@drawable/facebook_f6_login"
-                />
+                android:visibility="gone"/>
 
 <!--            <com.facebook.login.widget.LoginButton-->
 <!--                android:id="@+id/loginBtn"-->

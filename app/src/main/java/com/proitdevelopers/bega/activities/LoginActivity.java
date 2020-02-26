@@ -4,6 +4,9 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
@@ -20,6 +23,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
@@ -63,6 +67,8 @@ import com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -146,6 +152,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         initViews();
 
+//        printKeyHash();
+
+    }
+
+    private void printKeyHash() {
+
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo("com.proitdevelopers.bega", PackageManager.GET_SIGNATURES);
+            for (Signature signature:info.signatures) {
+                MessageDigest messageDigest = MessageDigest.getInstance("SHA");
+                messageDigest.update(signature.toByteArray());
+                Log.e("KEYHASH", Base64.encodeToString(messageDigest.digest(),Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -261,7 +285,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 if (!MetodosUsados.isConnected(10000)) {
                     LoginManager.getInstance().logOut();
-                    Toast.makeText(LoginActivity.this, "Check Net", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(LoginActivity.this, "Check Net", Toast.LENGTH_SHORT).show();
                     fb.setEnabled(true);
                     fb.setBackground(ContextCompat.getDrawable(LoginActivity.this,R.drawable.facebook_f6_login));
 
@@ -278,7 +302,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onCancel() {
                 fb.setEnabled(true);
                 fb.setBackground(ContextCompat.getDrawable(LoginActivity.this,R.drawable.facebook_f6_login));
-                Toast.makeText(LoginActivity.this, "onCancel()", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(LoginActivity.this, "onCancel()", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -298,7 +322,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 fb.setEnabled(true);
                 fb.setBackground(ContextCompat.getDrawable(LoginActivity.this,R.drawable.facebook_f6_login));
-                Toast.makeText(LoginActivity.this, "Logout", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(LoginActivity.this, "Logout", Toast.LENGTH_SHORT).show();
 
 
 
@@ -403,8 +427,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
                 } else {
-                    ErrorResponce errorResponce = ErrorUtils.parseError(response);
                     progressDialog.dismiss();
+                   Snackbar.make(raiz, "Este usuário não exite!", Snackbar.LENGTH_LONG)
+                           .setActionTextColor(Color.parseColor("#ff6600"))
+                        .setAction("Criar conta", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(LoginActivity.this, RegistroActivity.class);
+                                startActivity(intent);
+                            }
+                        }).show();
+
 
                 }
             }
@@ -654,7 +687,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if (dialog_editTelefone_telefone.getText() != null) {
             telefoneRedif_senha = dialog_editTelefone_telefone.getText().toString().trim();
-            if (!telefoneRedif_senha.matches("9[1-9][1-9]\\d{6}")) {
+            if (!telefoneRedif_senha.matches("9[1-9][0-9]\\d{6}")) {
                 dialog_editTelefone_telefone.setError(msgErroTelefone);
                 return false;
             }else {

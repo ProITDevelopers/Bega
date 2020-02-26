@@ -74,6 +74,7 @@ import static com.proitdevelopers.bega.helper.Common.msgErro;
 import static com.proitdevelopers.bega.helper.Common.msgErroEspaco;
 import static com.proitdevelopers.bega.helper.Common.msgErroLetras;
 import static com.proitdevelopers.bega.helper.Common.msgErroLetrasCaracteres;
+import static com.proitdevelopers.bega.helper.Common.msgErroSEmail;
 import static com.proitdevelopers.bega.helper.Common.msgErroSTelefone;
 import static com.proitdevelopers.bega.helper.Common.msgErroSenha;
 import static com.proitdevelopers.bega.helper.Common.msgErroSenhaDiferente;
@@ -301,6 +302,11 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
             return false;
         }
 
+        if (nomeUtilizador.length()<3){
+            editNomeUtilizador.setError(msgErroLetrasCaracteres);
+            return false;
+        }
+
         if (primeiroNome.isEmpty()){
             editPrimeiroNome.setError(msgErro);
             return false;
@@ -337,7 +343,7 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
         }
 
         if (!validarEmail(email)){
-            editEmail.setError(msgErro);
+            editEmail.setError(msgErroSEmail);
             return false;
         }
 
@@ -359,12 +365,12 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
             return false;
         }
 
-        if (senha.length()<5){
+        if (senha.length()<=5){
             editPass.setError(msgErroSenha);
             return false;
         }
 
-        if (senhaConf.length()<5){
+        if (senhaConf.length()<=5){
             editConfirmPass.setError(msgErroSenha);
             return false;
         }
@@ -410,10 +416,10 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
             return false;
         }
 
-        if (rua.length()<3){
-            editRua.setError(msgErroLetrasCaracteres);
-            return false;
-        }
+//        if (rua.length()<3){
+//            editRua.setError(msgErroLetrasCaracteres);
+//            return false;
+//        }
 
         if (nCasa.isEmpty()){
             editNCasa.setError(msgErro);

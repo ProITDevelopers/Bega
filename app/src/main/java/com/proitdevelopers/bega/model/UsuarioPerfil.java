@@ -56,6 +56,8 @@ public class UsuarioPerfil implements Serializable {
     @SerializedName("imagem")
     public String imagem;
 
+    public Wallet wallet;
+
     public UsuarioPerfil() {
     }
 

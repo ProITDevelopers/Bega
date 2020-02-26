@@ -6,19 +6,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.proitdevelopers.bega.R;
-import com.proitdevelopers.bega.model.CartItemProdutos;
 import com.proitdevelopers.bega.model.Categoria;
-import com.proitdevelopers.bega.model.Produtos;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import java.util.Collections;
 import java.util.List;
 
 import static com.proitdevelopers.bega.helper.Common.SPAN_COUNT_ONE;
@@ -80,6 +76,8 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.Item
         Categoria categoria = categoriaList.get(position);
 
 //        Picasso.with(context).load(categoria.getImagemCategoria()).placeholder(R.drawable.hamburger_placeholder).into(holder.category_image);
+
+
 
         Picasso.with(context)
                 .load(categoria.getImagemCategoria())
