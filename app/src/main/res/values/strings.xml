@@ -5,8 +5,7 @@
     <string name="google_direction_api">AIzaSyBTmXV6TlULl2AUSC0Dm9YaZhf1SDdMRL8</string>
     <string name="facebook_app_id">2335117853474777</string>
     <string name="fb_login_protocol_scheme">fb2335117853474777</string>
-
-
+    
     <string name="action_settings">Definições</string>
     <string name="bega_logo">bega_logo</string>
     <string name="text_hint_email">Email</string>
