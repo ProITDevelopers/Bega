@@ -56,7 +56,7 @@ public class PedidosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedidos);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Meus Pedidos");
+        toolbar.setTitle("Encomendas");
         setSupportActionBar(toolbar);
 
         if (getSupportActionBar()!=null){
@@ -193,6 +193,10 @@ public class PedidosActivity extends AppCompatActivity {
         }
 
         if (item.getItemId() == R.id.menu_refresh) {
+            if (errorLayout.getVisibility() == View.VISIBLE){
+                errorLayout.setVisibility(View.GONE);
+                coordinatorLayout.setVisibility(View.VISIBLE);
+            }
             verifConecxaoPedidos();
             return true;
         }

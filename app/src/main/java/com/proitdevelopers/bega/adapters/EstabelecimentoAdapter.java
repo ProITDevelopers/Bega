@@ -1,6 +1,7 @@
 package com.proitdevelopers.bega.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.proitdevelopers.bega.R;
+import com.proitdevelopers.bega.activities.ProdutosActivity;
 import com.proitdevelopers.bega.model.Estabelecimento;
 import com.squareup.picasso.Picasso;
 
@@ -116,6 +118,18 @@ public class EstabelecimentoAdapter extends RecyclerView.Adapter<Estabelecimento
 
             itemView.setTag(itemView);
             itemView.setOnClickListener(this);
+
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Intent intent = new Intent(context, ProdutosActivity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    intent.putExtra("idEstabelecimento",mItems.get(getAdapterPosition()).estabelecimentoID);
+//                    intent.putExtra("imagemCapa",mItems.get(getAdapterPosition()).imagemCapa);
+//                    intent.putExtra("nomeEstabelecimento",mItems.get(getAdapterPosition()).nomeEstabelecimento);
+//                    context.startActivity(intent);
+//                }
+//            });
 
         }
 

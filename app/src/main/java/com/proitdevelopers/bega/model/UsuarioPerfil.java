@@ -58,6 +58,8 @@ public class UsuarioPerfil implements Serializable {
 
     public Wallet wallet;
 
+    public float mSaldoWallet;
+
     public UsuarioPerfil() {
     }
 

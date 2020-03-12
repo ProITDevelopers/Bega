@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">Bega</string>
-    <string name="google_browser_key">google_browser_key</string>
 
-    <string name="facebook_app_id">facebook_app_id</string>
-    <string name="fb_login_protocol_scheme">fb_login_protocol_scheme</string>
+    <string name="google_browser_key">AIzaSyDt-fbJvlUxypFSogMt8PSoVnqPoB_SYiI</string>
+    <string name="google_direction_api">AIzaSyBTmXV6TlULl2AUSC0Dm9YaZhf1SDdMRL8</string>
+    <string name="facebook_app_id">2335117853474777</string>
+    <string name="fb_login_protocol_scheme">fb2335117853474777</string>
 
 
     <string name="action_settings">Definições</string>
@@ -75,6 +76,7 @@
     <!--    <string name="price_with_currency">Kz%.2f</string>-->
     <string name="price_with_currency">%.2f</string>
     <string name="order_id">Factura #%s</string>
+    <string name="btn_confirmar">Confirmar</string>
     <string name="btn_checkout">Enviar Pedido</string>
     <string name="lbl_item_price_quantity">%s x %d</string>
     <string name="cart_info_bar_data">%d Items | Kz%s</string>

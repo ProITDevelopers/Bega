@@ -5,7 +5,7 @@
         android:id="@+id/menu_perfil_edit"
         app:showAsAction="always"
         android:orderInCategory="100"
-        android:icon="@drawable/ic_edit_white_24dp"
+        android:icon="@drawable/account_edit_outline_24dp"
         android:title="Edit" />
 
     <item

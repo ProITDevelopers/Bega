@@ -284,6 +284,10 @@ public class WalletActivity extends AppCompatActivity {
 
                         wallet = response.body().get(0);
 
+                        Common.mCurrentUser.wallet = wallet;
+
+                        AppPref.getInstance().saveUser(Common.mCurrentUser);
+
                         carregarMeuPerfilOffline(Common.mCurrentUser);
 
                         progressDialog.dismiss();
@@ -452,6 +456,10 @@ public class WalletActivity extends AppCompatActivity {
         }
 
         if (item.getItemId() == R.id.menu_refresh) {
+            if (errorLayout.getVisibility() == View.VISIBLE){
+                errorLayout.setVisibility(View.GONE);
+                coordinatorLayout.setVisibility(View.VISIBLE);
+            }
             verifConecxaoSaldoWallet();
             return true;
         }

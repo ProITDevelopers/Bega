@@ -1,6 +1,9 @@
 package com.proitdevelopers.bega.activities;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -81,19 +84,31 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
     String mPlaceLocation, mPlaceDestination;
-    String getMyEndereco;
+    String getMyEndereco,getMyDestination;
+    String toolbarTitle;
+
+    Toolbar toolbar;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+        toolbarTitle = getIntent().getStringExtra("toolbarTitle");
+        if (toolbarTitle==null){
+            toolbarTitle = "Mapa";
+        }
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Mapa");
+        toolbar.setTitle(toolbarTitle);
         setSupportActionBar(toolbar);
         if (getSupportActionBar()!=null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+
+
+
 
 
 
@@ -251,6 +266,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
 
+
+
     }
 
     private void createLocationRequest() {
@@ -281,6 +298,33 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
         mMap.setInfoWindowAdapter(new CustomInfoWindow(this));
+
+
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+
+
+                if (toolbarTitle.equals("Local de entrega")){
+                    getMyDestination = getMyAddress(latLng);
+                    //First, check markerDestination
+                    //IF is not null, just remove available marker
+                    if (markerDestination != null)
+                        markerDestination.remove();
+                    markerDestination = mMap.addMarker(new MarkerOptions()
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.destination_marker))
+                            .position(latLng)
+                            .title("Destination")
+                            .snippet(getMyDestination));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
+                }
+
+
+
+
+            }
+        });
 
 
         mMap.setOnInfoWindowClickListener(this);
@@ -323,11 +367,63 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onInfoWindowClick(Marker marker) {
         //If marker info windows is your location, don't apply this event
-        if (!marker.getTitle().equals("Eu")){
-            Toast.makeText(this, ""+marker.getTitle(), Toast.LENGTH_SHORT).show();
+
+        String latitude = String.valueOf(marker.getPosition().latitude);
+        String longitude = String.valueOf(marker.getPosition().longitude);
+
+        if (toolbarTitle.equals("Local de entrega")){
+            if (marker.getTitle().equals("Eu")){
+//                Toast.makeText(this, ""+marker.getTitle(), Toast.LENGTH_SHORT).show();
+
+                alertaUsarLocalizacao(getMyEndereco,latitude,longitude);
+            }else if (marker.getTitle().equals("Destination")){
+
+                alertaUsarLocalizacao(getMyDestination,latitude,longitude);
+
+
+            }
         }
+
+
     }
 
+    private void alertaUsarLocalizacao(String endereco, String latitude, String longitude) {
+
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle(endereco);
+        dialog.setMessage("Deseja utilizar esta localização?");
+        dialog.setCancelable(false);
+
+        //Set button
+        dialog.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialogInterface, int i) {
+
+
+                dialogInterface.dismiss();
+
+                Intent data = new Intent();
+
+                data.putExtra("endereco", endereco);
+                data.putExtra("latitude", latitude);
+                data.putExtra("longitude", longitude);
+                setResult(RESULT_OK, data);
+                finish();
+
+            }
+        });
+
+        dialog.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+
+
+        dialog.show();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

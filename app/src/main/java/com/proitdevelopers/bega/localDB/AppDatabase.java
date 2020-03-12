@@ -1,5 +1,6 @@
 package com.proitdevelopers.bega.localDB;
 
+import android.content.Context;
 import android.widget.Toast;
 
 import com.proitdevelopers.bega.model.CartItemProdutos;
@@ -50,11 +51,11 @@ public class AppDatabase {
      * Will create a new cart entry if there is no cart created yet
      * Will increase the product quantity count if the item exists already
      */
-    public static void addItemToCart(Produtos product) {
-        initNewCart(product);
+    public static void addItemToCart(Context context,Produtos product) {
+        initNewCart(context,product);
     }
 
-    private static void initNewCart(Produtos product) {
+    private static void initNewCart(Context context,Produtos product) {
         Realm.getDefaultInstance().executeTransaction(realm -> {
             CartItemProdutos cartItem = realm.where(CartItemProdutos.class).equalTo("produtos.idProduto", product.idProduto).findFirst();
             if (cartItem == null) {
@@ -67,6 +68,8 @@ public class AppDatabase {
                 if (cartItem.quantity<=cartItem.produtos.emStock){
                     cartItem.quantity += 1;
                     realm.copyToRealmOrUpdate(cartItem);
+                }else {
+                    Toast.makeText(context, "Atingiu o limite em stock!", Toast.LENGTH_SHORT).show();
                 }
 
 

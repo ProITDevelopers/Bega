@@ -39,7 +39,7 @@ public interface ApiInterface {
     @POST("/authenticate2")
     Call<UsuarioAuth> autenticarCliente(@Body LoginRequest loginRequest);
 
-    @POST("/Facebook")
+    @POST("/FacebookCliente")
     Call<UsuarioAuth> autenticarFaceBook(@Body FaceBookLoginRequest faceBookLoginRequest);
 
 
@@ -123,7 +123,7 @@ public interface ApiInterface {
     Call<List<Factura>> getTodasFacturas();
 
 
-    @GET("/ListarEstabA24h")
+    @GET("/ListarEstabA24h2")
     Call<List<Estabelecimento>> getAltasHorasEstabelecimentos();
 
     @GET("/ListagemEstabelecimentoA")

@@ -122,9 +122,9 @@ public class EditarPerfilActivity extends AppCompatActivity implements View.OnCl
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        if (getIntent()!=null){
-            Common.mCurrentUser = (UsuarioPerfil) getIntent().getSerializableExtra("mCurrentUser");
-        }
+//        if (getIntent()!=null){
+//            Common.mCurrentUser = (UsuarioPerfil) getIntent().getSerializableExtra("mCurrentUser");
+//        }
 
         initViews();
         progressDialog = new ProgressDialog(this);

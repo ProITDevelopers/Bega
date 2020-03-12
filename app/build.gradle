@@ -92,11 +92,18 @@ dependencies {
     implementation "android.arch.navigation:navigation-fragment-ktx:1.0.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
+
+//    implementation 'com.google.android.libraries.places:places:1.1.0'
+
     //FACEBOOK
     implementation 'com.facebook.android:facebook-android-sdk:5.0.0'
 
     //MULTIDEX
     implementation 'com.android.support:multidex:1.0.0'
+
+    //SIGNALR
+    implementation 'com.microsoft.signalr:signalr:1.0.0'
+    implementation 'org.slf4j:slf4j-jdk14:1.7.25'
 
 
 }

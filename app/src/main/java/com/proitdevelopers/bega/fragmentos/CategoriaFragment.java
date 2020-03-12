@@ -234,7 +234,13 @@ public class CategoriaFragment extends Fragment {
             if (fragmentManager != null){
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 if (categoria.equals("Altas Horas")){
-                    fragmentTransaction.replace(R.id.frame_layout, new AltasHorasEstabelecimentoFragment());
+
+                    AltasHorasEstabelecimentoFragment altasHorasEstabelecimentoFragment = new AltasHorasEstabelecimentoFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("categoria", categoria);
+                    altasHorasEstabelecimentoFragment.setArguments(bundle);
+
+                    fragmentTransaction.replace(R.id.frame_layout, altasHorasEstabelecimentoFragment);
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                 }else{
@@ -242,6 +248,7 @@ public class CategoriaFragment extends Fragment {
                     EstabelecimentoFragment estabelecimentoFragment = new EstabelecimentoFragment();
                     Bundle bundle = new Bundle();
                     bundle.putInt("categoriaID", categoriaID);
+                    bundle.putString("categoria", categoria);
                     estabelecimentoFragment.setArguments(bundle);
 
                     fragmentTransaction.replace(R.id.frame_layout, estabelecimentoFragment);
@@ -272,7 +279,14 @@ public class CategoriaFragment extends Fragment {
 
 
         if (itemId == R.id.menu_refresh) {
+
+            if (errorLayout.getVisibility() == View.VISIBLE){
+                errorLayout.setVisibility(View.GONE);
+                coordinatorLayout.setVisibility(View.VISIBLE);
+            }
             verifConecxaoCategoria();
+
+
             return true;
         }
 

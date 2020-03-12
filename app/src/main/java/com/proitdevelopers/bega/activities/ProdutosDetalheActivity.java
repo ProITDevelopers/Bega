@@ -200,9 +200,7 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
         ic_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 listener.onProductAddedCart(position, produtos);
-
             }
         });
 
@@ -226,7 +224,11 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
         btn_comprar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ProdutosDetalheActivity.this, ShoppingCartActivity.class));
+
+                Intent intent = new Intent(ProdutosDetalheActivity.this,ShoppingCartActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+
             }
         });
 
@@ -335,7 +337,9 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
         }
 
         if (id == R.id.menu_cart) {
-            startActivity(new Intent(this, ShoppingCartActivity.class));
+            Intent intent = new Intent(ProdutosDetalheActivity.this,ShoppingCartActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         }
 
         if (id == R.id.action_favoritos) {
@@ -375,15 +379,18 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
 
     @Override
     public void onProductAddedCart(int index, Produtos product) {
-        AppDatabase.addItemToCart(product);
+        AppDatabase.addItemToCart(this,product);
         cartItem = cartItems.where().equalTo("produtos.idProduto", product.getIdProduto()).findFirst();
 
 
         if (cartItem != null) {
+
+            if (cartItem.quantity==1){
+                Snackbar.make(raiz, produtos.getDescricaoProdutoC()+" adicionado ao Carrinho!", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+
             product_count.setText(String.valueOf(cartItem.quantity));
-
-
-
             ic_remove.setVisibility(View.VISIBLE);
             product_count.setVisibility(View.VISIBLE);
             btn_addCart.setText("Adicionado");
@@ -407,7 +414,13 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
             product_count.setText(String.valueOf(cartItem.quantity));
 
 
+
+
         }else {
+
+            Snackbar.make(raiz, produtos.getDescricaoProdutoC()+" removido do Carrinho!", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+
             product_count.setText(String.valueOf(0));
 
 

@@ -2,9 +2,11 @@ package com.proitdevelopers.bega.activities;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -13,6 +15,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -31,9 +34,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.proitdevelopers.bega.MyApplication;
 import com.proitdevelopers.bega.R;
 import com.proitdevelopers.bega.model.Wallet;
+import com.proitdevelopers.bega.mySignalR.MySignalRService;
 import com.proitdevelopers.bega.utilsClasses.TimerInfoBar;
 import com.proitdevelopers.bega.api.ApiClient;
 import com.proitdevelopers.bega.api.ApiInterface;
@@ -80,7 +85,7 @@ public class MenuActivity extends AppCompatActivity implements
 
 
 
-    NotificationHelper notificationHelper;
+
 
 
     private static final long START_TIME_IN_MILLIS = 100000;
@@ -98,6 +103,14 @@ public class MenuActivity extends AppCompatActivity implements
 
     NavigationView navigationView;
 
+    Wallet wallet = new Wallet();
+
+    Button button_notify;
+
+
+    private final Context mContext = this;
+    private MySignalRService mService;
+    private boolean mBound = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,13 +118,17 @@ public class MenuActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_menu);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
+//        Intent intent = new Intent();
+//        intent.setClass(mContext, MySignalRService.class);
+//        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
         txtToolbar = toolbar.findViewById(R.id.txtToolbar);
         imageViewToolBar = toolbar.findViewById(R.id.imgToolbar);
         setSupportActionBar(toolbar);
 
-        notificationHelper = new NotificationHelper(this);
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -152,28 +169,6 @@ public class MenuActivity extends AppCompatActivity implements
         Common.mCurrentUser = AppPref.getInstance().getUser();
         carregarMeuPerfilOffline(Common.mCurrentUser);
 
-        mTextViewCountDown = findViewById(R.id.timer_info_bar);
-
-        mButtonStartPause = findViewById(R.id.button_start_pause);
-        mButtonReset = findViewById(R.id.button_reset);
-
-        mButtonStartPause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mTimerRunning) {
-                    pauseTimer();
-                } else {
-                    startTimer();
-                }
-            }
-        });
-
-        mButtonReset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                resetTimer();
-            }
-        });
 
 
         gotoCategoriaFragement();
@@ -186,7 +181,7 @@ public class MenuActivity extends AppCompatActivity implements
         if (conMgr!=null) {
             NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
             if (netInfo == null){
-                carregarMeuPerfilOffline(Common.mCurrentUser);
+                carregarMeuPerfilOffline(usuarioPerfil);
 //                Toast.makeText(this, "Network offline", Toast.LENGTH_SHORT).show();
             } else {
                 carregarMeuPerfil();
@@ -232,7 +227,11 @@ public class MenuActivity extends AppCompatActivity implements
 
                 } else {
 //                    notificationHelper.createNotification("A sessão expirou!","Inicie outra vez a sessão!");
-                    mensagemTokenExpirado();
+
+                    if (response.code()==401){
+                        mensagemTokenExpirado();
+                    }
+
                 }
 
 
@@ -282,6 +281,17 @@ public class MenuActivity extends AppCompatActivity implements
             }
         });
 
+        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialogInterface, int i) {
+
+
+                dialogInterface.dismiss();
+
+
+            }
+        });
+
 
 
         dialog.show();
@@ -293,25 +303,7 @@ public class MenuActivity extends AppCompatActivity implements
     private void logOut() {
 
 
-//        if (mTimerRunning) {
-//            pauseTimer();
-//            resetTimer();
-//        }
-//
-//
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                AppPref.getInstance().clearAppPrefs();
-//                AppDatabase.clearData();
-//                Intent intent = new Intent(MenuActivity.this, SplashActivity.class);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                startActivity(intent);
-//                finish();
-//            }
-//        },2000);
-
-
+        LoginManager.getInstance().logOut();
         AppPref.getInstance().clearAppPrefs();
         AppDatabase.clearData();
         Intent intent = new Intent(MenuActivity.this, SplashActivity.class);
@@ -359,7 +351,10 @@ public class MenuActivity extends AppCompatActivity implements
                 if (response.isSuccessful()) {
 
                     if (response.body()!=null){
-                        Common.mCurrentUser.wallet = response.body().get(0);
+                        wallet = response.body().get(0);
+                        Common.mCurrentUser.wallet = wallet;
+
+                        AppPref.getInstance().saveUser(Common.mCurrentUser);
                     }
                 }
             }
@@ -399,7 +394,7 @@ public class MenuActivity extends AppCompatActivity implements
             drawer.closeDrawer(GravityCompat.START);
         } else {
 //            super.onBackPressed();
-
+            txtToolbar.setText("Bega");
             int fragments = getSupportFragmentManager().getBackStackEntryCount();
             if (fragments == 1) {
                 finish();
@@ -417,16 +412,18 @@ public class MenuActivity extends AppCompatActivity implements
 
     @Override
     protected void onResume() {
+
+        Intent intent = new Intent();
+        intent.setClass(mContext, MySignalRService.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
         super.onResume();
-        verificaoPerfil();
         navigationView.setCheckedItem(R.id.nav_menu_home);
+        verificaoPerfil();
+
+
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        dialogTerminarSessao.dismiss();
-    }
+
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -449,11 +446,11 @@ public class MenuActivity extends AppCompatActivity implements
             startActivity(intent);
         }
 
-//        else if (id == R.id.nav_menu_favoritos) {
-//
-//            Intent intent = new Intent(this,FavoritosActivity.class);
-//            startActivity(intent);
-//        }
+        else if (id == R.id.nav_menu_favoritos) {
+
+            Intent intent = new Intent(this,FavoritosActivity.class);
+            startActivity(intent);
+        }
 
         else if (id == R.id.nav_menu_pedidos) {
 
@@ -461,11 +458,11 @@ public class MenuActivity extends AppCompatActivity implements
             startActivity(intent);
         }
 
-//        else if (id == R.id.nav_menu_mapa) {
-//
-//            Intent intent = new Intent(this,MapActivity.class);
-//            startActivity(intent);
-//        }
+        else if (id == R.id.nav_menu_mapa) {
+
+            Intent intent = new Intent(this,MapActivity.class);
+            startActivity(intent);
+        }
 
         else if (id == R.id.nav_menu_share) {
             MetodosUsados.shareTheApp(this);
@@ -533,134 +530,64 @@ public class MenuActivity extends AppCompatActivity implements
 //    }
 
 
-    private void startTimer() {
-        mEndTime = System.currentTimeMillis() + mTimeLeftInMillis;
-
-        mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                mTimeLeftInMillis = millisUntilFinished;
-                updateCountDownText();
-            }
-
-            @Override
-            public void onFinish() {
-                mTimerRunning = false;
-                updateButtons();
-
-                notificationHelper.createNotification("A sessão expirou!","onFinish()!");
-
-            }
-        }.start();
-
-        mTimerRunning = true;
-        updateButtons();
-
-
-    }
-
-    private void pauseTimer() {
-        mCountDownTimer.cancel();
-        mTimerRunning = false;
-        updateButtons();
-    }
-
-    private void resetTimer() {
-        mTimeLeftInMillis = START_TIME_IN_MILLIS;
-        updateCountDownText();
-        updateButtons();
-    }
-
-    private void updateCountDownText() {
 
 
 
-        int minutes = (int) (mTimeLeftInMillis / 1000) / 60;
-        int seconds = (int) (mTimeLeftInMillis / 1000) % 60;
 
-        String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
+    @Override
+    protected void onDestroy() {
 
-        mTextViewCountDown.setData(timeLeftFormatted);
-    }
-
-    private void updateButtons() {
-        if (mTimerRunning) {
-            mButtonReset.setVisibility(View.INVISIBLE);
-            mButtonStartPause.setText("Pause");
-        } else {
-            mButtonStartPause.setText("Start");
-
-            if (mTimeLeftInMillis < 1000) {
-                mButtonStartPause.setVisibility(View.INVISIBLE);
-            } else {
-                mButtonStartPause.setVisibility(View.VISIBLE);
-            }
-
-            if (mTimeLeftInMillis < START_TIME_IN_MILLIS) {
-                mButtonReset.setVisibility(View.VISIBLE);
-            } else {
-                mButtonReset.setVisibility(View.INVISIBLE);
-            }
+        if (mBound) {
+            unbindService(mConnection);
+            mBound = false;
         }
+        super.onDestroy();
+        dialogTerminarSessao.dismiss();
     }
+
 
     @Override
     protected void onStop() {
+
+//        if (mBound) {
+//            unbindService(mConnection);
+//            mBound = false;
+//        }
         super.onStop();
 
-
-        AppPref.getInstance().saveTimeCLOCK(mTimeLeftInMillis, mTimerRunning, mEndTime);
-
-//        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
-//        SharedPreferences.Editor editor = prefs.edit();
-//
-//        editor.putLong("millisLeft", mTimeLeftInMillis);
-//        editor.putBoolean("timerRunning", mTimerRunning);
-//        editor.putLong("endTime", mEndTime);
-//
-//        editor.apply();
-
-        if (mCountDownTimer != null) {
-            mCountDownTimer.cancel();
-        }
     }
+
+
+
 
     @Override
     protected void onStart() {
         super.onStart();
 
-//        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
-////
-////        mTimeLeftInMillis = prefs.getLong("millisLeft", START_TIME_IN_MILLIS);
-////        mTimerRunning = prefs.getBoolean("timerRunning", false);
-
-
-        mTimeLeftInMillis = AppPref.getInstance().getMILLIS_LEFT();
-        mTimerRunning = AppPref.getInstance().getTIMER_RUNNING();
-
-        updateCountDownText();
-        updateButtons();
-
-        if (mTimerRunning) {
-//            mEndTime = prefs.getLong("endTime", 0);
-            mEndTime = AppPref.getInstance().getEND_TIME();
-            mTimeLeftInMillis = mEndTime - System.currentTimeMillis();
-
-            if (mTimeLeftInMillis < 0) {
-                mTimeLeftInMillis = 0;
-                mTimerRunning = false;
-                updateCountDownText();
-                updateButtons();
-                notificationHelper.createNotification("A sessão expirou!","protected void onStart()!");
-            } else {
-                startTimer();
-            }
-        }
     }
 
 
 
 
+    /**
+     * Defines callbacks for service binding, passed to bindService()
+     */
+    private final ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            // We've bound to SignalRService, cast the IBinder and get SignalRService instance
+            MySignalRService.LocalBinder binder = (MySignalRService.LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
 
 
 }

@@ -187,20 +187,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             recyclerView.setAdapter(itemAdapter);
             recyclerView.setLayoutManager(gridLayoutManager);
 
-            itemAdapter.setItemClickListener(new ItemClickListener() {
-                @Override
-                public void onClick(View view, int position) {
-
-                    Estabelecimento estabelecimento = estabelecimentoList.get(position);
-                    Toast.makeText(MainActivity.this, "Id: "+estabelecimento.estabelecimentoID+", "+estabelecimento.nomeEstabelecimento, Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(MainActivity.this, ProdutosActivity.class);
-                    intent.putExtra("idEstabelecimento",estabelecimento.estabelecimentoID);
-                    intent.putExtra("logotipo",estabelecimento.logotipo);
-                    intent.putExtra("nomeEstabelecimento",estabelecimento.nomeEstabelecimento);
-                    startActivity(intent);
-
-                }
-            });
+//            itemAdapter.setItemClickListener(new ItemClickListener() {
+//                @Override
+//                public void onClick(View view, int position) {
+//
+//                    Estabelecimento estabelecimento = estabelecimentoList.get(position);
+//                    Toast.makeText(MainActivity.this, "Id: "+estabelecimento.estabelecimentoID+", "+estabelecimento.nomeEstabelecimento, Toast.LENGTH_SHORT).show();
+//                    Intent intent = new Intent(MainActivity.this, ProdutosActivity.class);
+//                    intent.putExtra("idEstabelecimento",estabelecimento.estabelecimentoID);
+//                    intent.putExtra("logotipo",estabelecimento.logotipo);
+//                    intent.putExtra("nomeEstabelecimento",estabelecimento.nomeEstabelecimento);
+//                    startActivity(intent);
+//
+//                }
+//            });
         }
 
 

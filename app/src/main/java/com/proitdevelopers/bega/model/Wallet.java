@@ -2,7 +2,9 @@ package com.proitdevelopers.bega.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Wallet {
+import java.io.Serializable;
+
+public class Wallet implements Serializable {
 
     @SerializedName("id")
     public String id;

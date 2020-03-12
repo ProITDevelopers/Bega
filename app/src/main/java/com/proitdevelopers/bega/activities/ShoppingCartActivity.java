@@ -1,6 +1,7 @@
 package com.proitdevelopers.bega.activities;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,7 +10,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
@@ -30,6 +30,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.proitdevelopers.bega.helper.Common;
+import com.proitdevelopers.bega.model.Produtos;
 import com.proitdevelopers.bega.utilsClasses.CartInfoBar;
 import com.proitdevelopers.bega.utilsClasses.RecyclerSectionItemDecoration;
 import com.proitdevelopers.bega.localDB.AppPref;
@@ -83,6 +85,10 @@ public class ShoppingCartActivity extends AppCompatActivity
     private Dialog dialogRemoverTodosItems;
     private TextView dialog_txt_items;
 
+    float totalPrice;
+    int totalItems=0;
+    String totalCart;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +102,8 @@ public class ShoppingCartActivity extends AppCompatActivity
         if (getSupportActionBar()!=null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        Common.mCurrentUser = AppPref.getInstance().getUser();
 
         recyclerView = findViewById(R.id.recycler_view);
         btnCheckout = findViewById(R.id.btn_checkout);
@@ -182,6 +190,19 @@ public class ShoppingCartActivity extends AppCompatActivity
 
         if (dialogRemoverTodosItems.getWindow()!=null)
             dialogRemoverTodosItems.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        if (Common.mCurrentUser.wallet!=null){
+            String mSaldo = Common.mCurrentUser.wallet.amount.replace("Kz","");
+            mSaldo = mSaldo.replace(",",".");
+            String mSaldo2 = mSaldo.replaceAll("\\s+","");
+
+            float mSaldoConta = Float.valueOf(mSaldo2);
+
+            Common.mCurrentUser.mSaldoWallet = Float.valueOf(mSaldo2);
+
+        }
+
+
     }
 
     private void init() {
@@ -231,14 +252,15 @@ public class ShoppingCartActivity extends AppCompatActivity
     private void setTotalPrice() {
         if (cartItems != null) {
             float price = Utils.getCartPrice(cartItems);
+            totalPrice = price;
             if (price > 0) {
 //                btnCheckout.setText(getString(R.string.btn_checkout, getString(R.string.price_with_currency, price)));
-                btnCheckout.setText(getString(R.string.btn_checkout));
+                btnCheckout.setText(getString(R.string.btn_confirmar));
             } else {
                 // if the price is zero, dismiss the dialog
 //                dismiss();
                 btnCheckout.setVisibility(View.GONE);
-                btnCheckout.setText(getString(R.string.btn_checkout));
+                btnCheckout.setText(getString(R.string.btn_confirmar));
 //                Toast.makeText(this, "O carrinho está vazio!", Toast.LENGTH_SHORT).show();
 
             }
@@ -250,6 +272,8 @@ public class ShoppingCartActivity extends AppCompatActivity
         for (CartItemProdutos cartItem : cartItems) {
             itemCount += cartItem.quantity;
         }
+        totalItems = itemCount;
+        totalCart = String.valueOf(Utils.getCartPrice(cartItems));
         cartInfoBar.setData(itemCount, String.valueOf(Utils.getCartPrice(cartItems)));
     }
 
@@ -268,12 +292,29 @@ public class ShoppingCartActivity extends AppCompatActivity
             case R.id.btnWallet:
                 caixa_dialogo_tipo_pagamento.dismiss();
                 tipoPagamento = "Wallet";
-                getCurrentPlaceItems();
+
+                if (Common.mCurrentUser.wallet==null){
+                    alertaCriarContaWallet();
+
+                }else{
+
+                    if (Common.mCurrentUser.mSaldoWallet>=totalPrice){
+//                        getCurrentPlaceItems();
+                        abrirMapa();
+                    }else{
+                        Toast.makeText(this, "Seu crédito não é suficiente", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }
+
+
                 break;
             case R.id.btnMulticaixa:
                 caixa_dialogo_tipo_pagamento.dismiss();
                 tipoPagamento = "Multicaixa";
-                getCurrentPlaceItems();
+//                getCurrentPlaceItems();
+                abrirMapa();
                 break;
             case R.id.btnCancelar_dialog:
                 caixa_dialogo_tipo_pagamento.dismiss();
@@ -357,15 +398,21 @@ public class ShoppingCartActivity extends AppCompatActivity
 
     private void abrirPagamentoActivity() {
         if (verificarCamposTelefone()){
+
             caixa_dialogo_fornecer_numero.dismiss();
-            Intent intent = new Intent(this,PagamentoActivity.class);
+//            Intent intent = new Intent(this,PagamentoActivity.class);
+            Intent intent = new Intent(this,CheckOutActivity.class);
             intent.putExtra("tipoPagamento",tipoPagamento);
             intent.putExtra("numero",telefone);
             intent.putExtra("endereco",endereco);
             intent.putExtra("latitude",latitude);
             intent.putExtra("longitude",longitude);
+            intent.putExtra("totalItems",totalItems);
+            intent.putExtra("totalCart",totalCart);
             startActivity(intent);
             finish();
+
+
         }
     }
 
@@ -389,6 +436,24 @@ public class ShoppingCartActivity extends AppCompatActivity
     @Override
     public void onCartItemRemoved(int index, CartItemProdutos cartItem) {
         AppDatabase.removeCartItem(cartItem);
+    }
+
+    @Override
+    public void onProductAddedCart(int index, Produtos product) {
+        AppDatabase.addItemToCart(this,product);
+        if (cartItems != null) {
+            mAdapter.updateItem(index, cartItems);
+
+        }
+    }
+
+    @Override
+    public void onProductRemovedFromCart(int index, Produtos product) {
+        AppDatabase.removeCartItem(product);
+        if (cartItems != null) {
+            mAdapter.updateItem(index, cartItems);
+
+        }
     }
 
     @Override
@@ -426,55 +491,60 @@ public class ShoppingCartActivity extends AppCompatActivity
 
 
 
-
-    private void getCurrentPlaceItems() {
-        if (isLocationAccessPermitted()) {
-            showPlacePicker();
-        } else {
-            requestLocationAccessPermission();
-        }
+    private void abrirMapa(){
+        Intent intent = new Intent(ShoppingCartActivity.this,MapActivity.class);
+        intent.putExtra("toolbarTitle","Local de entrega");
+        startActivityForResult(intent, PLACE_PICKER_REQ_CODE);
     }
 
-
-    private void showPlacePicker() {
-
-        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-
-        try {
-            startActivityForResult(builder.build(this), PLACE_PICKER_REQ_CODE);
-        } catch (Exception e) {
-            Log.e(TAG, e.getStackTrace().toString());
-        }
-    }
-
-    private boolean isLocationAccessPermitted() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    private void requestLocationAccessPermission() {
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                LOC_REQ_CODE);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == LOC_REQ_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //The External Storage Write Permission is granted to you... Continue your left job...
-                showPlacePicker();
-            } else {
-                Toast.makeText(this, "This app needs Location permission to continue!", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
+//    private void getCurrentPlaceItems() {
+//        if (isLocationAccessPermitted()) {
+//            showPlacePicker();
+//        } else {
+//            requestLocationAccessPermission();
+//        }
+//    }
+//
+//
+//    private void showPlacePicker() {
+//
+//        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+//
+//        try {
+//            startActivityForResult(builder.build(this), PLACE_PICKER_REQ_CODE);
+//        } catch (Exception e) {
+//            Log.e(TAG, e.getStackTrace().toString());
+//        }
+//    }
+//
+//    private boolean isLocationAccessPermitted() {
+//        if (ContextCompat.checkSelfPermission(this,
+//                Manifest.permission.ACCESS_FINE_LOCATION)
+//                != PackageManager.PERMISSION_GRANTED) {
+//            return false;
+//        } else {
+//            return true;
+//        }
+//    }
+//
+//    private void requestLocationAccessPermission() {
+//        ActivityCompat.requestPermissions(this,
+//                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+//                LOC_REQ_CODE);
+//    }
+//
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if (requestCode == LOC_REQ_CODE) {
+//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                //The External Storage Write Permission is granted to you... Continue your left job...
+//                showPlacePicker();
+//            } else {
+//                Toast.makeText(this, "This app needs Location permission to continue!", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//    }
 
 
 
@@ -483,17 +553,23 @@ public class ShoppingCartActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 
-        if (requestCode == LOC_REQ_CODE) {
-            if (resultCode == RESULT_OK) {
-                showPlacePicker();
-            }
-        }else if(requestCode == PLACE_PICKER_REQ_CODE){
-            if (resultCode == RESULT_OK) {
-                place = PlacePicker.getPlace(this, data);
+//        if (requestCode == LOC_REQ_CODE) {
+//            if (resultCode == RESULT_OK) {
+//                showPlacePicker();
+//            }
+//        }else
 
-                latitude = String.valueOf(place.getLatLng().latitude);
-                longitude = String.valueOf(place.getLatLng().longitude);
-                endereco = String.format("%s", place.getAddress());
+            if(requestCode == PLACE_PICKER_REQ_CODE){
+            if (resultCode == RESULT_OK) {
+//                place = PlacePicker.getPlace(this, data);
+
+//                latitude = String.valueOf(place.getLatLng().latitude);
+//                longitude = String.valueOf(place.getLatLng().longitude);
+//                endereco = String.format("%s", place.getAddress());
+
+                latitude = data.getStringExtra("latitude");
+                longitude = data.getStringExtra("longitude");
+                endereco = data.getStringExtra("endereco");
 
                 mostrarConfirmarNumeros(endereco);
             }
@@ -503,5 +579,37 @@ public class ShoppingCartActivity extends AppCompatActivity
     private void mostrarConfirmarNumeros(String endereco) {
         caixa_dialogo_fornecer_numero.show();
         dialog_editEndereco.setText(endereco);
+    }
+
+    private void alertaCriarContaWallet() {
+
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Não tem conta na Carteira!");
+        dialog.setMessage("Deseja criar uma?");
+        dialog.setCancelable(false);
+
+        //Set button
+        dialog.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialogInterface, int i) {
+
+
+                dialogInterface.dismiss();
+
+                startActivity(new Intent(ShoppingCartActivity.this,WalletActivity.class));
+
+            }
+        });
+
+        dialog.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+
+
+        dialog.show();
     }
 }

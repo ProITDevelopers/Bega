@@ -1,6 +1,7 @@
 package com.proitdevelopers.bega.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,8 +12,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.proitdevelopers.bega.R;
+import com.proitdevelopers.bega.activities.ProdutosDetalheActivity;
 import com.proitdevelopers.bega.model.CartItemProdutos;
 import com.proitdevelopers.bega.model.Produtos;
 import com.squareup.picasso.Picasso;
@@ -42,11 +45,13 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.ItemVi
     private Drawable btn_add_activo, btn_add_inactivo;
 
 
+
     public ProdutosAdapter(Context context, List<Produtos> produtosList, ProductsAdapterListener listener, GridLayoutManager layoutManager) {
         this.context = context;
         this.produtosList = produtosList;
         this.listener = listener;
         this.mLayoutManager = layoutManager;
+
 
         btn_add_activo = context.getResources().getDrawable( R.drawable.orange_btn_small_bk );
         btn_add_inactivo = context.getResources().getDrawable( R.drawable.grey_btn_small_bk );
@@ -118,6 +123,7 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.ItemVi
             });
 
             holder.ic_add.setOnClickListener(view -> {
+
                 listener.onProductAddedCart(position, produto);
             });
 
@@ -134,7 +140,11 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.ItemVi
                     holder.product_count.setVisibility(View.VISIBLE);
                     holder.btn_addCart.setEnabled(false);
                     holder.btn_addCart.setBackground(btn_add_inactivo);
+
+
+
                 } else {
+
                     holder.product_count.setText(String.valueOf(0));
                     holder.ic_add.setVisibility(View.GONE);
                     holder.ic_remove.setVisibility(View.GONE);
@@ -192,6 +202,8 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.ItemVi
 
             itemView.setTag(itemView);
             itemView.setOnClickListener(this);
+
+
 //            thumbnail.setOnClickListener(this);
 //            btn_addCart.setOnClickListener(new View.OnClickListener() {
 //                @Override

@@ -308,7 +308,7 @@ public class AlterarSenhaActivity extends AppCompatActivity implements View.OnCl
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (!response.isSuccessful()) {
                     ErrorResponce errorResponce = ErrorUtils.parseError(response);
-                    mostrarMensagem(AlterarSenhaActivity.this, "errorResponce.getError()");
+                    mostrarMensagem(AlterarSenhaActivity.this, errorResponce.getError());
                     progressDialog.cancel();
                 } else {
 

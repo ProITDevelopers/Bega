@@ -21,6 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/cart_info_bar"
+        android:layout_marginBottom="2dp"
         />
 
     <com.proitdevelopers.bega.utilsClasses.CartInfoBar
@@ -33,7 +34,7 @@
         android:visibility="visible"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginBottom="15dp"/>
+        android:layout_marginBottom="10dp"/>
 
     <Button
         android:id="@+id/btn_checkout"
@@ -46,7 +47,7 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginBottom="15dp"
-        android:text="@string/btn_checkout"
+        android:text="@string/btn_confirmar"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="16sp"/>

@@ -28,7 +28,15 @@ public class CustomInfoWindow implements GoogleMap.InfoWindowAdapter {
         String foto = (String) marker.getTag();
 
         CircleImageView circleImageView = ((CircleImageView)myView.findViewById(R.id.img));
-        Picasso.with(myView.getContext()).load(foto).placeholder(R.drawable.ic_camera).into(circleImageView);
+
+        if (marker.getTitle().equals("Eu")){
+            Picasso.with(myView.getContext()).load(foto).placeholder(R.drawable.ic_camera).into(circleImageView);
+        } else if (marker.getTitle().equals("Destination")){
+
+           circleImageView.setImageResource(R.drawable.ic_address_orange_24dp);
+
+        }
+
 
         TextView txtPickupTitle = ((TextView)myView.findViewById(R.id.txtNameInfo));
         txtPickupTitle.setText(marker.getTitle());

@@ -43,7 +43,7 @@ public class ConfiguracoesActivity extends AppCompatPreferenceActivity {
 //        setSupportActionBar(toolbar);
         toolbarBK = getResources().getDrawable( R.drawable.toolbar_bk );
 
-        Common.mCurrentUser = AppPref.getInstance().getUser();
+
 
         if (getSupportActionBar()!=null){
             getSupportActionBar().setBackgroundDrawable(toolbarBK);
@@ -119,7 +119,8 @@ public class ConfiguracoesActivity extends AppCompatPreferenceActivity {
     public static void openEditPerfilActivity(Context context) {
 
         Intent intent = new Intent(context, EditarPerfilActivity.class);
-        intent.putExtra("mCurrentUser",Common.mCurrentUser);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        intent.putExtra("mCurrentUser",Common.mCurrentUser);
         context.startActivity(intent);
 
     }
@@ -127,6 +128,7 @@ public class ConfiguracoesActivity extends AppCompatPreferenceActivity {
     public static void openAlterarSenhaActivity(Context context) {
 
         Intent intent = new Intent(context, AlterarSenhaActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(intent);
 
     }
@@ -152,6 +154,7 @@ public class ConfiguracoesActivity extends AppCompatPreferenceActivity {
         }
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("message/rfc822");
+
         intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"proitandroit@gmail.com"});
         /*intent.putExtra(Intent.EXTRA_SUBJECT, "Query from android app");*/
         intent.putExtra(Intent.EXTRA_SUBJECT, "Consulta do aplicativo Android");

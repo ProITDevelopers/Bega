@@ -17,11 +17,15 @@ import com.squareup.picasso.Picasso;
 import java.util.Collections;
 import java.util.List;
 
+import io.realm.RealmResults;
+
 public class CartProdutosAdapter extends RecyclerView.Adapter<CartProdutosAdapter.ItemViewHolder> {
 
     private Context context;
     private List<CartItemProdutos> cartItems = Collections.emptyList();
     private CartProductsAdapterListener listener;
+
+
 
     public CartProdutosAdapter(Context context, CartProductsAdapterListener listener) {
         this.context = context;
@@ -37,6 +41,11 @@ public class CartProdutosAdapter extends RecyclerView.Adapter<CartProdutosAdapte
         this.cartItems = cartItems;
 
         notifyDataSetChanged();
+    }
+
+    public void updateItem(int position, RealmResults<CartItemProdutos> cartItems) {
+        this.cartItems = cartItems;
+        notifyItemChanged(position);
     }
 
 
@@ -72,6 +81,25 @@ public class CartProdutosAdapter extends RecyclerView.Adapter<CartProdutosAdapte
                     listener.onCartItemRemoved(position, cartItem)
             );
 
+
+        holder.ic_add.setOnClickListener(view -> {
+
+            listener.onProductAddedCart(position, product);
+        });
+
+        holder.ic_remove.setOnClickListener(view -> {
+            listener.onProductRemovedFromCart(position, product);
+        });
+
+        if (cartItems != null) {
+            if (cartItem != null) {
+                holder.product_count.setText(String.valueOf(cartItem.quantity));
+            } else {
+                holder.product_count.setText(String.valueOf(0));
+
+            }
+        }
+
     }
 
     @Override
@@ -86,6 +114,9 @@ public class CartProdutosAdapter extends RecyclerView.Adapter<CartProdutosAdapte
         private TextView estabelecimento;
         private Button btn_remove;
 
+        private ImageView ic_add,ic_remove;
+        private TextView product_count;
+
 
         public ItemViewHolder(View itemView) {
             super(itemView);
@@ -96,6 +127,10 @@ public class CartProdutosAdapter extends RecyclerView.Adapter<CartProdutosAdapte
             estabelecimento = (TextView) itemView.findViewById(R.id.estabelecimento);
             btn_remove = (Button) itemView.findViewById(R.id.btn_remove);
 
+            ic_add = (ImageView) itemView.findViewById(R.id.ic_add);
+            ic_remove = (ImageView) itemView.findViewById(R.id.ic_remove);
+            product_count = (TextView) itemView.findViewById(R.id.product_count);
+
         }
 
 
@@ -103,5 +138,11 @@ public class CartProdutosAdapter extends RecyclerView.Adapter<CartProdutosAdapte
 
     public interface CartProductsAdapterListener {
         void onCartItemRemoved(int index, CartItemProdutos cartItem);
+
+        void onProductAddedCart(int index, Produtos product);
+
+        void onProductRemovedFromCart(int index, Produtos product);
     }
+
+
 }

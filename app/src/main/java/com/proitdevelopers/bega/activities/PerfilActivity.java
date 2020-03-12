@@ -27,6 +27,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.proitdevelopers.bega.localDB.AppPref;
 import com.proitdevelopers.bega.helper.Common;
 import com.proitdevelopers.bega.R;
@@ -36,6 +37,7 @@ import com.proitdevelopers.bega.localDB.AppDatabase;
 import com.proitdevelopers.bega.model.UsuarioPerfil;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -86,7 +88,7 @@ public class PerfilActivity extends AppCompatActivity {
 
 
         //carregar dados do Usuario
-        Common.mCurrentUser = AppPref.getInstance().getUser();
+
         carregarMeuPerfilOffline(Common.mCurrentUser);
 
 
@@ -180,9 +182,9 @@ public class PerfilActivity extends AppCompatActivity {
 
                         Common.mCurrentUser = usuarioPerfil;
 
-                        AppPref.getInstance().saveUser(Common.mCurrentUser);
+                        AppPref.getInstance().saveUser(usuarioPerfil);
 
-                        carregarMeuPerfilOffline(Common.mCurrentUser);
+                        carregarMeuPerfilOffline(usuarioPerfil);
 
 
 
@@ -191,7 +193,10 @@ public class PerfilActivity extends AppCompatActivity {
 
                 } else {
 
-                    mensagemTokenExpirado();
+                    if (response.code()==401){
+                        mensagemTokenExpirado();
+                    }
+
 
                 }
                 progressDialog.dismiss();
@@ -238,6 +243,17 @@ public class PerfilActivity extends AppCompatActivity {
             }
         });
 
+        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialogInterface, int i) {
+
+
+                dialogInterface.dismiss();
+
+
+            }
+        });
+
 
 
 
@@ -245,7 +261,7 @@ public class PerfilActivity extends AppCompatActivity {
     }
 
     private void logOut() {
-
+        LoginManager.getInstance().logOut();
         AppDatabase.clearData();
         AppPref.getInstance().clearAppPrefs();
         Intent intent = new Intent(PerfilActivity.this, SplashActivity.class);
@@ -280,7 +296,8 @@ public class PerfilActivity extends AppCompatActivity {
         if (id == R.id.menu_perfil_edit) {
 
             Intent intent = new Intent(this, EditarPerfilActivity.class);
-            intent.putExtra("mCurrentUser",Common.mCurrentUser);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            intent.putExtra("mCurrentUser",usuarioPerfil);
             startActivity(intent);
         }
 

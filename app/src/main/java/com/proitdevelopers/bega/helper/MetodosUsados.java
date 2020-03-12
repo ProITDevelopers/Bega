@@ -23,6 +23,7 @@ import com.proitdevelopers.bega.R;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.Normalizer;
+import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
@@ -100,6 +101,16 @@ public class MetodosUsados {
         shareIntent.putExtra(Intent.EXTRA_TEXT, postData);
         shareIntent.setType("text/plain");
         context.startActivity(Intent.createChooser(shareIntent, "Partilhar Link da App"));
+    }
+
+
+    public static int randNumber(int min, int max){
+        if (min >= max) {
+            throw new IllegalArgumentException("max must be greater than min");
+        }
+
+        Random r = new Random();
+        return r.nextInt((max - min) + 1) + min;
     }
 
     public static boolean conexaoInternetTrafego(Context context, String TAG){

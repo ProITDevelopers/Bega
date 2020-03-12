@@ -19,7 +19,6 @@ public class MyApplication extends Application {
 
         initRealm();
 
-
     }
 
     private void initRealm() {

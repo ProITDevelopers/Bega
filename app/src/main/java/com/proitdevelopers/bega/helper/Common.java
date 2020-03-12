@@ -1,25 +1,13 @@
 package com.proitdevelopers.bega.helper;
 
-import android.app.Activity;
-import android.content.Context;
 import android.location.Location;
-import android.os.Build;
-import android.util.Log;
-import android.util.Patterns;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.proitdevelopers.bega.model.Categoria;
 import com.proitdevelopers.bega.model.UsuarioPerfil;
 
-import java.text.Normalizer;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class Common {
 

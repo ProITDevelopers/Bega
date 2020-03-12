@@ -9,8 +9,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -76,6 +78,11 @@ public class AltasHorasEstabelecimentoFragment extends Fragment {
     private RelativeLayout errorLayout;
     private TextView btnTentarDeNovo;
 
+    String categoriaNome;
+
+    Toolbar toolbar;
+    public TextView txtToolbar;
+
     public AltasHorasEstabelecimentoFragment() {
         // Required empty public constructor
     }
@@ -106,6 +113,7 @@ public class AltasHorasEstabelecimentoFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            categoriaNome = getArguments().getString("categoria");
         }
     }
 
@@ -114,6 +122,12 @@ public class AltasHorasEstabelecimentoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view =  inflater.inflate(R.layout.fragment_altas_horas_estabelecimento, container, false);
+
+        if (getActivity()!=null){
+            toolbar =  ((AppCompatActivity)getActivity()).findViewById(R.id.toolbar);
+            txtToolbar = toolbar.findViewById(R.id.txtToolbar);
+            txtToolbar.setText(categoriaNome);
+        }
 
         coordinatorLayout = view.findViewById(R.id.coordinatorLayout);
         errorLayout = (RelativeLayout) view.findViewById(R.id.erroLayout);
@@ -218,8 +232,6 @@ public class AltasHorasEstabelecimentoFragment extends Fragment {
             recyclerView.setAdapter(itemAdapter);
             recyclerView.setLayoutManager(gridLayoutManager);
 
-
-
             itemAdapter.setItemClickListener(new ItemClickListener() {
                 @Override
                 public void onClick(View view, int position) {
@@ -227,6 +239,7 @@ public class AltasHorasEstabelecimentoFragment extends Fragment {
                     Estabelecimento estabelecimento = estabelecimentoList.get(position);
 
                     Intent intent = new Intent(getContext(), ProdutosActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.putExtra("idEstabelecimento",estabelecimento.estabelecimentoID);
                     intent.putExtra("imagemCapa",estabelecimento.imagemCapa);
                     intent.putExtra("nomeEstabelecimento",estabelecimento.nomeEstabelecimento);
@@ -264,6 +277,10 @@ public class AltasHorasEstabelecimentoFragment extends Fragment {
         }
 
         if (itemId == R.id.menu_refresh) {
+            if (errorLayout.getVisibility() == View.VISIBLE){
+                errorLayout.setVisibility(View.GONE);
+                coordinatorLayout.setVisibility(View.VISIBLE);
+            }
             verifConecxaoEstabelecimentos();
             return true;
         }

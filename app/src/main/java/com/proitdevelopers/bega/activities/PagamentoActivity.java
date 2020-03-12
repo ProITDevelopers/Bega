@@ -1,5 +1,6 @@
 package com.proitdevelopers.bega.activities;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -7,6 +8,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -195,7 +197,10 @@ public class PagamentoActivity extends AppCompatActivity implements View.OnClick
                 break;
 
             case R.id.btn_check_orders:
-                startActivity(new Intent(PagamentoActivity.this, PedidosActivity.class));
+                Intent intent = new Intent(PagamentoActivity.this,PedidosActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+
                 finish();
                 break;
 
@@ -358,6 +363,10 @@ public class PagamentoActivity extends AppCompatActivity implements View.OnClick
 
                 } else {
 
+                    if (response.code()==401){
+                        mensagemTokenExpirado();
+                    }
+
                     showOrderStatus(false);
                 }
 
@@ -376,6 +385,29 @@ public class PagamentoActivity extends AppCompatActivity implements View.OnClick
             }
         });
     }
+
+    private void mensagemTokenExpirado() {
+
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("A sessão expirou!");
+        dialog.setMessage("Inicie outra vez a sessão!");
+        dialog.setCancelable(false);
+
+        //Set button
+        dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialogInterface, int i) {
+
+
+                dialogInterface.dismiss();
+
+            }
+        });
+
+
+        dialog.show();
+    }
+
 
     private void enviarCodConrfirmacaoPagamento() {
 

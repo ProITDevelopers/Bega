@@ -247,7 +247,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
 
     @Override
     public void onProductAddedCart(int index, Produtos product) {
-        AppDatabase.addItemToCart(product);
+        AppDatabase.addItemToCart(this,product);
         if (cartItems != null) {
             itemAdapter.updateItem(index, cartItems);
 
@@ -322,6 +322,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
                     Produtos produto = produtosList.get(position);
 //                    Toast.makeText(ProdutosActivity.this, "Item: "+produto.getDescricaoProdutoC(), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(ProdutosActivity.this,ProdutosDetalheActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.putExtra("nomeEstabelecimento",nomeEstabelecimento);
                     intent.putExtra("produtoId",produto.getIdProduto());
                     intent.putExtra("position",position);
@@ -360,7 +361,11 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
         }
 
         if (id == R.id.menu_cart) {
-            startActivity(new Intent(this, ShoppingCartActivity.class));
+
+            Intent intent = new Intent(ProdutosActivity.this,ShoppingCartActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+
         }
 
         if (id == R.id.action_favoritos) {
@@ -399,6 +404,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
         if (realm != null) {
             realm.close();
         }
+        progressDialog.cancel();
     }
 
 

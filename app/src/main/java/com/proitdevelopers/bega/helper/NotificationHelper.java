@@ -13,6 +13,8 @@ import android.support.v4.app.NotificationCompat;
 import com.proitdevelopers.bega.R;
 import com.proitdevelopers.bega.activities.MenuActivity;
 
+import java.util.Random;
+
 public class NotificationHelper {
     private Context mContext;
     private NotificationManager mNotificationManager;
@@ -61,6 +63,12 @@ public class NotificationHelper {
             mNotificationManager.createNotificationChannel(notificationChannel);
         }
         assert mNotificationManager != null;
-        mNotificationManager.notify(0 /* Request Code */, mBuilder.build());
+        mNotificationManager.notify(MetodosUsados.randNumber(0,1000) /* Request Code */, mBuilder.build());
     }
+
+
+
+
+
+
 }
