@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">Bega</string>
-
-    <string name="google_direction_api">google_direction_api</string>
-    <string name="facebook_app_id">facebook_app_id</string>
-    <string name="fb_login_protocol_scheme">fb_login_protocol_scheme</string>
+    <!--    <string name="google_browser_key">AIzaSyCPzAyGAQWteRQyymrIPfrK2dfcbR3GR4U</string>-->
+<!--    <string name="google_browser_key">AIzaSyDt-fbJvlUxypFSogMt8PSoVnqPoB_SYiI</string>-->
+    <string name="google_direction_api">AIzaSyBTmXV6TlULl2AUSC0Dm9YaZhf1SDdMRL8</string>
+    <string name="facebook_app_id">2335117853474777</string>
+    <string name="fb_login_protocol_scheme">fb2335117853474777</string>
 
 
     <string name="action_settings">Definições</string>
