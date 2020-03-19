@@ -172,7 +172,7 @@ public class MenuActivity extends AppCompatActivity implements
 
 
         gotoCategoriaFragement();
-        verifConecxaoSaldoWallet();
+//        verifConecxaoSaldoWallet();
 
     }
 
@@ -198,6 +198,7 @@ public class MenuActivity extends AppCompatActivity implements
             txtEmail.setText(usuarioPerfil.email);
 
 
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -217,11 +218,13 @@ public class MenuActivity extends AppCompatActivity implements
                     if (response.body()!=null){
                         usuarioPerfil = response.body().get(0);
                         Common.mCurrentUser = usuarioPerfil;
-
+                        AppPref.getInstance().saveUser(usuarioPerfil);
 
                         carregarMeuPerfilOffline(Common.mCurrentUser);
 
-                        AppPref.getInstance().saveUser(Common.mCurrentUser);
+
+
+                        verifConecxaoSaldoWallet();
 
                     }
 
@@ -419,6 +422,7 @@ public class MenuActivity extends AppCompatActivity implements
         super.onResume();
         navigationView.setCheckedItem(R.id.nav_menu_home);
         verificaoPerfil();
+//        verifConecxaoSaldoWallet();
 
 
     }
@@ -446,11 +450,11 @@ public class MenuActivity extends AppCompatActivity implements
             startActivity(intent);
         }
 
-        else if (id == R.id.nav_menu_favoritos) {
-
-            Intent intent = new Intent(this,FavoritosActivity.class);
-            startActivity(intent);
-        }
+//        else if (id == R.id.nav_menu_favoritos) {
+//
+//            Intent intent = new Intent(this,FavoritosActivity.class);
+//            startActivity(intent);
+//        }
 
         else if (id == R.id.nav_menu_pedidos) {
 
@@ -458,11 +462,11 @@ public class MenuActivity extends AppCompatActivity implements
             startActivity(intent);
         }
 
-        else if (id == R.id.nav_menu_mapa) {
-
-            Intent intent = new Intent(this,MapActivity.class);
-            startActivity(intent);
-        }
+//        else if (id == R.id.nav_menu_mapa) {
+//
+//            Intent intent = new Intent(this,MapActivity.class);
+//            startActivity(intent);
+//        }
 
         else if (id == R.id.nav_menu_share) {
             MetodosUsados.shareTheApp(this);

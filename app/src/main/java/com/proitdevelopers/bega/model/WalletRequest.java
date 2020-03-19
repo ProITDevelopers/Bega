@@ -9,4 +9,7 @@ public class WalletRequest {
 
     @SerializedName("dataNasc")
     public String dataNasc;
+
+    @SerializedName("identityType")
+    public String identityType;
 }

@@ -266,12 +266,12 @@ public class CategoriaFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        MenuItem item =  menu.findItem(R.id.menu_view);
-        loadIcon(item);
-        super.onPrepareOptionsMenu(menu);
-    }
+//    @Override
+//    public void onPrepareOptionsMenu(Menu menu) {
+//        MenuItem item =  menu.findItem(R.id.menu_view);
+//        loadIcon(item);
+//        super.onPrepareOptionsMenu(menu);
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -290,11 +290,11 @@ public class CategoriaFragment extends Fragment {
             return true;
         }
 
-        if (itemId == R.id.menu_view) {
-            switchLayout();
-            switchIcon(item);
-            return true;
-        }
+//        if (itemId == R.id.menu_view) {
+//            switchLayout();
+//            switchIcon(item);
+//            return true;
+//        }
 
 
 

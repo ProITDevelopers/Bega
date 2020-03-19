@@ -376,6 +376,7 @@ public class WalletActivity extends AppCompatActivity {
         WalletRequest walletRequest = new WalletRequest();
         walletRequest.numeroBi = bi;
         walletRequest.dataNasc = dataNasc;
+        walletRequest.identityType = "BI";
 
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<ResponseBody> call = apiInterface.criarContaWallet(walletRequest);
@@ -436,7 +437,7 @@ public class WalletActivity extends AppCompatActivity {
 
 
             txtContaNumber.setText(wallet.number);
-            txtSaldo.setText(wallet.amount);
+            txtSaldo.setText(wallet.amount+" Kzs");
 
             cardView_hint.setVisibility(View.VISIBLE);
 

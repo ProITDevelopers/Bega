@@ -21,9 +21,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClient {
 
 
-//    private static final String BASE_URL = "http://192.168.10.12:8892/";
-//    private static final String BASE_URL = "http://192.168.10.246:2380/";
-    private static final String BASE_URL = "http://3.18.194.189/";
+//    private static final String BASE_URL = "http://3.18.194.189/";
+    private static final String BASE_URL = "https://official.begaentrega.com/";
     private static final String BASE_URL_ADAO = "http://35.181.153.234:8086/";
     private static Retrofit retrofit = null;
     private static int REQUEST_TIMEOUT = 30;
@@ -78,11 +77,6 @@ public class ApiClient {
 
 
 
-//    private static final String BASE_URL = "http://192.168.10.12:8892/";
-//    private static Retrofit retrofit;
-//
-//
-//
     private static OkHttpClient okHttpClientvalor = new OkHttpClient.Builder()
             .connectTimeout(90, TimeUnit.SECONDS)
             .writeTimeout(90, TimeUnit.SECONDS)

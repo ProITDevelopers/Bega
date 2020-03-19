@@ -3,12 +3,8 @@ package com.proitdevelopers.bega.mySignalR;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.microsoft.signalr.HubConnection;
 import com.microsoft.signalr.HubConnectionBuilder;
@@ -88,7 +84,7 @@ public class MySignalRService extends Service {
         }
 
 
-        String serverUrl = "http://ec2-3-18-194-189.us-east-2.compute.amazonaws.com/eventhub";
+        String serverUrl = "https://official.begaentrega.com/eventhub";
 
 
         mHubConnection = HubConnectionBuilder.create(serverUrl)

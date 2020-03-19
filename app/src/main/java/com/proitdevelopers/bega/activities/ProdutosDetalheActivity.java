@@ -342,10 +342,16 @@ public class ProdutosDetalheActivity extends AppCompatActivity implements Produt
             startActivity(intent);
         }
 
-        if (id == R.id.action_favoritos) {
-            startActivity(new Intent(this, FavoritosActivity.class));
-        }
+//        if (id == R.id.action_favoritos) {
+//            startActivity(new Intent(this, FavoritosActivity.class));
+//        }
 
+        if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, ConfiguracoesActivity.class);
+            startActivity(intent);
+
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
 

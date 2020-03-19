@@ -69,7 +69,7 @@ public class AppDatabase {
                     cartItem.quantity += 1;
                     realm.copyToRealmOrUpdate(cartItem);
                 }else {
-                    Toast.makeText(context, "Atingiu o limite em stock!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Atingiu o limite de compra!", Toast.LENGTH_SHORT).show();
                 }
 
 

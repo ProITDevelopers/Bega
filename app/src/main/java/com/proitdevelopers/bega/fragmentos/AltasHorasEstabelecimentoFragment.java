@@ -259,22 +259,22 @@ public class AltasHorasEstabelecimentoFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        MenuItem item =  menu.findItem(R.id.menu_switch_layout);
-        loadIcon(item);
-        super.onPrepareOptionsMenu(menu);
-    }
+//    @Override
+//    public void onPrepareOptionsMenu(Menu menu) {
+//        MenuItem item =  menu.findItem(R.id.menu_switch_layout);
+//        loadIcon(item);
+//        super.onPrepareOptionsMenu(menu);
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
 
-        if (itemId == R.id.menu_switch_layout) {
-            switchLayout();
-            switchIcon(item);
-            return true;
-        }
+//        if (itemId == R.id.menu_switch_layout) {
+//            switchLayout();
+//            switchIcon(item);
+//            return true;
+//        }
 
         if (itemId == R.id.menu_refresh) {
             if (errorLayout.getVisibility() == View.VISIBLE){

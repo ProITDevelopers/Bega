@@ -64,7 +64,8 @@ public interface ApiInterface {
 
 
 
-    @POST("/WalletAbrirContaCliente")
+//    @POST("/WalletAbrirContaCliente")
+    @POST("/v1/WalletAbrirContaCliente")
     Call<ResponseBody> criarContaWallet(@Body WalletRequest walletRequest);
 
     @GET("/WalletConsultarSaldo")

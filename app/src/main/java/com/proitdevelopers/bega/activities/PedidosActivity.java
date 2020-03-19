@@ -89,7 +89,9 @@ public class PedidosActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        loginEncomenda(loginADAO);
+//        loginEncomenda(loginADAO);
+
+        verifConecxaoPedidos();
 
 
 
@@ -194,19 +196,21 @@ public class PedidosActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view, int position) {
 
-                    Factura factura = facturaList.get(position);
-                    if (factura.estado.contains("Caminho")){
-                        Intent intent = new Intent(PedidosActivity.this,MotoBoyTrackingActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.putExtra("toolbarTitle","Minha Encomenda");
-                        intent.putExtra("idFactura",factura.idFactura);
-                        intent.putExtra("tokenEncomenda",tokenEncomenda);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(PedidosActivity.this, "Estado: "+factura.estado + "\n"+
-                                "Poderá ver no mapa, quando o Estado estiver 'A caminho'!",
-                                Toast.LENGTH_SHORT).show();
-                    }
+//                    Factura factura = facturaList.get(position);
+//                    if (factura.estado.contains("Caminho")){
+//                        Intent intent = new Intent(PedidosActivity.this,MotoBoyTrackingActivity.class);
+//                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                        intent.putExtra("toolbarTitle","Minha Encomenda");
+//                        intent.putExtra("idFactura",factura.idFactura);
+//                        intent.putExtra("tokenEncomenda",tokenEncomenda);
+//                        startActivity(intent);
+//                    } else {
+//                        Toast.makeText(PedidosActivity.this, "Estado: "+factura.estado + "\n"+
+//                                "Poderá ver no mapa, quando o Estado estiver 'A caminho'!",
+//                                Toast.LENGTH_SHORT).show();
+//                    }
+//
+//
 
 
                 }
@@ -302,9 +306,17 @@ public class PedidosActivity extends AppCompatActivity {
         }
 
 
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_favoritos) {
+//            startActivity(new Intent(this, FavoritosActivity.class));
+//
+//            return true;
+//        }
+
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_favoritos) {
-            startActivity(new Intent(this, FavoritosActivity.class));
+        if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, ConfiguracoesActivity.class);
+            startActivity(intent);
 
             return true;
         }

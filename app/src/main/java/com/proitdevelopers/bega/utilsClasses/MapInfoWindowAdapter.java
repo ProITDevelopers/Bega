@@ -55,10 +55,6 @@ public class MapInfoWindowAdapter implements GoogleMap.InfoWindowAdapter{
 
             circleImageView.setImageResource(R.drawable.ic_address_orange_24dp);
 
-        }else if (marker.getTitle().equals("Minha Encomenda")){
-
-            circleImageView.setImageResource(R.drawable.begalogo_marker);
-
         }
 
 

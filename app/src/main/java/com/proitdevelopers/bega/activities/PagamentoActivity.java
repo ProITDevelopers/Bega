@@ -332,6 +332,10 @@ public class PagamentoActivity extends AppCompatActivity implements View.OnClick
 
                 } else {
 
+                    if (response.code()==401){
+                        mensagemTokenExpirado();
+                    }
+
                     showOrderStatus(false);
                 }
 

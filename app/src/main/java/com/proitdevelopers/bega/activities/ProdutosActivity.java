@@ -368,8 +368,16 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
 
         }
 
-        if (id == R.id.action_favoritos) {
-            startActivity(new Intent(this, FavoritosActivity.class));
+//        if (id == R.id.action_favoritos) {
+//            startActivity(new Intent(this, FavoritosActivity.class));
+//        }
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, ConfiguracoesActivity.class);
+            startActivity(intent);
+
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

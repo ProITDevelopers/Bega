@@ -35,6 +35,8 @@ import java.util.regex.Pattern;
 public class MetodosUsados {
 
     private static String TAG = "FalhaSis";
+    private static String SHARE_URL_DROPBOX = "https://www.dropbox.com/sh/8oco26p7rrfkwfc/AAAJX3pXgQ0PCOjcpWbEWy1Ta?dl=0";
+    private static String SHARE_URL_PLAYSTORE = "https://play.google.com/store/apps/details?id=";
 
 
     public static void mostrarMensagem(Context mContexto, int mensagem) {
@@ -95,7 +97,7 @@ public class MetodosUsados {
 
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
-        String postData = "Obtenha o aplicativo " + appName + " para ter acesso aos melhores " + appCategory + "\n" + "https://play.google.com/store/apps/details?id=" + appPackageName;
+        String postData = "Obtenha o aplicativo " + appName + " para ter acesso aos melhores " + appCategory + "\n" + SHARE_URL_DROPBOX + appPackageName;
 
         shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Baixar Agora!");
         shareIntent.putExtra(Intent.EXTRA_TEXT, postData);

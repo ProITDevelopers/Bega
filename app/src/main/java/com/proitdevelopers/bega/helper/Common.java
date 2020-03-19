@@ -71,9 +71,9 @@ public class Common {
     public static List<Categoria> getCategoryList(){
         List<Categoria> categoriaList = new ArrayList<>();
 
-        categoriaList.add(new Categoria(5,"Restaurantes",CATEGORY_RESTAURANTE));
-        categoriaList.add(new Categoria(3,"Conveniência",CATEGORY_COVENIENCIA));
-        categoriaList.add(new Categoria(1,"Caseiros",CATEGORY_CASEIRO));
+        categoriaList.add(new Categoria(1,"Restaurantes",CATEGORY_RESTAURANTE));
+        categoriaList.add(new Categoria(2,"Conveniência",CATEGORY_COVENIENCIA));
+        categoriaList.add(new Categoria(3,"Caseiros",CATEGORY_CASEIRO));
         categoriaList.add(new Categoria(4,"Eventos",CATEGORY_EVENTOS));
         categoriaList.add(new Categoria(2,"Altas Horas",CATEGORY_ALTAS_HORAS));
 //        categoriaList.add(new Categoria(2,"Estafetas",CATEGORY_ESTAFETAS));

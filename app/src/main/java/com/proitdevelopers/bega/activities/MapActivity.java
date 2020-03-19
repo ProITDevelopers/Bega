@@ -71,7 +71,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static int DISPLACEMENT = 10;
 
 
-    Marker mUserMarker, markerDestination, motoboyMarker;
+    Marker mUserMarker, markerDestination;
 
 
 
@@ -324,20 +324,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.destination_marker))
                             .position(latLng)
                             .title("Local de entrega")
-                            .snippet(getMyDestination));
-
-
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
-                } else if (toolbarTitle.equals("Minha Encomenda")){
-                    getMyDestination = getMyAddress(latLng);
-                    //First, check markerDestination
-                    //IF is not null, just remove available marker
-                    if (motoboyMarker != null)
-                        motoboyMarker.remove();
-                    motoboyMarker = mMap.addMarker(new MarkerOptions()
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.motoboy_marker))
-                            .position(latLng)
-                            .title("Minha Encomenda")
                             .snippet(getMyDestination));
 
 

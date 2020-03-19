@@ -1,24 +1,19 @@
 package com.proitdevelopers.bega.activities;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,23 +23,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlacePicker;
+import com.proitdevelopers.bega.R;
+import com.proitdevelopers.bega.adapters.CartProdutosAdapter;
 import com.proitdevelopers.bega.helper.Common;
+import com.proitdevelopers.bega.helper.Utils;
+import com.proitdevelopers.bega.localDB.AppDatabase;
+import com.proitdevelopers.bega.localDB.AppPref;
+import com.proitdevelopers.bega.model.CartItemProdutos;
 import com.proitdevelopers.bega.model.Produtos;
 import com.proitdevelopers.bega.utilsClasses.CartInfoBar;
 import com.proitdevelopers.bega.utilsClasses.RecyclerSectionItemDecoration;
-import com.proitdevelopers.bega.localDB.AppPref;
-import com.proitdevelopers.bega.R;
-import com.proitdevelopers.bega.helper.Utils;
-import com.proitdevelopers.bega.adapters.CartProdutosAdapter;
-import com.proitdevelopers.bega.localDB.AppDatabase;
-import com.proitdevelopers.bega.model.CartItemProdutos;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
-
 
 import static com.proitdevelopers.bega.helper.Common.msgErroSTelefone;
 import static com.proitdevelopers.bega.helper.Common.msgErroTelefone;
@@ -73,7 +65,6 @@ public class ShoppingCartActivity extends AppCompatActivity
 
 
 
-    private Place place;
     String latitude,longitude,endereco,telefone,tipoPagamento;
 
     private Dialog caixa_dialogo_fornecer_numero;
@@ -191,14 +182,20 @@ public class ShoppingCartActivity extends AppCompatActivity
         if (dialogRemoverTodosItems.getWindow()!=null)
             dialogRemoverTodosItems.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
+//        if (Common.mCurrentUser.wallet!=null){
+//            String mSaldo = Common.mCurrentUser.wallet.amount.replace("Kz","");
+//            mSaldo = mSaldo.replace(",",".");
+//            String mSaldo2 = mSaldo.replaceAll("\\s+","");
+//
+//            float mSaldoConta = Float.valueOf(mSaldo2);
+//
+//            Common.mCurrentUser.mSaldoWallet = Float.valueOf(mSaldo2);
+//
+//        }
+
         if (Common.mCurrentUser.wallet!=null){
-            String mSaldo = Common.mCurrentUser.wallet.amount.replace("Kz","");
-            mSaldo = mSaldo.replace(",",".");
-            String mSaldo2 = mSaldo.replaceAll("\\s+","");
-
-            float mSaldoConta = Float.valueOf(mSaldo2);
-
-            Common.mCurrentUser.mSaldoWallet = Float.valueOf(mSaldo2);
+            String mSaldo = Common.mCurrentUser.wallet.amount;
+            Common.mCurrentUser.mSaldoWallet = Float.valueOf(mSaldo);
 
         }
 
