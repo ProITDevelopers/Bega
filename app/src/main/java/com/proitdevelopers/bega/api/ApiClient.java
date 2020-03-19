@@ -24,6 +24,7 @@ public class ApiClient {
 //    private static final String BASE_URL = "http://192.168.10.12:8892/";
 //    private static final String BASE_URL = "http://192.168.10.246:2380/";
     private static final String BASE_URL = "http://3.18.194.189/";
+    private static final String BASE_URL_ADAO = "http://35.181.153.234:8086/";
     private static Retrofit retrofit = null;
     private static int REQUEST_TIMEOUT = 30;
     private static OkHttpClient okHttpClient;
@@ -82,22 +83,22 @@ public class ApiClient {
 //
 //
 //
-//    private static OkHttpClient okHttpClientvalor = new OkHttpClient.Builder()
-//            .connectTimeout(90, TimeUnit.SECONDS)
-//            .writeTimeout(90, TimeUnit.SECONDS)
-//            .readTimeout(90, TimeUnit.SECONDS)
-//            .build();
-//
-//    public static Retrofit getClient(){
-//
-//        if (retrofit == null){
-//            retrofit = new Retrofit.Builder()
-//                    .baseUrl(BASE_URL)
-//                    .client(okHttpClientvalor)
-//                    .addConverterFactory(GsonConverterFactory.create())
-//                    .build();
-//        }
-//        return retrofit;
-//    }
+    private static OkHttpClient okHttpClientvalor = new OkHttpClient.Builder()
+            .connectTimeout(90, TimeUnit.SECONDS)
+            .writeTimeout(90, TimeUnit.SECONDS)
+            .readTimeout(90, TimeUnit.SECONDS)
+            .build();
+
+    public static Retrofit getADAOClient(){
+
+        if (retrofit == null){
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(BASE_URL_ADAO)
+                    .client(okHttpClientvalor)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+        }
+        return retrofit;
+    }
 
 }

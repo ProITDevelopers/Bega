@@ -110,11 +110,11 @@ public class MySignalRService extends Service {
         mHubConnection.on("ReceiveMessage",(message)->{
 
 
-            String namepass[] = message.split(":");
-            String title = namepass[0].toUpperCase();
-            String body = namepass[1].replaceFirst(" ","");
+            String data[] = message.split(":");
+            String title = data[0].toUpperCase();
+            String body = data[1].replaceFirst(" ","");
 
-            notificationHelper.createNotification(title,body);
+            notificationHelper.createNotification(title,body,"true");
 
 
         },String.class);

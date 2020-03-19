@@ -1,14 +1,14 @@
 package com.proitdevelopers.bega.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,25 +21,37 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.proitdevelopers.bega.R;
 import com.proitdevelopers.bega.adapters.FacturaAdapter;
 import com.proitdevelopers.bega.adapters.ItemClickListener;
 import com.proitdevelopers.bega.api.ApiClient;
 import com.proitdevelopers.bega.api.ApiInterface;
+import com.proitdevelopers.bega.api.ApiInterfaceEncomenda;
+import com.proitdevelopers.bega.helper.Common;
 import com.proitdevelopers.bega.helper.MetodosUsados;
 import com.proitdevelopers.bega.model.Factura;
+import com.proitdevelopers.bega.model.LoginEncomenda;
+import com.proitdevelopers.bega.model.UsuarioAuth;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.proitdevelopers.bega.helper.MetodosUsados.mostrarMensagem;
 
 public class PedidosActivity extends AppCompatActivity {
+
+    private static final String BASE_URL_ENCOMENDA = "http://35.181.153.234:8086/";
 
     private String TAG = "PedidosActivity";
     private ProgressBar progressBar;
@@ -50,6 +62,9 @@ public class PedidosActivity extends AppCompatActivity {
     private ConstraintLayout coordinatorLayout;
     private RelativeLayout errorLayout;
     private TextView btnTentarDeNovo;
+
+    private String tokenEncomenda;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +77,9 @@ public class PedidosActivity extends AppCompatActivity {
         if (getSupportActionBar()!=null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        LoginEncomenda loginADAO = new LoginEncomenda();
+        loginADAO.telefone = Common.mCurrentUser.contactoMovel;
+        loginADAO.palavraPasse = Common.mCurrentUser.contactoMovel;
 
         coordinatorLayout = findViewById(R.id.coordinatorLayout);
         errorLayout = (RelativeLayout) findViewById(R.id.erroLayout);
@@ -71,10 +89,14 @@ public class PedidosActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        verifConecxaoPedidos();
+        loginEncomenda(loginADAO);
+
+
 
 
     }
+
+
 
     private void mostarMsnErro(){
 
@@ -119,12 +141,7 @@ public class PedidosActivity extends AppCompatActivity {
 
                 facturaList = new ArrayList<>();
 
-                if (!response.isSuccessful()) {
-                    Toast.makeText(PedidosActivity.this, "fatura: "+response.message(), Toast.LENGTH_SHORT).show();
-                } else {
-
-
-
+                if (response.isSuccessful()) {
                     if (response.body()!=null){
                         facturaList = response.body();
 
@@ -137,7 +154,13 @@ public class PedidosActivity extends AppCompatActivity {
 
 
                     }
+                } else {
+                    if (response.code()==401){
+                        mensagemTokenExpirado();
+                    }
                 }
+
+
 
                 progressBar.setVisibility(View.GONE);
             }
@@ -170,10 +193,87 @@ public class PedidosActivity extends AppCompatActivity {
             facturaAdapter.setItemClickListener(new ItemClickListener() {
                 @Override
                 public void onClick(View view, int position) {
-                    Toast.makeText(PedidosActivity.this, "Pagamento: "+facturaList.get(position).metododPagamento, Toast.LENGTH_SHORT).show();
+
+                    Factura factura = facturaList.get(position);
+                    if (factura.estado.contains("Caminho")){
+                        Intent intent = new Intent(PedidosActivity.this,MotoBoyTrackingActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.putExtra("toolbarTitle","Minha Encomenda");
+                        intent.putExtra("idFactura",factura.idFactura);
+                        intent.putExtra("tokenEncomenda",tokenEncomenda);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(PedidosActivity.this, "Estado: "+factura.estado + "\n"+
+                                "Poderá ver no mapa, quando o Estado estiver 'A caminho'!",
+                                Toast.LENGTH_SHORT).show();
+                    }
+
+
                 }
             });
         }
+    }
+
+
+    private void loginEncomenda(LoginEncomenda loginADAO) {
+
+
+        ApiInterfaceEncomenda apiInterface = getClientEncomenda().create(ApiInterfaceEncomenda.class);
+        Call<UsuarioAuth> call = apiInterface.loginADAOCliente(loginADAO);
+        call.enqueue(new Callback<UsuarioAuth>() {
+            @Override
+            public void onResponse(@NonNull Call<UsuarioAuth> call, @NonNull Response<UsuarioAuth> response) {
+
+                if (response.isSuccessful() && response.body() != null) {
+                    UsuarioAuth userToken = response.body();
+
+
+                    tokenEncomenda = userToken.token_acesso;
+
+                    verifConecxaoPedidos();
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<UsuarioAuth> call, @NonNull Throwable t) {
+
+            }
+        });
+
+    }
+
+    public Retrofit getClientEncomenda() {
+        Retrofit retrofit;
+        OkHttpClient okHttpClient = initOkHttp();
+
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(BASE_URL_ENCOMENDA)
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .client(okHttpClient)
+                    .build();
+
+        return retrofit;
+    }
+
+    private OkHttpClient initOkHttp() {
+
+
+        OkHttpClient.Builder httpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS);
+
+
+
+        return httpClient.build();
+
+
     }
 
     @Override
@@ -210,6 +310,42 @@ public class PedidosActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void mensagemTokenExpirado() {
+
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("A sessão expirou!");
+        dialog.setMessage("Inicie outra vez a sessão!");
+        dialog.setCancelable(false);
+
+        //Set button
+        dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialogInterface, int i) {
+
+
+                dialogInterface.dismiss();
+
+
+            }
+        });
+
+        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialogInterface, int i) {
+
+
+                dialogInterface.dismiss();
+
+
+            }
+        });
+
+
+
+        dialog.show();
     }
 
 }

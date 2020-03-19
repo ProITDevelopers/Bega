@@ -27,11 +27,11 @@ public class CustomInfoWindow implements GoogleMap.InfoWindowAdapter {
 
         String foto = (String) marker.getTag();
 
-        CircleImageView circleImageView = ((CircleImageView)myView.findViewById(R.id.img));
+        CircleImageView circleImageView = myView.findViewById(R.id.img);
 
         if (marker.getTitle().equals("Eu")){
             Picasso.with(myView.getContext()).load(foto).placeholder(R.drawable.ic_camera).into(circleImageView);
-        } else if (marker.getTitle().equals("Destination")){
+        } else if (marker.getTitle().equals("Local de entrega")){
 
            circleImageView.setImageResource(R.drawable.ic_address_orange_24dp);
 

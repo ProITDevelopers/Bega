@@ -479,7 +479,7 @@ public class PagamentoActivity extends AppCompatActivity implements View.OnClick
             AppDatabase.clearAllCart();
 
 
-            notificationHelper.createNotification(mNotificationTitle,mNotificationMessage);
+            notificationHelper.createNotification(mNotificationTitle,mNotificationMessage,"false");
         } else {
             iconStatus.setImageResource(R.drawable.ic_checkmark_denial);
 //            iconStatus.setColorFilter(ContextCompat.getColor(this, R.color.btn_remove_item));
@@ -488,7 +488,7 @@ public class PagamentoActivity extends AppCompatActivity implements View.OnClick
 
             mNotificationMessage = statusMessage.getText().toString().trim();
 
-            notificationHelper.createNotification(mNotificationTitle,mNotificationMessage);
+            notificationHelper.createNotification(mNotificationTitle,mNotificationMessage,"false");
         }
 
         layoutOrderPlaced.setVisibility(View.VISIBLE);

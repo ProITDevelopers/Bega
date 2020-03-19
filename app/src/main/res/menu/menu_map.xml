@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.proitdevelopers.bega.Testes.MainActivity">
+
+    <item
+        android:id="@+id/menu_my_location"
+        android:title="Me"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_my_location_white_24dp"/>
+
+
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="101"
+        android:title="Definições"
+        app:showAsAction="never" />
+
+
+</menu>

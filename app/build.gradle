@@ -66,6 +66,7 @@ dependencies {
     //retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
     implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.6.0'
 
@@ -104,6 +105,11 @@ dependencies {
     //SIGNALR
     implementation 'com.microsoft.signalr:signalr:1.0.0'
     implementation 'org.slf4j:slf4j-jdk14:1.7.25'
+
+    //STOM-CLIENTE
+    implementation 'com.github.NaikSoftware:StompProtocolAndroid:1.1.6'
+//    implementation 'org.java-websocket:Java-WebSocket:1.3.0'
+    implementation 'org.java-websocket:Java-WebSocket:1.3.4'
 
 
 }

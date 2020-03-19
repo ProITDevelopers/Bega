@@ -1,5 +1,6 @@
 package com.proitdevelopers.bega.helper;
 
+import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -21,6 +22,7 @@ public class NotificationHelper {
     private NotificationCompat.Builder mBuilder;
     public static final String NOTIFICATION_CHANNEL_ID = "10001";
 
+
     public NotificationHelper(Context context) {
         mContext = context;
     }
@@ -28,25 +30,49 @@ public class NotificationHelper {
     /**
      * Create and push the notification
      */
-    public void createNotification(String title, String message)
+    public void createNotification(String title, String message, String status)
     {
         /**Creates an explicit intent for an Activity in your app**/
         Intent resultIntent = new Intent(mContext , MenuActivity.class);
-        resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
 
         PendingIntent resultPendingIntent = PendingIntent.getActivity(mContext,
                 0 /* Request code */, resultIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-        mBuilder = new NotificationCompat.Builder(mContext);
-        mBuilder.setSmallIcon(R.mipmap.ic_launcher);
-        mBuilder.setContentTitle(title)
-                .setContentText(message)
-                .setAutoCancel(false)
-                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+        if (status.equals("true")){
+
+            mBuilder = new NotificationCompat.Builder(mContext);
+            mBuilder.setSmallIcon(R.mipmap.ic_launcher);
+            mBuilder.setContentTitle(title)
+                    .setContentText(message)
+                    .setAutoCancel(true)
+                    .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+                    .setContentIntent(resultPendingIntent)
+                    .setStyle(new NotificationCompat.BigPictureStyle()
+                            .bigPicture(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.begalogo)));
+
+        }else {
+            mBuilder = new NotificationCompat.Builder(mContext);
+            mBuilder.setSmallIcon(R.mipmap.ic_launcher);
+            mBuilder.setContentTitle(title)
+                    .setContentText(message)
+                    .setAutoCancel(true)
+                    .setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+
+        }
+
+//        mBuilder = new NotificationCompat.Builder(mContext);
+//        mBuilder.setSmallIcon(R.mipmap.ic_launcher);
+//        mBuilder.setContentTitle(title)
+//                .setContentText(message)
+//                .setAutoCancel(true)
+//                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
 //                .setContentIntent(resultPendingIntent)
-                .setStyle(new NotificationCompat.BigPictureStyle()
-                        .bigPicture(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.begalogo)));
+//                .setStyle(new NotificationCompat.BigPictureStyle()
+//                        .bigPicture(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.begalogo)));
 
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 

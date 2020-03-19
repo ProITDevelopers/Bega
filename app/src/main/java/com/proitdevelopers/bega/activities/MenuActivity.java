@@ -276,7 +276,7 @@ public class MenuActivity extends AppCompatActivity implements
 
                 dialogInterface.dismiss();
 
-                logOut();
+                dialogTerminarSessao.show();
 
             }
         });
@@ -413,9 +413,9 @@ public class MenuActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
 
-        Intent intent = new Intent();
-        intent.setClass(mContext, MySignalRService.class);
-        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+//        Intent intent = new Intent();
+//        intent.setClass(mContext, MySignalRService.class);
+//        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
         super.onResume();
         navigationView.setCheckedItem(R.id.nav_menu_home);
         verificaoPerfil();
@@ -537,10 +537,10 @@ public class MenuActivity extends AppCompatActivity implements
     @Override
     protected void onDestroy() {
 
-        if (mBound) {
-            unbindService(mConnection);
-            mBound = false;
-        }
+//        if (mBound) {
+//            unbindService(mConnection);
+//            mBound = false;
+//        }
         super.onDestroy();
         dialogTerminarSessao.dismiss();
     }
@@ -569,25 +569,25 @@ public class MenuActivity extends AppCompatActivity implements
 
 
 
-    /**
-     * Defines callbacks for service binding, passed to bindService()
-     */
-    private final ServiceConnection mConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
-            // We've bound to SignalRService, cast the IBinder and get SignalRService instance
-            MySignalRService.LocalBinder binder = (MySignalRService.LocalBinder) service;
-            mService = binder.getService();
-            mBound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mBound = false;
-        }
-    };
+//    /**
+//     * Defines callbacks for service binding, passed to bindService()
+//     */
+//    private final ServiceConnection mConnection = new ServiceConnection() {
+//
+//        @Override
+//        public void onServiceConnected(ComponentName className,
+//                                       IBinder service) {
+//            // We've bound to SignalRService, cast the IBinder and get SignalRService instance
+//            MySignalRService.LocalBinder binder = (MySignalRService.LocalBinder) service;
+//            mService = binder.getService();
+//            mBound = true;
+//        }
+//
+//        @Override
+//        public void onServiceDisconnected(ComponentName arg0) {
+//            mBound = false;
+//        }
+//    };
 
 
 }

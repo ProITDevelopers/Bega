@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">Bega</string>
 
-    <string name="google_browser_key">AIzaSyDt-fbJvlUxypFSogMt8PSoVnqPoB_SYiI</string>
-    <string name="google_direction_api">AIzaSyBTmXV6TlULl2AUSC0Dm9YaZhf1SDdMRL8</string>
-    <string name="facebook_app_id">2335117853474777</string>
-    <string name="fb_login_protocol_scheme">fb2335117853474777</string>
-    
+    <string name="google_direction_api">google_direction_api</string>
+    <string name="facebook_app_id">facebook_app_id</string>
+    <string name="fb_login_protocol_scheme">fb_login_protocol_scheme</string>
+
+
     <string name="action_settings">Definições</string>
     <string name="bega_logo">bega_logo</string>
     <string name="text_hint_email">Email</string>
@@ -152,6 +152,7 @@
     <string name="ver_editar_perfil_pref">Actualize seu nome, números de telefone e endereço.</string>
     <string name="carrinho">Carrinho</string>
     <string name="action_favoritos">Favoritos</string>
+    <string name="title_activity_moto_boy_tracking">MotoBoyTrackingActivity</string>
     <string-array name="genero">
         <item>Feminino</item>
         <item>Masculino</item>

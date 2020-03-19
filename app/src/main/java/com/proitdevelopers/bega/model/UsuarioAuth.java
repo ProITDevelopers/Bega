@@ -17,4 +17,14 @@ public class UsuarioAuth implements Serializable {
 
 
 
+    //ADAAAAOOOOOOO
+    @SerializedName("dataExpiracao")
+    public String dataExpiracao;
+
+    @SerializedName("token_acesso")
+    public String token_acesso;
+
+
+
+
 }

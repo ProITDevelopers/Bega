@@ -140,6 +140,7 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.ItemVi
                     holder.product_count.setVisibility(View.VISIBLE);
                     holder.btn_addCart.setEnabled(false);
                     holder.btn_addCart.setBackground(btn_add_inactivo);
+                    holder.btn_addCart.setVisibility(View.INVISIBLE);
 
 
 
@@ -151,6 +152,7 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.ItemVi
                     holder.product_count.setVisibility(View.GONE);
                     holder.btn_addCart.setEnabled(true);
                     holder.btn_addCart.setBackground(btn_add_activo);
+                    holder.btn_addCart.setVisibility(View.VISIBLE);
                 }
             }
 

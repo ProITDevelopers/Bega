@@ -1,9 +1,11 @@
 package com.proitdevelopers.bega.activities;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
@@ -298,7 +300,12 @@ public class WalletActivity extends AppCompatActivity {
 
                 } else {
                     progressDialog.dismiss();
-                    mostrarTelaCriarWallet();
+
+                    if (response.code()==401){
+                        mensagemTokenExpirado();
+                    }else{
+                        mostrarTelaCriarWallet();
+                    }
 
                 }
             }
@@ -478,6 +485,42 @@ public class WalletActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
 
 
+    }
+
+    private void mensagemTokenExpirado() {
+
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("A sessão expirou!");
+        dialog.setMessage("Inicie outra vez a sessão!");
+        dialog.setCancelable(false);
+
+        //Set button
+        dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialogInterface, int i) {
+
+
+                dialogInterface.dismiss();
+
+
+
+            }
+        });
+
+        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialogInterface, int i) {
+
+
+                dialogInterface.dismiss();
+
+
+            }
+        });
+
+
+
+        dialog.show();
     }
 
 }

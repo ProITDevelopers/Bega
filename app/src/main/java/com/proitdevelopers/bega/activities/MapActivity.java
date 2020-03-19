@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -39,7 +40,9 @@ import com.google.maps.android.SphericalUtil;
 import com.proitdevelopers.bega.utilsClasses.CustomInfoWindow;
 import com.proitdevelopers.bega.R;
 import com.proitdevelopers.bega.helper.Common;
+import com.proitdevelopers.bega.utilsClasses.MapInfoWindowAdapter;
 
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
 
@@ -68,7 +71,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static int DISPLACEMENT = 10;
 
 
-    Marker mUserMarker, markerDestination;
+    Marker mUserMarker, markerDestination, motoboyMarker;
 
 
 
@@ -252,17 +255,22 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         //Add Marker
         //Here we will clear all map to delete old position of driver
 
+
         mMap.clear();
         mUserMarker = mMap.addMarker(new MarkerOptions()
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
                 .position(location)
                 .title(String.format("Eu"))
                 .snippet(getMyEndereco));
-
-        mUserMarker.setTag(Common.mCurrentUser.imagem);
+//        mUserMarker.setTag(Common.mCurrentUser.imagem);
 
         //Move camera to this position
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 15.0f));
+
+
+
+
+
 
 
 
@@ -297,9 +305,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
-        mMap.setInfoWindowAdapter(new CustomInfoWindow(this));
+//        mMap.setInfoWindowAdapter(new CustomInfoWindow(this));
 
-
+        mMap.setInfoWindowAdapter(new MapInfoWindowAdapter(this));
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -315,8 +323,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     markerDestination = mMap.addMarker(new MarkerOptions()
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.destination_marker))
                             .position(latLng)
-                            .title("Destination")
+                            .title("Local de entrega")
                             .snippet(getMyDestination));
+
+
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
+                } else if (toolbarTitle.equals("Minha Encomenda")){
+                    getMyDestination = getMyAddress(latLng);
+                    //First, check markerDestination
+                    //IF is not null, just remove available marker
+                    if (motoboyMarker != null)
+                        motoboyMarker.remove();
+                    motoboyMarker = mMap.addMarker(new MarkerOptions()
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.motoboy_marker))
+                            .position(latLng)
+                            .title("Minha Encomenda")
+                            .snippet(getMyDestination));
+
+
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
                 }
 
@@ -376,7 +400,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 //                Toast.makeText(this, ""+marker.getTitle(), Toast.LENGTH_SHORT).show();
 
                 alertaUsarLocalizacao(getMyEndereco,latitude,longitude);
-            }else if (marker.getTitle().equals("Destination")){
+            }else if (marker.getTitle().equals("Local de entrega")){
 
                 alertaUsarLocalizacao(getMyDestination,latitude,longitude);
 
@@ -426,14 +450,41 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_map, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
             finish();
         }
 
+        if (item.getItemId() == R.id.menu_my_location) {
+            setUpLocation();
+            return true;
+        }
+
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, ConfiguracoesActivity.class);
+            startActivity(intent);
+
+            return true;
+        }
+
+
+
         return super.onOptionsItemSelected(item);
     }
+
+
 }
