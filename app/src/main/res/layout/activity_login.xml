@@ -165,7 +165,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginStart="20dp"
                 android:background="@drawable/facebook_f6_login"
-                android:visibility="visible"/>
+                android:visibility="gone"/>
 
 
             <Button
