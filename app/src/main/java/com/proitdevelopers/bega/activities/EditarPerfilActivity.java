@@ -92,7 +92,7 @@ public class EditarPerfilActivity extends AppCompatActivity implements View.OnCl
     private Dialog caixa_dialogo_foto;
 
     private String TAG = "EditarPerfilActivity";
-    private UsuarioPerfil usuarioPerfil;
+    private UsuarioPerfil usuarioPerfil = new UsuarioPerfil();
 
     private CircleImageView imageView;
     private AppCompatEditText editPrimeiroNome,editUltimoNome;
@@ -133,8 +133,9 @@ public class EditarPerfilActivity extends AppCompatActivity implements View.OnCl
 
 
 
-
-        carregarMeuPerfilOffline(Common.mCurrentUser);
+///carregar dados do Usuario
+        usuarioPerfil = AppPref.getInstance().getUser();
+        carregarMeuPerfilOffline(usuarioPerfil);
 
     }
 
@@ -206,7 +207,7 @@ public class EditarPerfilActivity extends AppCompatActivity implements View.OnCl
         try {
 
 
-            Picasso.with(this).load(usuarioPerfil.imagem).placeholder(R.drawable.ic_camera).into(imageView);
+            Picasso.with(this).load(usuarioPerfil.imagem).fit().centerCrop().placeholder(R.drawable.ic_camera).into(imageView);
 
 
             editPrimeiroNome.setText(usuarioPerfil.primeiroNome);
@@ -663,7 +664,7 @@ public class EditarPerfilActivity extends AppCompatActivity implements View.OnCl
         progressDialog.show();
 
 
-        UsuarioPerfil usuarioPerfil = new UsuarioPerfil(primeiroNome,sobreNome,telefone,telefoneAlternativo,valorCidadeItem,municipio,bairro,rua,nCasa,valorGeneroItem);
+        usuarioPerfil = new UsuarioPerfil(primeiroNome,sobreNome,telefone,telefoneAlternativo,valorCidadeItem,municipio,bairro,rua,nCasa,valorGeneroItem);
 
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<Void> call = apiInterface.actualizarPerfil(usuarioPerfil);

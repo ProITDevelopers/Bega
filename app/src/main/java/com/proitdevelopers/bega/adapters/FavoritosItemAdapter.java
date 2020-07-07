@@ -61,7 +61,7 @@ public class FavoritosItemAdapter extends RecyclerView.Adapter<FavoritosItemAdap
         holder.estabelecimento.setText(product.getEstabelecimento());
 
 
-        Picasso.with(context).load(product.getImagemProduto()).placeholder(R.drawable.hamburger_placeholder).into(holder.thumbnail);
+        Picasso.with(context).load(product.getImagemProduto()).fit().centerCrop().placeholder(R.drawable.hamburger_placeholder).into(holder.thumbnail);
 
 
 

@@ -36,6 +36,7 @@ public class MetodosUsados {
 
     private static String TAG = "FalhaSis";
     private static String SHARE_URL_DROPBOX = "https://www.dropbox.com/sh/8oco26p7rrfkwfc/AAAJX3pXgQ0PCOjcpWbEWy1Ta?dl=0";
+    private static String SHARE_URL_GOOGLE_DRIVE = "https://drive.google.com/file/d/1rQie1lAXKs056EsxNWwnSo1bgMpkduAQ/view?usp=sharing";
     private static String SHARE_URL_PLAYSTORE = "https://play.google.com/store/apps/details?id=";
 
 
@@ -97,7 +98,7 @@ public class MetodosUsados {
 
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
-        String postData = "Obtenha o aplicativo " + appName + " para ter acesso aos melhores " + appCategory + "\n" + SHARE_URL_DROPBOX + appPackageName;
+        String postData = "Obtenha o aplicativo " + appName + " para ter acesso aos melhores " + appCategory + "\n" + SHARE_URL_GOOGLE_DRIVE + appPackageName;
 
         shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Baixar Agora!");
         shareIntent.putExtra(Intent.EXTRA_TEXT, postData);

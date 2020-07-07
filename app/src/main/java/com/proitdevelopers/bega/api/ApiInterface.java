@@ -31,9 +31,13 @@ import retrofit2.http.Path;
 
 public interface ApiInterface {
 
-//    @Headers("Content-type: application/json")
+
     @POST("/authenticate2")
     Call<UsuarioAuth> autenticarCliente(@Body LoginRequest loginRequest);
+
+    @POST("/authenticate2")
+    Call<ResponseBody> autenticarCliente2(@Body LoginRequest loginRequest);
+
 
     @POST("/FacebookCliente")
     Call<UsuarioAuth> autenticarFaceBook(@Body FaceBookLoginRequest faceBookLoginRequest);

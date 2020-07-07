@@ -37,8 +37,10 @@ import android.widget.Toast;
 import com.facebook.login.LoginManager;
 import com.proitdevelopers.bega.MyApplication;
 import com.proitdevelopers.bega.R;
+import com.proitdevelopers.bega.model.CartItemProdutos;
 import com.proitdevelopers.bega.model.Wallet;
 import com.proitdevelopers.bega.mySignalR.MySignalRService;
+import com.proitdevelopers.bega.utilsClasses.Converter;
 import com.proitdevelopers.bega.utilsClasses.TimerInfoBar;
 import com.proitdevelopers.bega.api.ApiClient;
 import com.proitdevelopers.bega.api.ApiInterface;
@@ -55,6 +57,9 @@ import java.util.List;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -112,6 +117,12 @@ public class MenuActivity extends AppCompatActivity implements
     private MySignalRService mService;
     private boolean mBound = false;
 
+
+    private Realm realm;
+    private RealmResults<CartItemProdutos> cartItems;
+    private RealmChangeListener<RealmResults<CartItemProdutos>> cartRealmChangeListener;
+    int cart_count = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,8 +177,23 @@ public class MenuActivity extends AppCompatActivity implements
 
 
         //carregar dados do Usuario
-        Common.mCurrentUser = AppPref.getInstance().getUser();
-        carregarMeuPerfilOffline(Common.mCurrentUser);
+        usuarioPerfil = AppPref.getInstance().getUser();
+        carregarMeuPerfilOffline(usuarioPerfil);
+
+        realm = Realm.getDefaultInstance();
+        cartItems = realm.where(CartItemProdutos.class).findAllAsync();
+
+        cartRealmChangeListener = cartItems -> {
+
+            if (cartItems != null && cartItems.size() > 0) {
+                setCartInfoBar(cartItems);
+            } else {
+                cart_count = 0;
+                invalidateOptionsMenu();
+            }
+
+            invalidateOptionsMenu();
+        };
 
 
 
@@ -176,14 +202,17 @@ public class MenuActivity extends AppCompatActivity implements
 
     }
 
+    private void setCartInfoBar(RealmResults<CartItemProdutos> cartItems) {
+
+        cart_count = cartItems.size();
+
+    }
+
     private void verificaoPerfil() {
         ConnectivityManager conMgr =  (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         if (conMgr!=null) {
             NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
-            if (netInfo == null){
-                carregarMeuPerfilOffline(usuarioPerfil);
-//                Toast.makeText(this, "Network offline", Toast.LENGTH_SHORT).show();
-            } else {
+            if (netInfo != null){
                 carregarMeuPerfil();
             }
         }
@@ -193,7 +222,7 @@ public class MenuActivity extends AppCompatActivity implements
 
         try {
 
-            Picasso.with(this).load(usuarioPerfil.imagem).placeholder(R.drawable.ic_camera).into(image_User_avatar);
+            Picasso.with(this).load(usuarioPerfil.imagem).fit().centerCrop().placeholder(R.drawable.ic_camera).into(image_User_avatar);
             txtName.setText(usuarioPerfil.primeiroNome + " "+ usuarioPerfil.ultimoNome);
             txtEmail.setText(usuarioPerfil.email);
 
@@ -217,10 +246,10 @@ public class MenuActivity extends AppCompatActivity implements
                 if (response.isSuccessful()) {
                     if (response.body()!=null){
                         usuarioPerfil = response.body().get(0);
-                        Common.mCurrentUser = usuarioPerfil;
+//                        Common.mCurrentUser = usuarioPerfil;
                         AppPref.getInstance().saveUser(usuarioPerfil);
 
-                        carregarMeuPerfilOffline(Common.mCurrentUser);
+                        carregarMeuPerfilOffline(usuarioPerfil);
 
 
 
@@ -355,9 +384,9 @@ public class MenuActivity extends AppCompatActivity implements
 
                     if (response.body()!=null){
                         wallet = response.body().get(0);
-                        Common.mCurrentUser.wallet = wallet;
+                        usuarioPerfil.wallet = wallet;
 
-                        AppPref.getInstance().saveUser(Common.mCurrentUser);
+                        AppPref.getInstance().saveUser(usuarioPerfil);
                     }
                 }
             }
@@ -415,14 +444,20 @@ public class MenuActivity extends AppCompatActivity implements
 
     @Override
     protected void onResume() {
+        navigationView.setCheckedItem(R.id.nav_menu_home);
+
 
 //        Intent intent = new Intent();
 //        intent.setClass(mContext, MySignalRService.class);
 //        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-        super.onResume();
-        navigationView.setCheckedItem(R.id.nav_menu_home);
+
+        if (cartItems != null) {
+            cartItems.addChangeListener(cartRealmChangeListener);
+        }
+
         verificaoPerfil();
-//        verifConecxaoSaldoWallet();
+        super.onResume();
+
 
 
     }
@@ -435,6 +470,7 @@ public class MenuActivity extends AppCompatActivity implements
         int id = item.getItemId();
 
         if (id == R.id.nav_menu_home) {
+            txtToolbar.setText("Bega");
             gotoCategoriaFragement();
         }
 
@@ -494,6 +530,9 @@ public class MenuActivity extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_options, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.menu_cart);
+        menuItem.setIcon(Converter.convertLayoutToImage(MenuActivity.this,cart_count,R.drawable.ic_shopping_cart_white_24dp));
         return true;
     }
 
@@ -545,6 +584,13 @@ public class MenuActivity extends AppCompatActivity implements
 //            unbindService(mConnection);
 //            mBound = false;
 //        }
+        if (cartItems != null) {
+            cartItems.addChangeListener(cartRealmChangeListener);
+        }
+        if (realm != null) {
+            realm.close();
+        }
+
         super.onDestroy();
         dialogTerminarSessao.dismiss();
     }

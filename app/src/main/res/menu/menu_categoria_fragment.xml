@@ -7,7 +7,7 @@
         android:id="@+id/menu_refresh"
         android:title="Actualizar"
         android:orderInCategory="101"
-        app:showAsAction="always"
+        app:showAsAction="never"
         android:icon="@drawable/ic_sync_white_24dp"/>
 
 <!--    <item-->

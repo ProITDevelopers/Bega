@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -66,6 +67,8 @@ public class EstabelecimentoFragment extends Fragment {
     private ProgressBar progressBar;
 
     private List<Estabelecimento> estabelecimentoList = new ArrayList<>();
+
+
     private RecyclerView recyclerView;
     private EstabelecimentoAdapter itemAdapter;
     private GridLayoutManager gridLayoutManager;
@@ -79,6 +82,8 @@ public class EstabelecimentoFragment extends Fragment {
 
     Toolbar toolbar;
     public TextView txtToolbar;
+
+    SearchView searchView;
 
 
     public EstabelecimentoFragment() {
@@ -137,17 +142,45 @@ public class EstabelecimentoFragment extends Fragment {
         btnTentarDeNovo = (TextView) view.findViewById(R.id.btn);
         btnTentarDeNovo.setText("Tentar de Novo");
 
+        searchView = (SearchView) view.findViewById(R.id.search_bar);
+        searchView.setQueryHint(getString(R.string.pesquisar));
+//        searchView.onActionViewExpanded();
+        searchView.setIconifiedByDefault(true);
+
 
         gridLayoutManager = new GridLayoutManager(getContext(), AppPref.getInstance().getListGridViewMode());
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewEstab);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
 
-        verifConecxaoEstabelecimentos();
+//        verifConecxaoEstabelecimentos();
+
+        if (searchView==null) {
+
+            verifConecxaoEstabelecimentos("");
+
+        } else {
+            verifConecxaoEstabelecimentos(searchView.getQuery().toString());
+        }
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                verifConecxaoEstabelecimentos(newText);
+                return false;
+            }
+        });
+
+
         return view;
     }
 
-    private void verifConecxaoEstabelecimentos() {
+    private void verifConecxaoEstabelecimentos(String searchText) {
 
         if (getActivity()!=null) {
             ConnectivityManager conMgr =  (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -156,7 +189,7 @@ public class EstabelecimentoFragment extends Fragment {
                 if (netInfo == null){
                     mostarMsnErro();
                 } else {
-                    carregarListaEstabelicimentos();
+                    carregarListaEstabelicimentos(searchText);
                 }
             }
         }
@@ -177,12 +210,12 @@ public class EstabelecimentoFragment extends Fragment {
             public void onClick(View view) {
                 coordinatorLayout.setVisibility(View.VISIBLE);
                 errorLayout.setVisibility(View.GONE);
-                verifConecxaoEstabelecimentos();
+                verifConecxaoEstabelecimentos("");
             }
         });
     }
 
-    private void carregarListaEstabelicimentos() {
+    private void carregarListaEstabelicimentos(String searchText) {
         progressBar.setVisibility(View.VISIBLE);
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<List<Estabelecimento>> rv = apiInterface.getEstabelecimentosPorTipo(idTipoEstabelecimento);
@@ -195,21 +228,22 @@ public class EstabelecimentoFragment extends Fragment {
 
                     if (response.body()!=null){
 
-//                        for (Estabelecimento estab:response.body()) {
-//
-//                            if (estab.estadoEstabelecimento!=null){
-//                                if (estab.estadoEstabelecimento.equals("Aberto")){
-//                                    estabelecimentoList.add(estab);
-//                                }
-//                            }
-//                        }
 
-                        estabelecimentoList = response.body();
+                        estabelecimentoList.clear();
+                        if (searchView!=null) {
+                            for (Estabelecimento estabelecimento:response.body()){
+                                if (estabelecimento.nomeEstabelecimento.toLowerCase().startsWith(searchText.toLowerCase()) ||
+                                        estabelecimento.nomeEstabelecimento.toLowerCase().contains(searchText.toLowerCase())
+                                )
+                                    estabelecimentoList.add(estabelecimento);
+                            }
+                        } else{
+
+                            estabelecimentoList = response.body();
+                        }
 
                         progressBar.setVisibility(View.GONE);
                         setAdapters(estabelecimentoList);
-
-//                        verifConecxaoProdutos();
 
 
                     }
@@ -295,7 +329,7 @@ public class EstabelecimentoFragment extends Fragment {
                 errorLayout.setVisibility(View.GONE);
                 coordinatorLayout.setVisibility(View.VISIBLE);
             }
-            verifConecxaoEstabelecimentos();
+            verifConecxaoEstabelecimentos("");
             return true;
         }
 

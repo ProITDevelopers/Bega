@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Bega</string>
     <!--    <string name="google_browser_key">AIzaSyCPzAyGAQWteRQyymrIPfrK2dfcbR3GR4U</string>-->
-<!--    <string name="google_browser_key">AIzaSyDt-fbJvlUxypFSogMt8PSoVnqPoB_SYiI</string>-->
+    <!--    <string name="google_browser_key">AIzaSyDt-fbJvlUxypFSogMt8PSoVnqPoB_SYiI</string>-->
     <string name="google_direction_api">AIzaSyBTmXV6TlULl2AUSC0Dm9YaZhf1SDdMRL8</string>
     <string name="facebook_app_id">2335117853474777</string>
     <string name="fb_login_protocol_scheme">fb2335117853474777</string>
@@ -34,14 +34,15 @@
     <string name="rua">Rua</string>
     <string name="numero_da_casa">NºCasa</string>
     <string name="recuperar_a_senha">Esqueci a senha</string>
-    <string name="txt_direitos">Copyright © 2020 Pro-IT Consulting</string>
+    <string name="txt_direitos">Copyright © 2019 Pro-IT Consulting</string>
+    <string name="txt_wallet_note">*Carteira apenas para maiores de 18 anos.</string>
 
     <string name="hit_recuperar_senha">Redifinir Senha</string>
     <string name="hit_receber_cod_confirmacao">Como deseja receber o código de confirmação?</string>
     <string name="hit_redif_senha">Insira o seu e-mail para redifinir a sua senha</string>
-    <string name="hit_redif_senha_telef">Insira o seu nº do telefone para redifinir a sua senha</string>
-    <string name="hit_enviar_telef">Insira o nº do telefone e o endereço para fazer o seu pedido</string>
-    <string name="hit_redif_telef">Insira o seu número do telefone</string>
+    <string name="hit_redif_senha_telef">Insira o seu nº de telefone para redifinir a sua senha</string>
+    <string name="hit_enviar_telef">Insira o nº de telefone e o endereço para fazer o seu pedido</string>
+    <string name="hit_redif_telef">Insira o seu número de telefone</string>
     <string name="hit_redif_cod">Insira o Seu Código de Confirmação</string>
     <string name="hit_pagamento_cod">Que Recebeu por SMS</string>
     <string name="hit_codigo_confirm">Código de Confirmação</string>
@@ -118,6 +119,7 @@
     <string name="title_activity_configuracoes">ConfiguracoesActivity</string>
     <string name="pref_header_about">Sobre Nós</string>
     <string name="pref_header_feedback">Feedback</string>
+    <string name="pref_header_versao">Versão do aplicativo</string>
 
 
     <string name="pref_header_privacidade">Conteúdo legal e políticas</string>
@@ -139,13 +141,16 @@
 
     <string name="key_app_version">key_app_version</string>
     <string name="key_alterar_senha">key_alterar_senha</string>
+    <string name="key_bega_manual">key_bega_manual</string>
     <string name="alterar_recuperar_senha">Altere sua senha</string>
+    <string name="manual_utilizador_dicas">Informações sobre o aplicativo.</string>
     <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
 
     <string name="pref_titlte_geral">Informações pessoais</string>
 
 
     <string name="pref_title_seguranca">Segurança</string>
+    <string name="pref_title_manual_utilizador">Manual de utilizador</string>
 
     <string name="pesquisar">Pesquisar</string>
     <string name="mudar_vista">Mudar vista</string>

@@ -81,6 +81,7 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.Item
 
         Picasso.with(context)
                 .load(categoria.getImagemCategoria())
+                .fit().centerCrop()
                 .placeholder(R.drawable.hamburger_placeholder)
                 .error(R.drawable.hamburger_placeholder)
                 .into(holder.category_image, new Callback() {

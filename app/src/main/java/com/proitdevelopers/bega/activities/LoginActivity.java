@@ -67,6 +67,7 @@ import com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -101,18 +102,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private String TAG = "LoginActivity";
 
     private UsuarioPerfil usuarioPerfil = new UsuarioPerfil();
-    private LoginRequest request = new LoginRequest();
+    private LoginRequest loginRequest = new LoginRequest();
     private FaceBookLoginRequest faceBookLoginRequest = new FaceBookLoginRequest();
 
 
+    private AppCompatEditText editEmailTelefone;
+    private ShowHidePasswordEditText editPass;
 
-
-    AppCompatEditText editEmailTelefone;
-    ShowHidePasswordEditText editPass;
-
-    Button btnLogin;
-    Button btnRegistro,btnForgotPass;
-    ProgressDialog progressDialog;
+    private Button btnLogin, btnRegistro,btnForgotPass;
+    private ProgressDialog progressDialog;
     View raiz;
 
     //Esqueceu a senha? ----Componentes interface da caixa de dialogo Enviar Numero Telefone
@@ -194,7 +192,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                verifConecxao();
+                if (verificarCamposEmailTelefone()) {
+                    verifConecxao();
+                }
             }
         });
 
@@ -210,7 +210,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnForgotPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialogOpcaoSenhaEnviarTelefone.show();
+//                dialogOpcaoSenhaEnviarTelefone.show();
+                Intent intent = new Intent(LoginActivity.this, AlterarSenhaActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
 
             }
         });
@@ -341,7 +344,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             if (netInfo == null) {
                 mostrarMensagem(LoginActivity.this,R.string.txtMsg);
             } else {
-                verificarCamposEmailTelef();
+                loginRequest.password = palavraPass;
+                loginRequest.rememberMe = true;
+                autenticacaoLogin(loginRequest);
             }
         }
 
@@ -352,8 +357,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         emailTelefone = editEmailTelefone.getText().toString().trim();
         palavraPass = editPass.getText().toString().trim();
 
-
-
         if (emailTelefone.isEmpty()){
             editEmailTelefone.setError(msgErro);
             return false;
@@ -361,10 +364,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if (validarEmail(emailTelefone)) {
             emailTelefone = emailTelefone.toLowerCase();
-            request.email = emailTelefone;
+            loginRequest.email = emailTelefone;
+
         }else {
             if (emailTelefone.matches("9[1-9][0-9]\\d{6}")){
-                request.telefone = emailTelefone;
+                loginRequest.telefone = emailTelefone;
                 return true;
             } else {
                 editEmailTelefone.requestFocus();
@@ -382,34 +386,31 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
 
+
         editEmailTelefone.onEditorAction(EditorInfo.IME_ACTION_DONE);
         editPass.onEditorAction(EditorInfo.IME_ACTION_DONE);
+
+
 
         return true;
     }
 
-    private void verificarCamposEmailTelef() {
-        if (verificarCamposEmailTelefone()) {
 
-            request.password = palavraPass;
-            request.rememberMe = true;
-
-            autenticacaoLogin(request);
-        }
-    }
-
-    private void autenticacaoLogin(LoginRequest request) {
+    private void autenticacaoLogin(LoginRequest loginRequest) {
 
         progressDialog.setMessage("Verificando...");
         progressDialog.show();
 
+
+
+
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<UsuarioAuth> call = apiInterface.autenticarCliente(request);
+        Call<UsuarioAuth> call = apiInterface.autenticarCliente(loginRequest);
         call.enqueue(new Callback<UsuarioAuth>() {
             @Override
             public void onResponse(@NonNull Call<UsuarioAuth> call, @NonNull Response<UsuarioAuth> response) {
 
-                //response.body()==null
+
                 progressDialog.setMessage("Validando os dados...");
                 if (response.isSuccessful() && response.body() != null) {
                     UsuarioAuth userToken = response.body();
@@ -418,15 +419,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     AppPref.getInstance().saveAuthToken(userToken.tokenuser);
                     AppPref.getInstance().saveTokenTime(userToken.expiracao);
-//                    AppPref.getInstance().saveUser(Common.mCurrentUser);
+
 
                     carregarMeuPerfil(userToken.tokenuser);
 
-//                    progressDialog.dismiss();
-//                    launchHomeScreen();
-
 
                 } else {
+
                     progressDialog.dismiss();
                    Snackbar.make(raiz, "Este usuário não exite!", Snackbar.LENGTH_LONG)
                            .setActionTextColor(Color.parseColor("#ff6600"))
@@ -483,11 +482,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     if (response.body()!=null){
                         usuarioPerfil = response.body().get(0);
 //
-                        Common.mCurrentUser = usuarioPerfil;
+//                        Common.mCurrentUser = usuarioPerfil;
 //
 //
 
-                        AppPref.getInstance().saveUser(Common.mCurrentUser);
+                        AppPref.getInstance().saveUser(usuarioPerfil);
                         progressDialog.dismiss();
                         launchHomeScreen();
                     }
@@ -526,10 +525,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void run() {
 
                 progressDialog.dismiss();
-                Common.mCurrentUser = usuarioPerfil;
+
                 Intent intent = new Intent(LoginActivity.this, PerfilFacebookActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.putExtra("mCurrentUser",Common.mCurrentUser);
+                intent.putExtra("mCurrentUser",usuarioPerfil);
                 startActivity(intent);
                 finish();
 
@@ -779,6 +778,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
                 } else {
+
+
                     ErrorResponce errorResponce = ErrorUtils.parseError(response);
                     progressDialog.dismiss();
                     Snackbar.make(raiz, "Este usuário não exite!", Snackbar.LENGTH_LONG)

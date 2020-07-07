@@ -7,7 +7,7 @@
         android:id="@+id/menu_cart"
         android:title="Carrinho"
         android:orderInCategory="102"
-        app:showAsAction="never"
+        app:showAsAction="always"
         android:icon="@drawable/ic_shopping_cart_white_24dp"/>
 
 

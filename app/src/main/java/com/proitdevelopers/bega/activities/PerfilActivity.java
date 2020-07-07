@@ -59,7 +59,7 @@ import static com.proitdevelopers.bega.helper.MetodosUsados.removeAcentos;
 public class PerfilActivity extends AppCompatActivity {
 
     private String TAG = "PerfilActivity";
-    private UsuarioPerfil usuarioPerfil;
+    private UsuarioPerfil usuarioPerfil = new UsuarioPerfil();
 
     private CircleImageView imageView;
     private TextView txtNomeCompleto,txtNomeUtilizador,txtTelefone,txtTelefoneAlternativo;
@@ -87,9 +87,9 @@ public class PerfilActivity extends AppCompatActivity {
 
 
 
-        //carregar dados do Usuario
-
-        carregarMeuPerfilOffline(Common.mCurrentUser);
+        ///carregar dados do Usuario
+        usuarioPerfil = AppPref.getInstance().getUser();
+        carregarMeuPerfilOffline(usuarioPerfil);
 
 
     }
@@ -118,10 +118,7 @@ public class PerfilActivity extends AppCompatActivity {
         ConnectivityManager conMgr =  (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         if (conMgr!=null) {
             NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
-            if (netInfo == null){
-
-                carregarMeuPerfilOffline(Common.mCurrentUser);
-            } else {
+            if (netInfo != null){
                 carregarMeuPerfil();
             }
         }
@@ -131,7 +128,7 @@ public class PerfilActivity extends AppCompatActivity {
         try {
 
 
-            Picasso.with(this).load(usuarioPerfil.imagem).placeholder(R.drawable.ic_camera).into(imageView);
+            Picasso.with(this).load(usuarioPerfil.imagem).fit().centerCrop().placeholder(R.drawable.ic_camera).into(imageView);
 
 
             txtNomeCompleto.setText(usuarioPerfil.nomeCompleto);
@@ -163,8 +160,14 @@ public class PerfilActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        super.onResume();
         verificaoPerfil();
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        progressDialog.cancel();
+        super.onDestroy();
     }
 
     private void carregarMeuPerfil() {
@@ -180,12 +183,8 @@ public class PerfilActivity extends AppCompatActivity {
                     if (response.body()!=null){
                         usuarioPerfil = response.body().get(0);
 
-                        Common.mCurrentUser = usuarioPerfil;
-
                         AppPref.getInstance().saveUser(usuarioPerfil);
-
                         carregarMeuPerfilOffline(usuarioPerfil);
-
 
 
                     }

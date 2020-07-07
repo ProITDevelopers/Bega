@@ -90,7 +90,7 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.ItemVi
 
         if (produto!=null){
 
-            Picasso.with(context).load(produto.getImagemProduto()).placeholder(R.drawable.hamburger_placeholder).into(holder.thumbnail);
+            Picasso.with(context).load(produto.getImagemProduto()).fit().centerCrop().placeholder(R.drawable.hamburger_placeholder).into(holder.thumbnail);
 
 
 

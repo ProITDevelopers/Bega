@@ -85,6 +85,17 @@ public class ConfiguracoesActivity extends AppCompatPreferenceActivity {
                 }
             });
 
+            // feedback preference click listener
+//            Preference key_bega_manual = findPreference(getString(R.string.key_bega_manual));
+//            key_bega_manual.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+//                public boolean onPreferenceClick(Preference preference) {
+//                    openInternetActivity(getActivity());
+//                    Toast.makeText(getActivity(), "key_bega_manual", Toast.LENGTH_SHORT).show();
+//
+//                    return true;
+//                }
+//            });
+
             Preference key_app_version = findPreference(getString(R.string.key_app_version));
             key_app_version.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
@@ -129,6 +140,16 @@ public class ConfiguracoesActivity extends AppCompatPreferenceActivity {
 
         Intent intent = new Intent(context, AlterarSenhaActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        context.startActivity(intent);
+
+    }
+
+
+    public static void openInternetActivity(Context context) {
+
+        Intent intent = new Intent(context, WebViewInternetActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("bega_manual","Manual Bega");
         context.startActivity(intent);
 
     }

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:background="@color/white"
-    android:visibility="gone"
+    android:visibility="visible"
     >
 
 
@@ -180,6 +180,20 @@
         app:layout_constraintTop_toBottomOf="@+id/cardView_wallet"
 
         />
+
+    <TextView
+        android:id="@+id/txtWalletNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:textColor="@color/colorText"
+        android:text="@string/txt_wallet_note"/>
 
 
 

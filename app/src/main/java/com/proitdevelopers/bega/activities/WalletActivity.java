@@ -76,7 +76,8 @@ public class WalletActivity extends AppCompatActivity {
 
     long minDateMilliseconds,maxDateMilliseconds;
 
-    Wallet wallet = new Wallet();
+    private Wallet wallet = new Wallet();
+    private UsuarioPerfil usuarioPerfil = new UsuarioPerfil();
 
     private ConstraintLayout coordinatorLayout;
     private RelativeLayout errorLayout;
@@ -98,8 +99,9 @@ public class WalletActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(WalletActivity.this);
         progressDialog.setCancelable(false);
 
-        //carregar dados do Usuario
-        Common.mCurrentUser = AppPref.getInstance().getUser();
+        ///carregar dados do Usuario
+        usuarioPerfil = AppPref.getInstance().getUser();
+
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -150,19 +152,28 @@ public class WalletActivity extends AppCompatActivity {
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Date daymin = f.parse(minDate);
-            Date daymax = f.parse(maxDate);
-            minDateMilliseconds = daymin.getTime();
-            maxDateMilliseconds = daymax.getTime();
+//            Date daymax = f.parse(maxDate);
+//            minDateMilliseconds = daymin.getTime();
+//            maxDateMilliseconds = daymax.getTime();
+
 
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-//        Date dataMIN = new Date();
-//        Date dataMAX = new Date();
-//        minDateMilliseconds = dataMIN.getDate() - 36500;
-//        maxDateMilliseconds = dataMAX.getDate() - 19;
+
+        Calendar calendarMin = Calendar.getInstance();
+        calendarMin.add(Calendar.YEAR, -90);
+        calendarMin.set(Calendar.MONTH,0);
+        calendarMin.set(Calendar.DAY_OF_MONTH,1);
+        minDateMilliseconds = calendarMin.getTimeInMillis();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, -19);
+        calendar.set(Calendar.MONTH,11);
+        calendar.set(Calendar.DAY_OF_MONTH,31);
+        maxDateMilliseconds = calendar.getTimeInMillis();
 
         editTextDataNasc.setOnClickListener(view -> {
             Calendar cal = Calendar.getInstance();
@@ -286,11 +297,11 @@ public class WalletActivity extends AppCompatActivity {
 
                         wallet = response.body().get(0);
 
-                        Common.mCurrentUser.wallet = wallet;
+                        usuarioPerfil.wallet = wallet;
 
-                        AppPref.getInstance().saveUser(Common.mCurrentUser);
+                        AppPref.getInstance().saveUser(usuarioPerfil);
 
-                        carregarMeuPerfilOffline(Common.mCurrentUser);
+                        carregarMeuPerfilOffline(usuarioPerfil);
 
                         progressDialog.dismiss();
                     }
@@ -427,7 +438,7 @@ public class WalletActivity extends AppCompatActivity {
     private void carregarMeuPerfilOffline(UsuarioPerfil usuarioPerfil) {
         try {
 
-            Picasso.with(this).load(usuarioPerfil.imagem).placeholder(R.drawable.ic_camera).into(imageView);
+            Picasso.with(this).load(usuarioPerfil.imagem).fit().centerCrop().placeholder(R.drawable.ic_camera).into(imageView);
 
             txtNomeCompleto.setText(usuarioPerfil.nomeCompleto);
 

@@ -21,8 +21,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClient {
 
 
-//    private static final String BASE_URL = "http://3.18.194.189/";
-    private static final String BASE_URL = "https://official.begaentrega.com/";
+//    private static final String BASE_URL = "https://official.begaentrega.com/";
+    private static final String BASE_URL = "http://ec2-3-23-104-12.us-east-2.compute.amazonaws.com/";
     private static final String BASE_URL_ADAO = "http://35.181.153.234:8086/";
     private static Retrofit retrofit = null;
     private static int REQUEST_TIMEOUT = 30;

@@ -21,6 +21,26 @@
 
     </PreferenceCategory>
 
+<!--    <PreferenceCategory android:title="@string/pref_title_manual_utilizador">-->
+
+<!--        <Preference-->
+<!--            android:key="@string/key_bega_manual"-->
+<!--            android:title="Serviço Bega"-->
+<!--            android:summary="@string/manual_utilizador_dicas"/>-->
+
+
+<!--    </PreferenceCategory>-->
+
+
+<!--    <PreferenceCategory android:title="@string/pref_header_versao">-->
+
+<!--        <Preference-->
+<!--            android:key="@string/key_app_version"-->
+<!--            android:summary="@string/app_version"-->
+<!--            android:title="@string/title_version" />-->
+
+
+<!--    </PreferenceCategory>-->
 
 
     <PreferenceCategory android:title="@string/pref_header_about">

@@ -28,6 +28,7 @@ public class Common {
     public static String ROCK_BURGER_LOGO = "https://firebasestorage.googleapis.com/v0/b/firetutorial-9cfcc.appspot.com/o/bega%2Frock_burger_logo.png?alt=media&token=b77ba4ad-d16b-4119-9b27-53b8e534fa51";
     public static String KFC_LOGO = "https://firebasestorage.googleapis.com/v0/b/firetutorial-9cfcc.appspot.com/o/bega%2Fkfc_logo.png?alt=media&token=f07bbb8b-2949-4307-96e1-729059256dc3";
     public static String DOOH_PONTO_LOGO = "https://firebasestorage.googleapis.com/v0/b/firetutorial-9cfcc.appspot.com/o/bega%2Fdooh_ponto_logo.png?alt=media&token=fcb7d40b-aecc-4eb0-b803-6d8d0e0bf876";
+    public static String BEGA_MANUAL_USER = "https://www.dropbox.com/s/unrijjzt01cubgf/bega_android.pdf?dl=0";
 
 
     public static String bearerApi = "Bearer ";
